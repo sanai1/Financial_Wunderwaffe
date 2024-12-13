@@ -1,4 +1,4 @@
-package com.example.financialwunderwaffe.Fragments
+package com.example.financialwunderwaffe.welcome
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import com.example.financialwunderwaffe.MainActivity
 import com.example.financialwunderwaffe.R
 
 class WelcomeFragmentStart : Fragment() {
@@ -21,12 +20,12 @@ class WelcomeFragmentStart : Fragment() {
 
         val logIn : Button = view.findViewById(R.id.button_log_in)
         logIn.setOnClickListener {
-            (activity as MainActivity).log_in()
+            (activity as WelcomeActivity).go_to_log_in()
         }
 
         val registration : Button = view.findViewById(R.id.button_register)
         registration.setOnClickListener {
-            (activity as MainActivity).registration()
+            (activity as WelcomeActivity).go_to_registration()
         }
 
         return view

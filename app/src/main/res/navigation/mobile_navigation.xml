@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/navigation_budget">
+
+    <fragment
+        android:id="@+id/navigation_budget"
+        android:name="com.example.financialwunderwaffe.main.budget.BudgetFragment"
+        android:label="@string/title_budget"
+        tools:layout="@layout/fragment_main_budget" />
+
+    <fragment
+        android:id="@+id/navigation_goal"
+        android:name="com.example.financialwunderwaffe.main.goal.GoalFragment"
+        android:label="@string/title_goal"
+        tools:layout="@layout/fragment_main_goal" />
+
+    <fragment
+        android:id="@+id/navigation_briefcase"
+        android:name="com.example.financialwunderwaffe.main.briefcase.BriefcaseFragment"
+        android:label="@string/title_briefcase"
+        tools:layout="@layout/fragment_main_briefcase" />
+
+    <fragment
+        android:id="@+id/navigation_LK"
+        android:name="com.example.financialwunderwaffe.main.lk.LKFragment"
+        android:label="@string/title_LK"
+        tools:layout="@layout/fragment_main_lk" />
+
+</navigation>
