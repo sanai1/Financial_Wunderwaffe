@@ -69,4 +69,9 @@
     <string name="title_goal">Цели</string>
     <string name="title_briefcase">Портфель</string>
     <string name="title_LK">Личный кабинет</string>
+    <string name="transaction">Транзакции</string>
+    <string name="history">История</string>
+    <string name="report">Отчет</string>
+    <string name="category">Категории</string>
+    <string name="menu">МЕНЮ</string>
 </resources>
