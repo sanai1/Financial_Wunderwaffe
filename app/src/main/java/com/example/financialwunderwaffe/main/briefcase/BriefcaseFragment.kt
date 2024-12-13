@@ -21,6 +21,8 @@ class BriefcaseFragment : Fragment() {
         _binding = FragmentMainBriefcaseBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
+        binding.textViewTitleBriefcase.setText(getString(R.string.title_briefcase))
+
         binding.imageViewMenuBriefcase.setOnClickListener{
             binding.drawerBriefcase.openDrawer(GravityCompat.START)
         }

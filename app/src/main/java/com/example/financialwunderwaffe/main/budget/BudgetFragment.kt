@@ -22,6 +22,8 @@ class BudgetFragment : Fragment() {
         _binding = FragmentMainBudgetBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
+        binding.textViewTitleBudget.setText(getString(R.string.title_budget))
+
         binding.imageViewMenuBudget.setOnClickListener{
             binding.drawerBudget.openDrawer(GravityCompat.START)
         }

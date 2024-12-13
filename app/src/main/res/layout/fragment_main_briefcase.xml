@@ -7,6 +7,8 @@
     android:id="@+id/drawer_briefcase"
     tools:context=".main.briefcase.BriefcaseFragment">
 
+    <include layout="@layout/main_color"/>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">

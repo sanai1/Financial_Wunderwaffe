@@ -6,6 +6,8 @@
     android:layout_height="match_parent"
     tools:context=".main.goal.GoalFragment">
 
+    <include layout="@layout/main_color"/>
+
     <TextView
         android:id="@+id/text_dashboard"
         android:layout_width="match_parent"

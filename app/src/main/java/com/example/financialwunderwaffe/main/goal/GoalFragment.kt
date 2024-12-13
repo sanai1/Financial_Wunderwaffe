@@ -14,13 +14,8 @@ class GoalFragment : Fragment() {
     private var _binding: FragmentMainGoalBinding? = null
     private val binding get() = _binding!!
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        val dashboardViewModel =
-            ViewModelProvider(this).get(GoalViewModel::class.java)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        val dashboardViewModel = ViewModelProvider(this).get(GoalViewModel::class.java)
 
         _binding = FragmentMainGoalBinding.inflate(inflater, container, false)
         val root: View = binding.root
