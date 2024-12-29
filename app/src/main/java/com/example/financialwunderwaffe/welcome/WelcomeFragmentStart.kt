@@ -20,12 +20,12 @@ class WelcomeFragmentStart : Fragment() {
 
         val logIn : Button = view.findViewById(R.id.button_log_in)
         logIn.setOnClickListener {
-            (activity as WelcomeActivity).go_to_log_in()
+            (activity as WelcomeActivity).goToLogIn()
         }
 
         val registration : Button = view.findViewById(R.id.button_register)
         registration.setOnClickListener {
-            (activity as WelcomeActivity).go_to_registration()
+            (activity as WelcomeActivity).goToRegistration()
         }
 
         return view

@@ -1,4 +1,4 @@
-package com.example.financialwunderwaffe.data
+package com.example.financialwunderwaffe.retrofit.database.user
 
 data class User(
     val uid: String,

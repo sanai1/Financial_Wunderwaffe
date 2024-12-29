@@ -4,9 +4,17 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
+import com.example.financialwunderwaffe.LoadingFragment
 import com.example.financialwunderwaffe.main.MainActivity
 import com.example.financialwunderwaffe.R
 import com.example.financialwunderwaffe.databinding.ActivityWelcomeBinding
+import com.example.financialwunderwaffe.retrofit.database.user.User
+import com.example.financialwunderwaffe.retrofit.database.user.UserApiClient
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import java.util.Base64
+import java.util.UUID
 
 class WelcomeActivity : AppCompatActivity() {
 
@@ -14,6 +22,7 @@ class WelcomeActivity : AppCompatActivity() {
     lateinit var startFragment : WelcomeFragmentStart
     lateinit var logInFragment : WelcomeFragmentLogIn
     lateinit var registrationFragment : WelcomeFragmentRegistration
+    lateinit var loadingFragment: LoadingFragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,40 +33,83 @@ class WelcomeActivity : AppCompatActivity() {
         startFragment = WelcomeFragmentStart()
         logInFragment = WelcomeFragmentLogIn()
         registrationFragment = WelcomeFragmentRegistration()
+        loadingFragment = LoadingFragment()
 
         supportFragmentManager.beginTransaction().replace(R.id.container_welcome, startFragment).commit()
 
     }
 
-    fun go_to_log_in() {
+    fun goToLogIn() =
         supportFragmentManager.beginTransaction().replace(R.id.container_welcome, logInFragment).commit()
-    }
 
-    fun go_to_registration() {
+    fun goToRegistration() =
         supportFragmentManager.beginTransaction().replace(R.id.container_welcome, registrationFragment).commit()
-    }
 
-    fun back() {
+    fun back() =
         supportFragmentManager.beginTransaction().replace(R.id.container_welcome, startFragment).commit()
+
+    private fun loading() =
+        supportFragmentManager.beginTransaction().replace(R.id.container_welcome, loadingFragment).commit()
+
+    fun toast(text : String) =
+        Toast.makeText(this, text, Toast.LENGTH_LONG).show()
+
+    fun logIn(email : String, password : String) {
+        loading()
+        UserApiClient.userAPIService.findByLogin(
+            "Basic " + Base64.getEncoder().encodeToString("$email:$password".toByteArray()),
+            email
+        ).enqueue(object : Callback<String> {
+            override fun onResponse(call: Call<String>, response: Response<String>) {
+                if (response.isSuccessful) {
+                    saveUID(UUID.fromString(response.body()))
+                    goToMainActivity()
+                } else {
+                    toast("Ошибка сервера: ${response.code()} - ${response.message()}")
+                    goToLogIn()
+                }
+            }
+
+            override fun onFailure(call: Call<String>, t: Throwable) {
+                toast("Ошибка сети: ${t.message}")
+                goToLogIn()
+            }
+        })
     }
 
-    fun toast(text : String) {
-        val toast : Toast = Toast.makeText(this, text, Toast.LENGTH_LONG)
-        toast.show()
+    fun registration(email : String, password: String) {
+        loading()
+        val uid = UUID.randomUUID()
+        UserApiClient.userAPIService.registerUser(
+            User(
+                uid = uid.toString(),
+                login = email,
+                password = password,
+            )
+        ).enqueue(object : Callback<Boolean> {
+            override fun onResponse(call: Call<Boolean>, response: Response<Boolean>) {
+                if (response.isSuccessful) {
+                    saveUID(uid)
+                    goToMainActivity()
+                } else {
+                    toast("Ошибка сервера: ${response.code()} - ${response.message()}")
+                    goToRegistration()
+                }
+            }
+
+            override fun onFailure(call: Call<Boolean>, t: Throwable) {
+                toast("Ошибка сети: ${t.message}")
+                goToRegistration()
+            }
+        })
     }
 
-    fun log_in(email : String, password : Int) {
-        // TODO("выполнить вход в приложение на сервере -> выкачать данные с сервера на клиент офлайн")
-        go_to_main_activity()
+    private fun saveUID(uid: UUID) {
+        println(uid)
+        // TODO: сохранить UID пользователя для дальнейших запросов
     }
 
-    fun registration(email : String, password: Int) {
-        // TODO("выполнить регистрацию нового пользователя на сервере")
-        go_to_main_activity()
-    }
+    private fun goToMainActivity() =
+        startActivity(Intent(this, MainActivity::class.java))
 
-    private fun go_to_main_activity() {
-        val intent : Intent = Intent(this, MainActivity::class.java)
-        startActivity(intent)
-    }
 }
