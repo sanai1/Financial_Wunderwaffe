@@ -1,6 +1,6 @@
 package com.example.financialwunderwaffe.retrofit.database.category
 
-import com.example.financialwunderwaffe.retrofit.database.BaseURL
+import com.example.financialwunderwaffe.retrofit.BaseURL
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 

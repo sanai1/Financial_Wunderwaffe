@@ -7,9 +7,14 @@ import android.widget.Toast
 import com.example.financialwunderwaffe.LoadingFragment
 import com.example.financialwunderwaffe.main.MainActivity
 import com.example.financialwunderwaffe.R
+import com.example.financialwunderwaffe.database.AppDatabase
+import com.example.financialwunderwaffe.database.UserInfo
 import com.example.financialwunderwaffe.databinding.ActivityWelcomeBinding
 import com.example.financialwunderwaffe.retrofit.database.user.User
 import com.example.financialwunderwaffe.retrofit.database.user.UserApiClient
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -23,6 +28,13 @@ class WelcomeActivity : AppCompatActivity() {
     lateinit var logInFragment : WelcomeFragmentLogIn
     lateinit var registrationFragment : WelcomeFragmentRegistration
     lateinit var loadingFragment: LoadingFragment
+    lateinit var codeFragment: WelcomeFragmentCode
+
+    val context = this
+    var code: Long = 0L
+    var uid: UUID? = null
+    var login = ""
+    var password = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,9 +46,24 @@ class WelcomeActivity : AppCompatActivity() {
         logInFragment = WelcomeFragmentLogIn()
         registrationFragment = WelcomeFragmentRegistration()
         loadingFragment = LoadingFragment()
+        codeFragment = WelcomeFragmentCode()
 
-        supportFragmentManager.beginTransaction().replace(R.id.container_welcome, startFragment).commit()
+        supportFragmentManager.beginTransaction().replace(R.id.container_welcome, loadingFragment).commit()
 
+        CoroutineScope(Dispatchers.IO).launch {
+            checkAuth()
+        }
+    }
+
+    private fun checkAuth() {
+        val list = AppDatabase.getDatabase(this).getUserInfoDao().getInfo()
+        if (list.isEmpty()) {
+            supportFragmentManager.beginTransaction().replace(R.id.container_welcome, startFragment).commit()
+            return
+        }
+        code = list.last().code
+        codeFragment.checkCode = true
+        supportFragmentManager.beginTransaction().replace(R.id.container_welcome, codeFragment).commit()
     }
 
     fun goToLogIn() =
@@ -44,6 +71,9 @@ class WelcomeActivity : AppCompatActivity() {
 
     fun goToRegistration() =
         supportFragmentManager.beginTransaction().replace(R.id.container_welcome, registrationFragment).commit()
+
+    fun goToMainActivity() =
+        startActivity(Intent(this, MainActivity::class.java))
 
     fun back() =
         supportFragmentManager.beginTransaction().replace(R.id.container_welcome, startFragment).commit()
@@ -62,8 +92,7 @@ class WelcomeActivity : AppCompatActivity() {
         ).enqueue(object : Callback<String> {
             override fun onResponse(call: Call<String>, response: Response<String>) {
                 if (response.isSuccessful) {
-                    saveUID(UUID.fromString(response.body()))
-                    goToMainActivity()
+                    goToInstallCode(UUID.fromString(response.body()), email, password)
                 } else {
                     toast("Ошибка сервера: ${response.code()} - ${response.message()}")
                     goToLogIn()
@@ -89,8 +118,7 @@ class WelcomeActivity : AppCompatActivity() {
         ).enqueue(object : Callback<Boolean> {
             override fun onResponse(call: Call<Boolean>, response: Response<Boolean>) {
                 if (response.isSuccessful) {
-                    saveUID(uid)
-                    goToMainActivity()
+                    goToInstallCode(uid, email, password)
                 } else {
                     toast("Ошибка сервера: ${response.code()} - ${response.message()}")
                     goToRegistration()
@@ -104,12 +132,35 @@ class WelcomeActivity : AppCompatActivity() {
         })
     }
 
-    private fun saveUID(uid: UUID) {
-        println(uid)
-        // TODO: сохранить UID пользователя для дальнейших запросов
+    private fun goToInstallCode(uid_: UUID, login_: String, password_: String) {
+        uid = uid_
+        login = login_
+        password = password_
+        codeFragment.checkCode = false
+        supportFragmentManager.beginTransaction().replace(R.id.container_welcome, codeFragment).commit()
     }
 
-    private fun goToMainActivity() =
-        startActivity(Intent(this, MainActivity::class.java))
+    fun saveUID(code: String) {
+        CoroutineScope(Dispatchers.IO).launch {
+            AppDatabase.getDatabase(context).getUserInfoDao().insertUserInfo(
+                UserInfo(
+                    id = 1,
+                    uid = uid!!,
+                    loginAndPassword = Base64.getEncoder()
+                        .encodeToString("$login:$password".toByteArray()),
+                    code = code.toLong()
+                )
+            )
+            goToMainActivity()
+        }
+    }
+
+    fun deleteUID() {
+        CoroutineScope(Dispatchers.IO).launch {
+            AppDatabase.getDatabase(context).getUserInfoDao().deleteUserInfo(
+                AppDatabase.getDatabase(context).getUserInfoDao().getInfo()[0]
+            )
+        }
+    }
 
 }

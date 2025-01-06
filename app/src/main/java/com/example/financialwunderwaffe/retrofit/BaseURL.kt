@@ -1,4 +1,4 @@
-package com.example.financialwunderwaffe.retrofit.database
+package com.example.financialwunderwaffe.retrofit
 
 object BaseURL {
 
