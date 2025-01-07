@@ -9,43 +9,36 @@
     <include layout="@layout/main_color"/>
 
     <EditText
+        style="@style/EditTextWelcome"
+
         android:id="@+id/editTextNumberCode"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/black"
-        android:hint="Введите код доступа"
-        android:textColorHint="@color/purple_500"
-        android:textSize="15sp"
-        android:gravity="center"
-        android:ems="10"
+        android:hint="@string/install_code"
         android:maxLength="4"
         android:inputType="numberPassword"
+
         app:layout_constraintBottom_toTopOf="@+id/buttonCode"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
+        style="@style/ButtonWelcome"
+
         android:id="@+id/buttonCode"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Войти"
-        android:textSize="15sp"
-        android:textColor="@color/white"
-        android:backgroundTint="@color/purple_700"
+        android:text="@string/resume"
+
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
+        style="@style/TextViewClickWelcome"
+
         android:id="@+id/textViewReset"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Повторно авторизоваться"
-        android:textColor="@color/black"
-        android:textSize="15sp"
+        android:text="@string/log_in_again"
         android:layout_marginBottom="50sp"
+
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
