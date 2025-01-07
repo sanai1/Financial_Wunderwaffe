@@ -12,4 +12,10 @@
         android:layout_height="match_parent"
         android:text="@string/history" />
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/transactions_list"
+        android:layout_width="385dp"
+        android:layout_height="550dp"
+        android:layout_marginTop="100dp"/>
+
 </FrameLayout>
