@@ -7,17 +7,44 @@
 
     <include layout="@layout/main_color"/>
 
-    <TextView
-        style="@style/TextViewLabelWelcome"
+    <LinearLayout
+        android:id="@+id/linearLayout3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
+        <TextView
+            style="@style/TextViewClickWelcome"
+            android:text="@string/have_account"
+            android:textColor="@color/gray" />
+
+        <Space
+            android:layout_width="5dp"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            style="@style/TextViewClickWelcome"
+
+            android:id="@+id/textViewLogIn"
+            android:text="@string/enter"
+            android:textColor="@color/dodger_blue" />
+
+    </LinearLayout>
+
+    <TextView
         android:id="@+id/textView5"
+
+        style="@style/TextViewLabelWelcome"
         android:text="@string/register"
         android:textSize="35sp"
-        android:layout_marginTop="50sp"
+        android:layout_marginTop="100dp"
 
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout3" />
 
     <EditText
         style="@style/EditTextWelcome"
@@ -25,7 +52,7 @@
         android:id="@+id/editTextTextEmailAddressRegister"
         android:hint="@string/enter_email"
         android:inputType="textEmailAddress"
-        android:layout_marginTop="100sp"
+        android:layout_marginTop="50dp"
 
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -37,7 +64,7 @@
         android:id="@+id/editTextNumberPasswordRegister"
         android:hint="@string/enter_password"
         android:inputType="numberPassword"
-        android:layout_marginTop="75sp"
+        android:layout_marginTop="25dp"
 
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -49,32 +76,21 @@
         android:id="@+id/editTextNumberPasswordRegisterPasswordAgain"
         android:hint="@string/enter_password_again"
         android:inputType="numberPassword"
-        android:layout_marginTop="50sp"
+        android:layout_marginTop="25dp"
 
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextNumberPasswordRegister" />
 
     <Button
-        style="@style/ButtonWelcome"
-
         android:id="@+id/buttonResumeRegister"
+
+        style="@style/ButtonWelcome"
         android:text="@string/resume"
 
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextNumberPasswordRegisterPasswordAgain" />
-
-    <TextView
-        style="@style/TextViewClickWelcome"
-
-        android:id="@+id/textViewBackRegister"
-        android:text="@string/back"
-
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonResumeRegister" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextNumberPasswordRegister" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -8,40 +8,125 @@
 
     <include layout="@layout/main_color"/>
 
+    <LinearLayout
+        android:id="@+id/linearLayoutCode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            style="@style/TextViewClickWelcome"
+
+            android:text="@string/forget_code"
+            android:textColor="@color/gray" />
+
+        <Space
+            android:layout_width="5dp"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            style="@style/TextViewClickWelcome"
+
+            android:id="@+id/textViewReset"
+            android:text="@string/log_in_again"
+            android:textColor="@color/dodger_blue" />
+
+    </LinearLayout>
+
     <EditText
-        style="@style/EditTextWelcome"
-
         android:id="@+id/editTextNumberCode"
+
+        style="@style/EditTextWelcome"
+        android:enabled="false"
         android:hint="@string/install_code"
-        android:maxLength="4"
         android:inputType="numberPassword"
-
-        app:layout_constraintBottom_toTopOf="@+id/buttonCode"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        style="@style/ButtonWelcome"
-
-        android:id="@+id/buttonCode"
-        android:text="@string/resume"
+        android:maxLength="4"
 
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        style="@style/TextViewClickWelcome"
-
-        android:id="@+id/textViewReset"
-        android:text="@string/log_in_again"
-        android:layout_marginBottom="50sp"
-
+    <androidx.gridlayout.widget.GridLayout
+        android:id="@+id/gridLayoutCode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:columnCount="3"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextNumberCode"
+        app:rowCount="4">
+
+        <Button
+            android:id="@+id/buttonCode1"
+            style="@style/ButtonGripCode"
+            android:text="@string/_1" />
+
+        <Button
+            android:id="@+id/buttonCode2"
+            style="@style/ButtonGripCode"
+            android:text="@string/_2" />
+
+        <Button
+            android:id="@+id/buttonCode3"
+            style="@style/ButtonGripCode"
+            android:text="@string/_3" />
+
+        <Button
+            android:id="@+id/buttonCode4"
+            style="@style/ButtonGripCode"
+            android:text="@string/_4" />
+
+        <Button
+            android:id="@+id/buttonCode5"
+            style="@style/ButtonGripCode"
+            android:text="@string/_5" />
+
+        <Button
+            android:id="@+id/buttonCode6"
+            style="@style/ButtonGripCode"
+            android:text="@string/_6" />
+
+        <Button
+            android:id="@+id/buttonCode7"
+            style="@style/ButtonGripCode"
+            android:text="@string/_7" />
+
+        <Button
+            android:id="@+id/buttonCode8"
+            style="@style/ButtonGripCode"
+            android:text="@string/_8" />
+
+        <Button
+            android:id="@+id/buttonCode9"
+            style="@style/ButtonGripCode"
+            android:text="@string/_9" />
+
+        <Button
+            android:id="@+id/buttonCodeDEL"
+            style="@style/ButtonGripCode"
+            android:text="@string/del"
+            android:textColor="@color/maroon"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/buttonCode0"
+            style="@style/ButtonGripCode"
+            android:text="@string/_0" />
+
+        <Button
+            android:id="@+id/buttonCodeGO"
+            style="@style/ButtonGripCode"
+            android:text="@string/go"
+            android:textColor="@color/teal_700"
+            android:textStyle="bold" />
+
+
+    </androidx.gridlayout.widget.GridLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

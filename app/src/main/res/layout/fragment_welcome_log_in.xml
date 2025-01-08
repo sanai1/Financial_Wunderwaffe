@@ -7,18 +7,45 @@
 
     <include layout="@layout/main_color"/>
 
-    <TextView
-        style="@style/TextViewLabelWelcome"
+    <LinearLayout
+        android:id="@+id/linearLayout3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
+        <TextView
+            style="@style/TextViewClickWelcome"
+            android:text="@string/have_not_account"
+            android:textColor="@color/gray" />
+
+        <Space
+            android:layout_width="5dp"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            style="@style/TextViewClickWelcome"
+
+            android:id="@+id/textViewRegister"
+            android:text="@string/register"
+            android:textColor="@color/dodger_blue" />
+
+    </LinearLayout>
+
+    <TextView
         android:id="@+id/textView4"
-        android:text="@string/log_in"
+
+        style="@style/TextViewLabelWelcome"
+        android:text="@string/app_name"
         android:textSize="35sp"
-        android:layout_marginTop="50sp"
+        android:layout_marginTop="100dp"
 
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout3" />
 
     <EditText
         style="@style/EditTextWelcome"
@@ -26,7 +53,7 @@
         android:id="@+id/editTextTextEmailAddressLogIn"
         android:hint="@string/enter_email"
         android:inputType="textEmailAddress"
-        android:layout_marginTop="150sp"
+        android:layout_marginTop="50sp"
 
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -35,10 +62,10 @@
     <EditText
         style="@style/EditTextWelcome"
 
-        android:id="@+id/editTextNumberPasswordLogIn"
+        android:id="@+id/editTextPasswordLogIn"
         android:hint="@string/enter_password"
         android:inputType="textPassword"
-        android:layout_marginTop="100sp"
+        android:layout_marginTop="25sp"
 
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -53,18 +80,9 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextNumberPasswordLogIn" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextPasswordLogIn" />
 
-    <TextView
-        style="@style/TextViewClickWelcome"
 
-        android:id="@+id/textViewBackLogIn"
-        android:text="@string/back"
-
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonResumeLogIn" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

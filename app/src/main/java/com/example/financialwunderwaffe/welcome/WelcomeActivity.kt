@@ -24,7 +24,6 @@ import java.util.UUID
 class WelcomeActivity : AppCompatActivity() {
 
     lateinit var binding_main : ActivityWelcomeBinding
-    lateinit var startFragment : WelcomeFragmentStart
     lateinit var logInFragment : WelcomeFragmentLogIn
     lateinit var registrationFragment : WelcomeFragmentRegistration
     lateinit var loadingFragment: LoadingFragment
@@ -42,7 +41,6 @@ class WelcomeActivity : AppCompatActivity() {
         binding_main = ActivityWelcomeBinding.inflate(layoutInflater)
         setContentView(binding_main.root)
 
-        startFragment = WelcomeFragmentStart()
         logInFragment = WelcomeFragmentLogIn()
         registrationFragment = WelcomeFragmentRegistration()
         loadingFragment = LoadingFragment()
@@ -58,7 +56,7 @@ class WelcomeActivity : AppCompatActivity() {
     private fun checkAuth() {
         val list = AppDatabase.getDatabase(this).getUserInfoDao().getInfo()
         if (list.isEmpty()) {
-            supportFragmentManager.beginTransaction().replace(R.id.container_welcome, startFragment).commit()
+            supportFragmentManager.beginTransaction().replace(R.id.container_welcome, logInFragment).commit()
             return
         }
         code = list.last().code
@@ -74,9 +72,6 @@ class WelcomeActivity : AppCompatActivity() {
 
     fun goToMainActivity() =
         startActivity(Intent(this, MainActivity::class.java))
-
-    fun back() =
-        supportFragmentManager.beginTransaction().replace(R.id.container_welcome, startFragment).commit()
 
     private fun loading() =
         supportFragmentManager.beginTransaction().replace(R.id.container_welcome, loadingFragment).commit()

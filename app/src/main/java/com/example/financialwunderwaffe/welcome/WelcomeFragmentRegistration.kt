@@ -17,12 +17,12 @@ class WelcomeFragmentRegistration : Fragment() {
 
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val view : View = inflater.inflate(R.layout.fragment_welcome_registration, container, false)
 
-        val back : TextView = view.findViewById(R.id.textViewBackRegister)
+        val back : TextView = view.findViewById(R.id.textViewLogIn)
         back.setOnClickListener {
-            (activity as WelcomeActivity).back()
+            (activity as WelcomeActivity).goToLogIn()
         }
 
         val email : EditText = view.findViewById(R.id.editTextTextEmailAddressRegister)

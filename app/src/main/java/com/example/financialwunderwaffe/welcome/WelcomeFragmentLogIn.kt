@@ -17,16 +17,16 @@ class WelcomeFragmentLogIn : Fragment() {
 
     }
 
-    override fun onCreateView( inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView( inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val view : View = inflater.inflate(R.layout.fragment_welcome_log_in, container, false)
 
-        val back : TextView = view.findViewById(R.id.textViewBackLogIn)
+        val back : TextView = view.findViewById(R.id.textViewRegister)
         back.setOnClickListener {
-            (activity as WelcomeActivity).back()
+            (activity as WelcomeActivity).goToRegistration()
         }
 
         val email : EditText = view.findViewById(R.id.editTextTextEmailAddressLogIn)
-        val password : EditText = view.findViewById(R.id.editTextNumberPasswordLogIn)
+        val password : EditText = view.findViewById(R.id.editTextPasswordLogIn)
 
         val resume : Button = view.findViewById(R.id.buttonResumeLogIn)
         resume.setOnClickListener {
