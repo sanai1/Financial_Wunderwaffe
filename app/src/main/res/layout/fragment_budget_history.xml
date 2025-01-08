@@ -9,13 +9,23 @@
 
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/history" />
+        android:layout_height="702dp"
+        android:layout_marginTop="20sp"
+        android:text="@string/history"
+        android:gravity="center_horizontal"
+        android:textColor="@color/black"
+        android:textSize="30sp"/>
 
+    <!-- Header -->
+    <include
+        android:id="@+id/header"
+        layout="@layout/header_transaction" />
+
+    <!-- RecyclerView -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/transactions_list"
-        android:layout_width="385dp"
-        android:layout_height="550dp"
-        android:layout_marginTop="100dp"/>
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="110dp" />
 
 </FrameLayout>

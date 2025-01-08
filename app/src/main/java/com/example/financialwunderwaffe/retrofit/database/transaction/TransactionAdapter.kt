@@ -11,10 +11,11 @@ class TransactionAdapter(private val transactions: List<Transaction>) :
     RecyclerView.Adapter<TransactionAdapter.TransactionViewHolder>() {
 
     class TransactionViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val amountTextView: TextView = itemView.findViewById(R.id.textViewAmount)
-        val dateTextView: TextView = itemView.findViewById(R.id.textViewDate)
-        val typeTextView: TextView = itemView.findViewById(R.id.textViewType)
-        val descriptionTextView: TextView = itemView.findViewById(R.id.textViewDescription)
+        val columnId: TextView = itemView.findViewById(R.id.column_id)
+        val columnAmount: TextView = itemView.findViewById(R.id.column_amount)
+        val columnDate: TextView = itemView.findViewById(R.id.column_date)
+        val columnType: TextView = itemView.findViewById(R.id.column_type)
+        val columnDescription: TextView = itemView.findViewById(R.id.column_description)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TransactionViewHolder {
@@ -25,10 +26,11 @@ class TransactionAdapter(private val transactions: List<Transaction>) :
 
     override fun onBindViewHolder(holder: TransactionViewHolder, position: Int) {
         val transaction = transactions[position]
-        holder.amountTextView.text = "Amount: ${transaction.amount}"
-        holder.dateTextView.text = "Date: ${transaction.date}"
-        holder.typeTextView.text = if (transaction.type) "Type: Income" else "Type: Expense"
-        holder.descriptionTextView.text = "Description: ${transaction.description}"
+        holder.columnId.text = transaction.id.toString()
+        holder.columnAmount.text = transaction.amount.toString()
+        holder.columnDate.text = transaction.date
+        holder.columnType.text = if (transaction.type) "Income" else "Expense"
+        holder.columnDescription.text = transaction.description
     }
 
     override fun getItemCount(): Int = transactions.size
