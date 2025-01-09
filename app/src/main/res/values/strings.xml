@@ -54,4 +54,10 @@
     <string name="shares_of_assets">Доли активов</string>
     <string name="assets">Активы</string>
     <string name="install_code_info">Установите код доступа для быстрого входа в приложение</string>
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="question">Question</string>
+    <string name="answer">Answer</string>
+    <string name="complete">Завершить</string>
+    <string name="questionnaire">Анкета</string>
 </resources>
