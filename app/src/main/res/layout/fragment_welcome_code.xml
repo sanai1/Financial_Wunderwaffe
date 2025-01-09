@@ -36,6 +36,17 @@
 
     </LinearLayout>
 
+    <TextView
+        style="@style/TextViewInfoWelcome"
+
+        android:id="@+id/TextViewInfoCode"
+        android:text="@string/install_code_info"
+
+        app:layout_constraintBottom_toTopOf="@+id/editTextNumberCode"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayoutCode" />
+
     <EditText
         android:id="@+id/editTextNumberCode"
 

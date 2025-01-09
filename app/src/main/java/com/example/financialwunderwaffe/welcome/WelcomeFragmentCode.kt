@@ -39,9 +39,12 @@ class WelcomeFragmentCode : Fragment() {
                 (activity as WelcomeActivity).goToLogIn()
             }
             view.findViewById<LinearLayout>(R.id.linearLayoutCode).isVisible = true
+            view.findViewById<TextView>(R.id.TextViewInfoCode).isVisible = false
         }
-        else
+        else {
+            view.findViewById<TextView>(R.id.TextViewInfoCode).isVisible = true
             view.findViewById<LinearLayout>(R.id.linearLayoutCode).isVisible = false
+        }
 
         val buttons: List<Button> = listOf(
             view.findViewById(R.id.buttonCode0),
