@@ -11,13 +11,18 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.financialwunderwaffe.R
+import com.example.financialwunderwaffe.database.AppDatabase
 import com.example.financialwunderwaffe.databinding.ActivityMainBinding
 import com.example.financialwunderwaffe.welcome.WelcomeActivity
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     val context = this
+    lateinit var basicLoginAndPassword: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,6 +39,10 @@ class MainActivity : AppCompatActivity() {
                 R.id.navigation_budget, R.id.navigation_goal, R.id.navigation_briefcase, R.id.navigation_LK
             )
         )
+
+        CoroutineScope(Dispatchers.IO).launch {
+            basicLoginAndPassword = "Basic " + AppDatabase.getDatabase(context).getUserInfoDao().getInfo()[0].loginAndPassword
+        }
 
 //        setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)

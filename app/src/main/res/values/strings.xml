@@ -31,7 +31,7 @@
     <string name="del">DEL</string>
     <string name="go">GO</string>
 
-    <string name="back"><u>Назад</u></string>
+    <string name="back">Назад</string>
     <string name="title_activity_login">LoginActivity</string>
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password</string>

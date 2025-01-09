@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 //import android.widget.TextView
 import androidx.fragment.app.Fragment
+import com.example.financialwunderwaffe.LoadingFragment
 import com.example.financialwunderwaffe.R
 //import androidx.lifecycle.ViewModelProvider
 import com.example.financialwunderwaffe.databinding.FragmentMainLkBinding
@@ -18,6 +19,7 @@ class LKFragment : Fragment() {
     private val binding get() = _binding!!
     lateinit var lkMainFragment: LKMainFragment
     lateinit var lkQuestionnaireFragment: LKQuestionnaireFragment
+    lateinit var loadingFragment: LoadingFragment
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
 //        val dashboardViewModel =
@@ -27,7 +29,7 @@ class LKFragment : Fragment() {
         val root: View = binding.root
 
         lkMainFragment = LKMainFragment()
-        lkQuestionnaireFragment = LKQuestionnaireFragment()
+        loadingFragment = LoadingFragment()
 
 //        val textView: TextView = binding.textLk
 //        dashboardViewModel.text.observe(viewLifecycleOwner) {

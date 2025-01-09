@@ -12,9 +12,14 @@ import com.example.financialwunderwaffe.R
 import com.example.financialwunderwaffe.database.AppDatabase
 import com.example.financialwunderwaffe.main.MainActivity
 import com.example.financialwunderwaffe.main.lk.LKFragment
+import com.example.financialwunderwaffe.retrofit.database.questionnaire.QuestionApiClient
+import com.example.financialwunderwaffe.retrofit.database.questionnaire.model.Question
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class LKMainFragment : Fragment() {
 
@@ -49,10 +54,42 @@ class LKMainFragment : Fragment() {
         (activity as MainActivity).toast("Этот функционал скоро станет доступным")
     }
 
-    private fun testLK() =
+    private fun testLK() {
         (parentFragment as LKFragment).goToFragment(
-            (parentFragment as LKFragment).lkQuestionnaireFragment
+            (parentFragment as LKFragment).loadingFragment
         )
+        QuestionApiClient.questionAPIService.getQuestions(
+            (activity as MainActivity).basicLoginAndPassword
+        ).enqueue(object : Callback<List<Question>> {
+            override fun onResponse(
+                call: Call<List<Question>>,
+                response: Response<List<Question>>
+            ) {
+                if (response.isSuccessful) {
+                    (parentFragment as LKFragment).lkQuestionnaireFragment =
+                        LKQuestionnaireFragment(
+                            response.body() ?: emptyList()
+                        )
+                    (parentFragment as LKFragment).goToFragment(
+                        (parentFragment as LKFragment).lkQuestionnaireFragment
+                    )
+                } else {
+                    (activity as MainActivity).toast("Ошибка сервера: ${response.code()} - ${response.message()}")
+                    (parentFragment as LKFragment).goToFragment(
+                        (parentFragment as LKFragment).lkMainFragment
+                    )
+                }
+            }
+
+            override fun onFailure(call: Call<List<Question>>, t: Throwable) {
+                (activity as MainActivity).toast("Ошибка сети: ${t.message}")
+                (parentFragment as LKFragment).goToFragment(
+                    (parentFragment as LKFragment).lkMainFragment
+                )
+            }
+
+        })
+    }
 
     private fun exitLK()  =
         CoroutineScope(Dispatchers.IO).launch {
