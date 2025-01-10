@@ -1,6 +1,5 @@
-package com.example.financialwunderwaffe.retrofit.database.questionnaire
+package com.example.financialwunderwaffe.retrofit.database.questionnaire.question
 
-import com.example.financialwunderwaffe.retrofit.database.questionnaire.model.Question
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Header

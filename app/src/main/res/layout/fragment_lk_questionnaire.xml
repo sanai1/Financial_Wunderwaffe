@@ -48,6 +48,7 @@
                 android:layout_marginBottom="10dp"/>
 
             <RadioGroup
+                android:id="@+id/radioGroupQuestionnaire"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" >
 

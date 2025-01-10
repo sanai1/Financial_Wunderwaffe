@@ -17,12 +17,16 @@ import com.example.financialwunderwaffe.welcome.WelcomeActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.time.LocalDate
+import java.util.UUID
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     val context = this
     lateinit var basicLoginAndPassword: String
+    lateinit var uid: UUID
+    val date: LocalDate = LocalDate.now()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,7 +45,9 @@ class MainActivity : AppCompatActivity() {
         )
 
         CoroutineScope(Dispatchers.IO).launch {
-            basicLoginAndPassword = "Basic " + AppDatabase.getDatabase(context).getUserInfoDao().getInfo()[0].loginAndPassword
+            val info = AppDatabase.getDatabase(context).getUserInfoDao().getInfo()[0]
+            basicLoginAndPassword = "Basic " + info.loginAndPassword
+            uid = info.uid
         }
 
 //        setupActionBarWithNavController(navController, appBarConfiguration)

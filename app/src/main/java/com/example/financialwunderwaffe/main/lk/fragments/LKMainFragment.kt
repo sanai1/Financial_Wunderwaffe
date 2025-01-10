@@ -12,8 +12,8 @@ import com.example.financialwunderwaffe.R
 import com.example.financialwunderwaffe.database.AppDatabase
 import com.example.financialwunderwaffe.main.MainActivity
 import com.example.financialwunderwaffe.main.lk.LKFragment
-import com.example.financialwunderwaffe.retrofit.database.questionnaire.QuestionApiClient
-import com.example.financialwunderwaffe.retrofit.database.questionnaire.model.Question
+import com.example.financialwunderwaffe.retrofit.database.questionnaire.question.QuestionApiClient
+import com.example.financialwunderwaffe.retrofit.database.questionnaire.question.Question
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

@@ -1,4 +1,4 @@
-package com.example.financialwunderwaffe.retrofit.database.questionnaire.model
+package com.example.financialwunderwaffe.retrofit.database.questionnaire.question
 
 data class Question(
     val id: Long,
