@@ -14,6 +14,8 @@ import com.example.financialwunderwaffe.main.MainActivity
 import com.example.financialwunderwaffe.main.lk.LKFragment
 import com.example.financialwunderwaffe.retrofit.database.questionnaire.question.QuestionApiClient
 import com.example.financialwunderwaffe.retrofit.database.questionnaire.question.Question
+import com.example.financialwunderwaffe.retrofit.database.questionnaire.user_answer.UserAnswer
+import com.example.financialwunderwaffe.retrofit.database.questionnaire.user_answer.UserAnswerApiClient
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -58,6 +60,10 @@ class LKMainFragment : Fragment() {
         (parentFragment as LKFragment).goToFragment(
             (parentFragment as LKFragment).loadingFragment
         )
+        requestGetQuestion()
+    }
+
+    private fun requestGetQuestion() =
         QuestionApiClient.questionAPIService.getQuestions(
             (activity as MainActivity).basicLoginAndPassword
         ).enqueue(object : Callback<List<Question>> {
@@ -66,13 +72,9 @@ class LKMainFragment : Fragment() {
                 response: Response<List<Question>>
             ) {
                 if (response.isSuccessful) {
-                    (parentFragment as LKFragment).lkQuestionnaireFragment =
-                        LKQuestionnaireFragment(
-                            response.body() ?: emptyList()
-                        )
-                    (parentFragment as LKFragment).goToFragment(
-                        (parentFragment as LKFragment).lkQuestionnaireFragment
-                    )
+                    (parentFragment as LKFragment).lkQuestionnaireFragment.listQuestionsAndAnswers =
+                        response.body() ?: emptyList()
+                    requestGetUserAnswer()
                 } else {
                     (activity as MainActivity).toast("Ошибка сервера: ${response.code()} - ${response.message()}")
                     (parentFragment as LKFragment).goToFragment(
@@ -89,7 +91,38 @@ class LKMainFragment : Fragment() {
             }
 
         })
-    }
+
+    private fun requestGetUserAnswer() =
+        UserAnswerApiClient.userAnswerAPIService.getUserAnswerByUID(
+            (activity as MainActivity).basicLoginAndPassword,
+            (activity as MainActivity).uid
+        ).enqueue(object : Callback<List<UserAnswer>> {
+            override fun onResponse(
+                call: Call<List<UserAnswer>>,
+                response: Response<List<UserAnswer>>
+            ) {
+                if (response.isSuccessful) {
+                    (parentFragment as LKFragment).lkQuestionnaireFragment.listUserAnswer =
+                        (response.body() ?: emptyList()).toMutableList()
+                    (parentFragment as LKFragment).goToFragment(
+                        (parentFragment as LKFragment).lkQuestionnaireFragment
+                    )
+                } else {
+                    (activity as MainActivity).toast("Ошибка сервера: ${response.code()} - ${response.message()}")
+                    (parentFragment as LKFragment).goToFragment(
+                        (parentFragment as LKFragment).lkMainFragment
+                    )
+                }
+            }
+
+            override fun onFailure(call: Call<List<UserAnswer>>, t: Throwable) {
+                (activity as MainActivity).toast("Ошибка сети: ${t.message}")
+                (parentFragment as LKFragment).goToFragment(
+                    (parentFragment as LKFragment).lkMainFragment
+                )
+            }
+
+        })
 
     private fun exitLK()  =
         CoroutineScope(Dispatchers.IO).launch {

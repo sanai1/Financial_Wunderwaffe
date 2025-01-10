@@ -21,9 +21,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class LKQuestionnaireFragment(
-    private var listQuestionsAndAnswers: List<Question>
-) : Fragment() {
+class LKQuestionnaireFragment : Fragment() {
 
     private lateinit var textViewQuestion: TextView
     private lateinit var listRadioButton: List<RadioButton>
@@ -32,7 +30,9 @@ class LKQuestionnaireFragment(
     private lateinit var imageViewFurther: ImageView
     private lateinit var buttonSave:  Button
     private var indexQuestion = 0
-    private val listUserAnswer = mutableListOf<UserAnswer>()
+    private var isFirstResponse = true
+    var listUserAnswer = mutableListOf<UserAnswer>()
+    var listQuestionsAndAnswers = listOf<Question>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -72,6 +72,9 @@ class LKQuestionnaireFragment(
             backToMainFragmentLK()
         }
 
+        if (listUserAnswer.isNotEmpty()) {
+            isFirstResponse = false
+        }
 
         if (listQuestionsAndAnswers.isNotEmpty()) {
             if (listQuestionsAndAnswers.size == 1) imageViewFurther.isVisible = false
@@ -90,14 +93,12 @@ class LKQuestionnaireFragment(
         } else {
             imageViewBack.isVisible = true
         }
-        when(listUserAnswer[indexQuestion].answerID % 4) {
-            1L -> listRadioButton[0].isChecked = true
-            2L -> listRadioButton[1].isChecked = true
-            3L -> listRadioButton[2].isChecked = true
-            0L -> listRadioButton[3].isChecked = true
-        }
-        listUserAnswer.removeAt(listUserAnswer.lastIndex)
         updateQuestion()
+        try {
+            listUserAnswer[indexQuestion+1]
+        } catch (_: Exception) {
+            listUserAnswer.removeAt(listUserAnswer.lastIndex)
+        }
     }
 
     private fun furtherQuestion() {
@@ -114,8 +115,12 @@ class LKQuestionnaireFragment(
             buttonSave.isVisible = false
             imageViewFurther.isVisible = true
         }
-        addUserAnswer()
-        radioGroup.clearCheck()
+        try {
+            listUserAnswer[indexQuestion-1]
+            updateUserAnswer()
+        } catch (_: Exception) {
+            addUserAnswer()
+        }
         updateQuestion()
     }
 
@@ -128,9 +133,22 @@ class LKQuestionnaireFragment(
         }
     }
 
+    private fun updateUserAnswer() {
+        when (radioGroup.checkedRadioButtonId) {
+            listRadioButton[0].id -> listUserAnswer[indexQuestion-1] = getUserAnswer(0)
+            listRadioButton[1].id -> listUserAnswer[indexQuestion-1] = getUserAnswer(1)
+            listRadioButton[2].id -> listUserAnswer[indexQuestion-1] = getUserAnswer(2)
+            listRadioButton[3].id -> listUserAnswer[indexQuestion-1] = getUserAnswer(3)
+        }
+    }
+
     private fun getUserAnswer(id: Long): UserAnswer =
         UserAnswer(
-            id = 0L,
+            id = try {
+                listUserAnswer[indexQuestion-1].id
+            } catch (_: Exception) {
+                0L
+            },
             userUID = (activity as MainActivity).uid,
             questionID = listQuestionsAndAnswers[indexQuestion-1].id,
             answerID = listQuestionsAndAnswers[indexQuestion-1].listAnswers[id.toInt()].id,
@@ -144,6 +162,16 @@ class LKQuestionnaireFragment(
             listRadioButton.map {
                 it.text = listQuestionsAndAnswers[indexQuestion].listAnswers[indexAnswer++].text
             }
+            try {
+                when(listUserAnswer[indexQuestion].answerID % 4) {
+                    1L -> listRadioButton[0].isChecked = true
+                    2L -> listRadioButton[1].isChecked = true
+                    3L -> listRadioButton[2].isChecked = true
+                    0L -> listRadioButton[3].isChecked = true
+                }
+            } catch (_: Exception) {
+                radioGroup.clearCheck()
+            }
         } else {
             furtherQuestion()
         }
@@ -155,17 +183,29 @@ class LKQuestionnaireFragment(
             return
         }
         indexQuestion++
-        addUserAnswer()
+        try {
+            listUserAnswer[indexQuestion-1]
+            updateUserAnswer()
+        } catch (_: Exception) {
+            addUserAnswer()
+        }
         (parentFragment as LKFragment).goToFragment(
             (parentFragment as LKFragment).loadingFragment
         )
+        if (isFirstResponse) {
+            requestSaveUserAnswer()
+        } else {
+            requestUpdateUserAnswer()
+        }
+    }
+
+    private fun requestSaveUserAnswer() =
         UserAnswerApiClient.userAnswerAPIService.createUserAnswer(
             (activity as MainActivity).basicLoginAndPassword,
             listUserAnswer
         ).enqueue(object : Callback<List<Long>> {
             override fun onResponse(call: Call<List<Long>>, response: Response<List<Long>>) {
                 if (response.isSuccessful) {
-                    println(response.body())
                     (parentFragment as LKFragment).goToFragment(
                         (parentFragment as LKFragment).lkMainFragment
                     )
@@ -185,11 +225,39 @@ class LKQuestionnaireFragment(
             }
 
         })
-    }
 
-    private fun backToMainFragmentLK() =
+    private fun requestUpdateUserAnswer() =
+        UserAnswerApiClient.userAnswerAPIService.updateUserAnswer(
+            (activity as MainActivity).basicLoginAndPassword,
+            listUserAnswer
+        ).enqueue(object : Callback<Boolean> {
+            override fun onResponse(call: Call<Boolean>, response: Response<Boolean>) {
+                if (response.isSuccessful) {
+                    (parentFragment as LKFragment).goToFragment(
+                        (parentFragment as LKFragment).lkMainFragment
+                    )
+                } else {
+                    (activity as MainActivity).toast("Ошибка сервера: ${response.code()} - ${response.message()}")
+                    (parentFragment as LKFragment).goToFragment(
+                        (parentFragment as LKFragment).lkQuestionnaireFragment // TODO: проверить можно ли при ошибке воозвращаться в анкету
+                    )
+                }
+            }
+
+            override fun onFailure(call: Call<Boolean>, t: Throwable) {
+                (activity as MainActivity).toast("Ошибка сети: ${t.message}")
+                (parentFragment as LKFragment).goToFragment(
+                    (parentFragment as LKFragment).lkQuestionnaireFragment
+                )
+            }
+
+        })
+
+    private fun backToMainFragmentLK() {
         (parentFragment as LKFragment).goToFragment(
             (parentFragment as LKFragment).lkMainFragment
         )
+        (parentFragment as LKFragment).lkQuestionnaireFragment = LKQuestionnaireFragment()
+    }
 
 }

@@ -29,6 +29,7 @@ class LKFragment : Fragment() {
         val root: View = binding.root
 
         lkMainFragment = LKMainFragment()
+        lkQuestionnaireFragment = LKQuestionnaireFragment()
         loadingFragment = LoadingFragment()
 
 //        val textView: TextView = binding.textLk

@@ -6,6 +6,6 @@ data class UserAnswer(
     val id: Long,
     val userUID: UUID,
     val questionID: Long,
-    val answerID: Long,
+    var answerID: Long,
     val date: String
 )
