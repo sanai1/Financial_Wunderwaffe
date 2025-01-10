@@ -197,6 +197,7 @@ class LKQuestionnaireFragment : Fragment() {
         } else {
             requestUpdateUserAnswer()
         }
+        updateThisFragment()
     }
 
     private fun requestSaveUserAnswer() =
@@ -257,6 +258,10 @@ class LKQuestionnaireFragment : Fragment() {
         (parentFragment as LKFragment).goToFragment(
             (parentFragment as LKFragment).lkMainFragment
         )
+        updateThisFragment()
+    }
+
+    private fun updateThisFragment() {
         (parentFragment as LKFragment).lkQuestionnaireFragment = LKQuestionnaireFragment()
     }
 
