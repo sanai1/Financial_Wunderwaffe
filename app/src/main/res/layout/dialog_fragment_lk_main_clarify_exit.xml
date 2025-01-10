@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        style="@style/LinearLayoutInfoLK"
+
+        android:orientation="vertical"
+        tools:ignore="MissingConstraints">
+
+        <TextView
+            style="@style/TextViewInfoLK"
+
+            android:layout_marginTop="15dp"
+            android:text="Вы уверены, что хотите выйти из аккаунта?" />
+
+        <LinearLayout
+            style="@style/LinearLayoutInfoLK"
+
+            android:layout_marginTop="50dp"
+            android:orientation="vertical">
+
+            <Button
+                style="@style/ButtonWelcome"
+
+                android:id="@+id/buttonClarifyExitMainLK"
+                android:layout_width="match_parent"
+                android:backgroundTint="@color/maroon"
+                android:text="@string/exit"
+                android:layout_gravity="center"/>
+
+        </LinearLayout>
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

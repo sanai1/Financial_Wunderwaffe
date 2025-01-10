@@ -1,4 +1,4 @@
-package com.example.financialwunderwaffe.main.lk.fragments
+package com.example.financialwunderwaffe.main.lk.fragments.main
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -12,6 +12,7 @@ import com.example.financialwunderwaffe.R
 import com.example.financialwunderwaffe.database.AppDatabase
 import com.example.financialwunderwaffe.main.MainActivity
 import com.example.financialwunderwaffe.main.lk.LKFragment
+import com.example.financialwunderwaffe.main.lk.fragments.main.dialogs.LKDialogExitMainFragment
 import com.example.financialwunderwaffe.retrofit.database.questionnaire.question.QuestionApiClient
 import com.example.financialwunderwaffe.retrofit.database.questionnaire.question.Question
 import com.example.financialwunderwaffe.retrofit.database.questionnaire.user_answer.UserAnswer
@@ -23,7 +24,12 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class LKMainFragment : Fragment() {
+class LKMainFragment :
+    Fragment(),
+    LKDialogExitMainFragment.DialogExitMainFragment
+{
+
+    private lateinit var dialogExitMainFragment: LKDialogExitMainFragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,6 +38,9 @@ class LKMainFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_lk_main, container, false)
+
+        dialogExitMainFragment = LKDialogExitMainFragment()
+        dialogExitMainFragment.setDialogExitMainFragment(this)
 
         view.findViewById<LinearLayout>(R.id.linearLayoutEmailLK).setOnClickListener {
             emailLK()
@@ -124,12 +133,16 @@ class LKMainFragment : Fragment() {
 
         })
 
-    private fun exitLK()  =
+    private fun exitLK() =
+        dialogExitMainFragment.show(childFragmentManager, "dialogExitMainFragment")
+
+    override fun onDialogExitMainFragmentClickListener() {
         CoroutineScope(Dispatchers.IO).launch {
             AppDatabase.getDatabase((activity as MainActivity).context).getUserInfoDao().deleteUserInfo(
                 AppDatabase.getDatabase((activity as MainActivity).context).getUserInfoDao().getInfo()[0]
             )
             (activity as MainActivity).goToWelcomeActivity()
         }
+    }
 
 }

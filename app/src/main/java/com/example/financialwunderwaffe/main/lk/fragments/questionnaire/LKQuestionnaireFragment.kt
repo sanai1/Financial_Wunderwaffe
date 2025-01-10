@@ -1,4 +1,4 @@
-package com.example.financialwunderwaffe.main.lk.fragments
+package com.example.financialwunderwaffe.main.lk.fragments.questionnaire
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -207,22 +207,16 @@ class LKQuestionnaireFragment : Fragment() {
         ).enqueue(object : Callback<List<Long>> {
             override fun onResponse(call: Call<List<Long>>, response: Response<List<Long>>) {
                 if (response.isSuccessful) {
-                    (parentFragment as LKFragment).goToFragment(
-                        (parentFragment as LKFragment).lkMainFragment
-                    )
+                    backToMainFragmentLK()
                 } else {
                     (activity as MainActivity).toast("Ошибка сервера: ${response.code()} - ${response.message()}")
-                    (parentFragment as LKFragment).goToFragment(
-                        (parentFragment as LKFragment).lkQuestionnaireFragment // TODO: проверить можно ли при ошибке воозвращаться в анкету
-                    )
+                    backToQuestionnaireFragmentLK()
                 }
             }
 
             override fun onFailure(call: Call<List<Long>>, t: Throwable) {
                 (activity as MainActivity).toast("Ошибка сети: ${t.message}")
-                (parentFragment as LKFragment).goToFragment(
-                    (parentFragment as LKFragment).lkQuestionnaireFragment
-                )
+                backToQuestionnaireFragmentLK()
             }
 
         })
@@ -234,22 +228,16 @@ class LKQuestionnaireFragment : Fragment() {
         ).enqueue(object : Callback<Boolean> {
             override fun onResponse(call: Call<Boolean>, response: Response<Boolean>) {
                 if (response.isSuccessful) {
-                    (parentFragment as LKFragment).goToFragment(
-                        (parentFragment as LKFragment).lkMainFragment
-                    )
+                    backToMainFragmentLK()
                 } else {
                     (activity as MainActivity).toast("Ошибка сервера: ${response.code()} - ${response.message()}")
-                    (parentFragment as LKFragment).goToFragment(
-                        (parentFragment as LKFragment).lkQuestionnaireFragment // TODO: проверить можно ли при ошибке воозвращаться в анкету
-                    )
+                    backToQuestionnaireFragmentLK()
                 }
             }
 
             override fun onFailure(call: Call<Boolean>, t: Throwable) {
                 (activity as MainActivity).toast("Ошибка сети: ${t.message}")
-                (parentFragment as LKFragment).goToFragment(
-                    (parentFragment as LKFragment).lkQuestionnaireFragment
-                )
+                backToQuestionnaireFragmentLK()
             }
 
         })
@@ -257,6 +245,13 @@ class LKQuestionnaireFragment : Fragment() {
     private fun backToMainFragmentLK() {
         (parentFragment as LKFragment).goToFragment(
             (parentFragment as LKFragment).lkMainFragment
+        )
+        updateThisFragment()
+    }
+
+    private fun backToQuestionnaireFragmentLK() {
+        (parentFragment as LKFragment).goToFragment(
+            (parentFragment as LKFragment).lkQuestionnaireFragment // TODO: проверить можно ли при ошибке воозвращаться в анкету
         )
         updateThisFragment()
     }

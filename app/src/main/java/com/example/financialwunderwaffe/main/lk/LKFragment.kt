@@ -10,8 +10,8 @@ import com.example.financialwunderwaffe.LoadingFragment
 import com.example.financialwunderwaffe.R
 //import androidx.lifecycle.ViewModelProvider
 import com.example.financialwunderwaffe.databinding.FragmentMainLkBinding
-import com.example.financialwunderwaffe.main.lk.fragments.LKMainFragment
-import com.example.financialwunderwaffe.main.lk.fragments.LKQuestionnaireFragment
+import com.example.financialwunderwaffe.main.lk.fragments.main.LKMainFragment
+import com.example.financialwunderwaffe.main.lk.fragments.questionnaire.LKQuestionnaireFragment
 
 class LKFragment : Fragment() {
 
