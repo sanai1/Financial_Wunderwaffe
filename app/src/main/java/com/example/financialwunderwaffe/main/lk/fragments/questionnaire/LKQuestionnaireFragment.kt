@@ -207,6 +207,9 @@ class LKQuestionnaireFragment : Fragment() {
         ).enqueue(object : Callback<List<Long>> {
             override fun onResponse(call: Call<List<Long>>, response: Response<List<Long>>) {
                 if (response.isSuccessful) {
+                    val list = response.body() ?: emptyList()
+                    if (list.isEmpty())
+                        (activity as MainActivity).toast("Произошла ошибка сохранения данных")
                     backToMainFragmentLK()
                 } else {
                     (activity as MainActivity).toast("Ошибка сервера: ${response.code()} - ${response.message()}")
@@ -228,6 +231,8 @@ class LKQuestionnaireFragment : Fragment() {
         ).enqueue(object : Callback<Boolean> {
             override fun onResponse(call: Call<Boolean>, response: Response<Boolean>) {
                 if (response.isSuccessful) {
+                    if (response.body() == false)
+                        (activity as MainActivity).toast("Произошла ошибка обновления данных")
                     backToMainFragmentLK()
                 } else {
                     (activity as MainActivity).toast("Ошибка сервера: ${response.code()} - ${response.message()}")

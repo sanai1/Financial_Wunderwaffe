@@ -26,6 +26,8 @@
             style="@style/LinearLayoutInfoLK"
 
             android:id="@+id/linearLayoutEmailLK"
+            android:background="@drawable/rectangle_rounded_all"
+
             app:layout_constraintTop_toBottomOf="@+id/textView2"
             tools:ignore="MissingConstraints">
 
@@ -42,8 +44,8 @@
                 android:layout_weight="1" />
 
             <ImageView
-                android:layout_width="35dp"
-                android:layout_height="35dp"
+                style="@style/ImageViewArrowLK"
+
                 android:src="@mipmap/ic_right_arrow_foreground" />
 
         </LinearLayout>
@@ -52,6 +54,7 @@
             style="@style/LinearLayoutInfoLK"
 
             android:id="@+id/linearLayoutTestLK"
+            android:background="@drawable/rectangle_rounded_all"
             app:layout_constraintTop_toBottomOf="@+id/linearLayoutEmailLK"
             tools:ignore="MissingConstraints">
 
@@ -68,8 +71,8 @@
                 android:layout_weight="1" />
 
             <ImageView
-                android:layout_width="35dp"
-                android:layout_height="35dp"
+                style="@style/ImageViewArrowLK"
+
                 android:src="@mipmap/ic_right_arrow_foreground" />
 
         </LinearLayout>
