@@ -1,4 +1,4 @@
-package com.example.financialwunderwaffe.retrofit.database.questionnaire.user_answer
+package com.example.financialwunderwaffe.retrofit.database.questionnaire.userAnswer
 
 import java.util.UUID
 

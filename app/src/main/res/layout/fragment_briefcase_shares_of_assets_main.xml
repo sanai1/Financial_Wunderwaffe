@@ -3,13 +3,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".main.briefcase.fragments.strategies.BriefcaseStrategiesFragment">
+    tools:context=".main.briefcase.fragments.sharesOfAssets.fragments.BriefcaseSharesOfAssetsMainFragment">
 
-    <include layout="@layout/main_color"/>
+    <include layout="@layout/main_color" />
 
+    <!-- TODO: Update blank fragment layout -->
     <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/strategies" />
+        android:text="распределение долей активов" />
 
 </FrameLayout>

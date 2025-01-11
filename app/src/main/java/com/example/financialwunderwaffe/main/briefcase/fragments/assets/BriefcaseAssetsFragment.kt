@@ -1,4 +1,4 @@
-package com.example.financialwunderwaffe.main.briefcase.fragments
+package com.example.financialwunderwaffe.main.briefcase.fragments.assets
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

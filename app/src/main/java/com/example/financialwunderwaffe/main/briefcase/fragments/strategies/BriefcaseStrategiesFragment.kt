@@ -1,4 +1,4 @@
-package com.example.financialwunderwaffe.main.briefcase.fragments
+package com.example.financialwunderwaffe.main.briefcase.fragments.strategies
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.example.financialwunderwaffe.R
 
-class BriefcaseSharesOfAssetsFragment : Fragment() {
+class BriefcaseStrategiesFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -15,7 +15,7 @@ class BriefcaseSharesOfAssetsFragment : Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.fragment_briefcase_shares_of_assets, container, false)
+        val view = inflater.inflate(R.layout.fragment_briefcase_strategies, container, false)
 
         return view
     }

@@ -22,7 +22,7 @@ class BudgetFragment : Fragment() {
         _binding = FragmentMainBudgetBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        binding.textViewTitleBudget.setText(getString(R.string.title_budget))
+        binding.textViewTitleBudget.text = getString(R.string.transaction)
 
         binding.imageViewMenuBudget.setOnClickListener{
             binding.drawerBudget.openDrawer(GravityCompat.START)
@@ -30,10 +30,22 @@ class BudgetFragment : Fragment() {
 
         binding.navigationBudget.setNavigationItemSelectedListener {menuitem ->
             when (menuitem.itemId) {
-                R.id.nav_budget_history -> go_to_fragment(BudgetHistoryFragment())
-                R.id.nav_budget_transaction -> go_to_fragment(BudgetTransactionFragment())
-                R.id.nav_budget_report -> go_to_fragment(BudgetReportFragment())
-                R.id.nav_budget_category -> go_to_fragment(BudgetCategoryFragment())
+                R.id.nav_budget_history -> {
+                    binding.textViewTitleBudget.text = getString(R.string.history)
+                    go_to_fragment(BudgetHistoryFragment())
+                }
+                R.id.nav_budget_transaction -> {
+                    binding.textViewTitleBudget.text = getString(R.string.transaction)
+                    go_to_fragment(BudgetTransactionFragment())
+                }
+                R.id.nav_budget_report -> {
+                    binding.textViewTitleBudget.text = getString(R.string.report)
+                    go_to_fragment(BudgetReportFragment())
+                }
+                R.id.nav_budget_category -> {
+                    binding.textViewTitleBudget.text = getString(R.string.category)
+                    go_to_fragment(BudgetCategoryFragment())
+                }
             }
             binding.drawerBudget.closeDrawer(GravityCompat.START)
             true

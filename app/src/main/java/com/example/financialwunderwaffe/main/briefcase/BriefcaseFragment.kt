@@ -8,9 +8,9 @@ import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
 import com.example.financialwunderwaffe.R
 import com.example.financialwunderwaffe.databinding.FragmentMainBriefcaseBinding
-import com.example.financialwunderwaffe.main.briefcase.fragments.BriefcaseAssetsFragment
-import com.example.financialwunderwaffe.main.briefcase.fragments.BriefcaseSharesOfAssetsFragment
-import com.example.financialwunderwaffe.main.briefcase.fragments.BriefcaseStrategiesFragment
+import com.example.financialwunderwaffe.main.briefcase.fragments.assets.BriefcaseAssetsFragment
+import com.example.financialwunderwaffe.main.briefcase.fragments.sharesOfAssets.BriefcaseSharesOfAssetsFragment
+import com.example.financialwunderwaffe.main.briefcase.fragments.strategies.BriefcaseStrategiesFragment
 
 class BriefcaseFragment : Fragment() {
 
@@ -21,7 +21,7 @@ class BriefcaseFragment : Fragment() {
         _binding = FragmentMainBriefcaseBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        binding.textViewTitleBriefcase.setText(getString(R.string.title_briefcase))
+        binding.textViewTitleBriefcase.text = getString(R.string.assets)
 
         binding.imageViewMenuBriefcase.setOnClickListener{
             binding.drawerBriefcase.openDrawer(GravityCompat.START)
@@ -29,9 +29,18 @@ class BriefcaseFragment : Fragment() {
 
         binding.navigationBriefcase.setNavigationItemSelectedListener { menuitem ->
             when(menuitem.itemId) {
-                R.id.nav_briefcase_strategies -> go_to_fragment(BriefcaseStrategiesFragment())
-                R.id.nav_briefcase_shares_of_assets -> go_to_fragment(BriefcaseSharesOfAssetsFragment())
-                R.id.nav_briefcase_assets -> go_to_fragment(BriefcaseAssetsFragment())
+                R.id.nav_briefcase_strategies -> {
+                    binding.textViewTitleBriefcase.text = getString(R.string.strategies)
+                    go_to_fragment(BriefcaseStrategiesFragment())
+                }
+                R.id.nav_briefcase_shares_of_assets -> {
+                    binding.textViewTitleBriefcase.text = getString(R.string.shares_of_assets)
+                    go_to_fragment(BriefcaseSharesOfAssetsFragment())
+                }
+                R.id.nav_briefcase_assets -> {
+                    binding.textViewTitleBriefcase.text = getString(R.string.assets)
+                    go_to_fragment(BriefcaseAssetsFragment())
+                }
             }
             binding.drawerBriefcase.closeDrawer(GravityCompat.START)
             true

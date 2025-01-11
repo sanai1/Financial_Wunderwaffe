@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".main.briefcase.fragments.sharesOfAssets.fragments.BriefcaseSharesOfAssetsQuestionnaireNotFoundFragment">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:ignore="UselessParent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                style="@style/TextViewInfoBriefcase"
+
+                android:gravity="center"
+                android:text="@string/shares_of_assets_info_questionnaire_not_found" />
+
+            <Button
+                style="@style/ButtonWelcome"
+                android:id="@+id/button"
+                android:layout_gravity="center"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
+                android:text="Заполнить анкету" />
+
+            <LinearLayout
+                style="@style/LinearLayoutInfoLK.Drawable.Elevation"
+
+                android:layout_marginBottom="25dp"
+                android:orientation="vertical">
+
+                <TextView
+                    style="@style/TextViewInfoBriefcase"
+
+                    android:text="Некая методика расчета" />
+
+                <TextView
+                    style="@style/TextViewInfoBriefcase"
+
+                    android:text="@string/test" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</FrameLayout>

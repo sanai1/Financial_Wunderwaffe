@@ -15,8 +15,8 @@ import com.example.financialwunderwaffe.R
 import com.example.financialwunderwaffe.main.MainActivity
 import com.example.financialwunderwaffe.main.lk.LKFragment
 import com.example.financialwunderwaffe.retrofit.database.questionnaire.question.Question
-import com.example.financialwunderwaffe.retrofit.database.questionnaire.user_answer.UserAnswer
-import com.example.financialwunderwaffe.retrofit.database.questionnaire.user_answer.UserAnswerApiClient
+import com.example.financialwunderwaffe.retrofit.database.questionnaire.userAnswer.UserAnswer
+import com.example.financialwunderwaffe.retrofit.database.questionnaire.userAnswer.UserAnswerApiClient
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
