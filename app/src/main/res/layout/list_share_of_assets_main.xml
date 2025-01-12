@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/LinearLayoutInfoLK.Drawable.Elevation"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="10dp"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/linearLayoutAssetDetails"
+        android:layout_margin="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:id="@+id/linearLayoutColorTypeAsset"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@drawable/restangle_rounded_all"
+            android:orientation="horizontal"
+            tools:ignore="UselessLeaf" />
+
+<!--        TODO: сделать стиль для данного TextView-->
+        <TextView
+            android:id="@+id/textViewTypeAsset"
+            android:textColor="@color/black"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Тип актива" />
+
+        <ImageView
+            style="@style/ImageViewArrowLK"
+
+            app:srcCompat="@mipmap/ic_right_arrow_foreground" />
+    </LinearLayout>
+
+    <TableLayout
+        android:layout_margin="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                style="@style/TextViewInTableLayoutShareOfAssetsMain.Bold"
+
+                android:text="Сейчас" />
+
+            <TextView
+                style="@style/TextViewInTableLayoutShareOfAssetsMain.Bold"
+
+                android:text="Цель" />
+
+            <TextView
+                style="@style/TextViewInTableLayoutShareOfAssetsMain.Bold"
+
+                android:text="Дельта" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                style="@style/TextViewInTableLayoutShareOfAssetsMain"
+
+                android:id="@+id/textViewShareOfAssetNow"
+                android:text="TextView" />
+
+            <TextView
+                style="@style/TextViewInTableLayoutShareOfAssetsMain"
+
+                android:id="@+id/textViewShareOfAssetGoal"
+                android:text="TextView" />
+
+            <TextView
+                style="@style/TextViewInTableLayoutShareOfAssetsMain"
+
+                android:id="@+id/textViewShareOfAssetDelta"
+                android:text="TextView" />
+        </TableRow>
+    </TableLayout>
+</LinearLayout>

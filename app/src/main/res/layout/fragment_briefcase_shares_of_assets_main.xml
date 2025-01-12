@@ -1,16 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".main.briefcase.fragments.sharesOfAssets.fragments.BriefcaseSharesOfAssetsMainFragment">
+    tools:context=".main.briefcase.fragments.sharesOfAssets.fragments.main.BriefcaseSharesOfAssetsMainFragment">
 
-    <include layout="@layout/main_color" />
-
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="распределение долей активов" />
+        android:layout_height="match_parent">
+
+        <include layout="@layout/main_color" />
+
+        <!--    TODO: тут что-то для размещения графика    -->
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/list_shares_of_assets"
+            android:layout_marginBottom="70dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <Button
+            android:id="@+id/button3"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:text="Button"
+            android:layout_marginBottom="10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </FrameLayout>
