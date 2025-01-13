@@ -3,5 +3,5 @@ package com.example.financialwunderwaffe.retrofit.database.calculationShareOfAss
 data class TypeAsset(
     val id: Long,
     val name: String,
-    val description: String
+    val color: List<Int>
 )

@@ -8,7 +8,7 @@
     <include layout="@layout/main_color"/>
 
     <ProgressBar
-        android:id="@+id/progressBar"
+        android:id="@+id/progressBarLoading"
         style="?android:attr/progressBarStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -20,9 +20,10 @@
     <TextView
         style="@style/TextViewInfoWelcome"
 
+        android:id="@+id/textViewLoading"
         android:text="@string/loading"
 
-        app:layout_constraintBottom_toTopOf="@+id/progressBar"
+        app:layout_constraintBottom_toTopOf="@+id/progressBarLoading"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

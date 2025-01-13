@@ -9,7 +9,7 @@ import java.util.UUID
 
 interface CalculationShareOfAssetApiService {
 
-    @GET("") // TODO: указать путь
+    @GET("calculation_share_of_asset")
     fun getCalculationShareOfAssetByUID(
         @Header("Authorization") token: String,
         @Query("userUID") userUID: UUID

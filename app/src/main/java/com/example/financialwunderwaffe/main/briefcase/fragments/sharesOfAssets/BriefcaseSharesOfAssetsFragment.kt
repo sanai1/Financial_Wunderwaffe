@@ -62,26 +62,43 @@ class BriefcaseSharesOfAssetsFragment : Fragment() {
                 call: Call<RequestTemplate<CalculationShareOfAsset>>,
                 response: Response<RequestTemplate<CalculationShareOfAsset>>
             ) {
-                if (response.isSuccessful) {
+                if (response.isSuccessful && response.body() != null && response.code() == 200) {
                     val answer = response.body()
                     if (answer == null) {
                         (activity as MainActivity).toast("Непредвиденная ошибка на стороне сервера")
                         goToFragment(briefcaseSharesOfAssetsQuestionnaireNotFound)
                     } else if (answer.status.code == 422 && answer.status.message == "Questionnaire Not Found") {
                         goToFragment(briefcaseSharesOfAssetsQuestionnaireNotFound)
-                    } else {
-                        temporaryStub() // TODO: заменить передачей списка активов во фрагмент в нужном формате
+                    } else if (answer.status.code == 200 && answer.data != null){
+                        briefcaseSharesOfAssetsMainFragment.listStateSharesOfAssetsState =
+                            answer.data.listShareOfAsset.map {
+                                SharesOfAssetsState(
+                                    typeAssets = it.typeAsset.name,
+                                    now = 10000, // TODO: придумать откуда брать начальное значение доли актива
+                                    goal = it.share,
+                                    delta = it.share - 10000,
+                                    color = it.typeAsset.color,
+                                )
+                            }
                         goToFragment(briefcaseSharesOfAssetsMainFragment)
+                    } else {
+                        loadingFragment.text = answer.status.message
+                        loadingFragment.visible = "false"
+                        goToFragment(loadingFragment)
                     }
                 } else {
                     (activity as MainActivity).toast("Ошибка сервера: ${response.code()} - ${response.message()}")
-                    goToFragment(briefcaseSharesOfAssetsQuestionnaireNotFound) // TODO: сделать дополнительный фрагмент для показа информации об ошибке на уровне LoadingFragment
+                    loadingFragment.text = response.message()
+                    loadingFragment.visible = "false"
+                    goToFragment(loadingFragment)
                 }
             }
 
             override fun onFailure(call: Call<RequestTemplate<CalculationShareOfAsset>>, t: Throwable) {
                 (activity as MainActivity).toast("Ошибка сети: ${t.message}")
-                goToFragment(briefcaseSharesOfAssetsQuestionnaireNotFound)
+                loadingFragment.text = t.message.toString()
+                loadingFragment.visible = "false"
+                goToFragment(loadingFragment)
             }
         })
     }
