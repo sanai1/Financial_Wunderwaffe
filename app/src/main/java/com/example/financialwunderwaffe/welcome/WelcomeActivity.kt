@@ -1,6 +1,7 @@
 package com.example.financialwunderwaffe.welcome
 
 import android.content.Intent
+import android.content.pm.ActivityInfo
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
@@ -37,6 +38,7 @@ class WelcomeActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        ActivityInfo.SCREEN_ORIENTATION_PORTRAIT.also { requestedOrientation = it }
 
         binding_main = ActivityWelcomeBinding.inflate(layoutInflater)
         setContentView(binding_main.root)
