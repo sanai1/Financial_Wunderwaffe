@@ -20,6 +20,7 @@ interface TransactionApiService {
 
     @POST("transaction")
     fun createTransaction(
+        @Header("Authorization") token: String,
         @Body transaction: Transaction
     ): Call<Long>
 

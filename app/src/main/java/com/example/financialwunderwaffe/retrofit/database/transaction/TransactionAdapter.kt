@@ -29,7 +29,7 @@ class TransactionAdapter(private val transactions: List<Transaction>) :
         holder.columnId.text = transaction.id.toString()
         holder.columnAmount.text = transaction.amount.toString()
         holder.columnDate.text = transaction.date
-        holder.columnType.text = if (transaction.type) "Income" else "Expense"
+        holder.columnType.text = if (transaction.type) "Доход" else "Расход"
         holder.columnDescription.text = transaction.description
     }
 
