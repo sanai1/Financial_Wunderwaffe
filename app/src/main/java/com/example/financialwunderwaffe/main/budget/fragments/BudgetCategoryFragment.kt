@@ -45,7 +45,7 @@ class BudgetCategoryFragment : Fragment() {
 //                    id = id,
                     name = name.text.toString(),
                     type = type,
-                    user_uid = s
+                    userUID = s
                 )
             ).enqueue(object : Callback<Long> {
                 override fun onResponse(call: Call<Long>, response: Response<Long>) {
