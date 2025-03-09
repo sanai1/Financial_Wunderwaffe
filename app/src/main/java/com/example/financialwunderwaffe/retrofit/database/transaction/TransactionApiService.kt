@@ -4,6 +4,7 @@ import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
+import retrofit2.http.Header
 import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Query
@@ -13,11 +14,13 @@ interface TransactionApiService {
 
     @GET("transaction")
     fun getBuUserUID(
+        @Header("Authorization") token: String,
         @Query("userUID") userUID: UUID
     ): Call<List<Transaction>>
 
     @POST("transaction")
     fun createTransaction(
+        @Header("Authorization") token: String,
         @Body transaction: Transaction
     ): Call<Long>
 
