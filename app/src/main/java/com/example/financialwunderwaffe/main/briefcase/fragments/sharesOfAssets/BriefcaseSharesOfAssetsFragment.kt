@@ -38,10 +38,10 @@ class BriefcaseSharesOfAssetsFragment : Fragment() {
             BriefcaseSharesOfAssetsMainFragment()
         loadingFragment = LoadingFragment()
 
-//        goToFragment(loadingFragment)
-//        requestGetSharesOfAssets()
-        temporaryStub()
-        goToFragment(briefcaseSharesOfAssetsMainFragment)
+        goToFragment(loadingFragment)
+        requestGetSharesOfAssets()
+//        temporaryStub()
+//        goToFragment(briefcaseSharesOfAssetsMainFragment)
 
         return view
     }
@@ -62,8 +62,10 @@ class BriefcaseSharesOfAssetsFragment : Fragment() {
                 call: Call<RequestTemplate<CalculationShareOfAsset>>,
                 response: Response<RequestTemplate<CalculationShareOfAsset>>
             ) {
+                println(response)
                 if (response.isSuccessful && response.body() != null && response.code() == 200) {
                     val answer = response.body()
+                    println(answer)
                     if (answer == null) {
                         (activity as MainActivity).toast("Непредвиденная ошибка на стороне сервера")
                         goToFragment(briefcaseSharesOfAssetsQuestionnaireNotFound)
@@ -80,6 +82,7 @@ class BriefcaseSharesOfAssetsFragment : Fragment() {
                                     color = it.typeAsset.color,
                                 )
                             }
+                        println(briefcaseSharesOfAssetsMainFragment.listStateSharesOfAssetsState)
                         goToFragment(briefcaseSharesOfAssetsMainFragment)
                     } else {
                         loadingFragment.text = answer.status.message

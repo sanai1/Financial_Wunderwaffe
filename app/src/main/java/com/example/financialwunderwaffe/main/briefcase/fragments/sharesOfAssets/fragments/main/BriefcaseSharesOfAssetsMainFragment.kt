@@ -11,6 +11,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.financialwunderwaffe.R
 import com.example.financialwunderwaffe.main.MainActivity
 import com.github.mikephil.charting.charts.PieChart
+import com.github.mikephil.charting.components.Legend
+import com.github.mikephil.charting.components.LegendEntry
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
@@ -37,7 +39,7 @@ class BriefcaseSharesOfAssetsMainFragment : Fragment() {
 //        layoutManagerShareOfAssets = object : LinearLayoutManager((activity as MainActivity).context) {
 //            override fun canScrollVertically() = false
 //        }
-
+        println(listStateSharesOfAssetsState)
         initPieChart()
         initRecycleViewSharesOfAssets()
 
@@ -50,6 +52,7 @@ class BriefcaseSharesOfAssetsMainFragment : Fragment() {
                 (activity as MainActivity).toast("Нажали на Item - ${sharesOfAssetsState.typeAssets}")
             }
         }
+        println(listStateSharesOfAssetsState)
         shareOfAssetsAdapter = ShareOfAssetsAdapter(listStateSharesOfAssetsState, onStateClickShareOfAssets)
         recyclerViewSharesOfAssets.adapter = shareOfAssetsAdapter
         recyclerViewSharesOfAssets.layoutManager = layoutManagerShareOfAssets
@@ -60,12 +63,12 @@ class BriefcaseSharesOfAssetsMainFragment : Fragment() {
         pieChart.description.isEnabled = false
 
         // ?
-        pieChart.dragDecelerationFrictionCoef = 0.99f
+        pieChart.dragDecelerationFrictionCoef = 15f
 
         // полость внутри
         pieChart.isDrawHoleEnabled = true
         // цвет полости
-        pieChart.setHoleColor(Color.rgb(255,255,255))
+        pieChart.setHoleColor(Color.TRANSPARENT)
         // ? - появляется подобие тени после 60f
         pieChart.transparentCircleRadius = 50f
         // текст в полости
@@ -81,22 +84,63 @@ class BriefcaseSharesOfAssetsMainFragment : Fragment() {
             pieData.add(PieEntry(it.goal.toFloat()/100))
         }
 
-        val dataSet = PieDataSet(pieData, "Hello")
+        val dataSet = PieDataSet(pieData, "")
         // расстояние между дугами
-        dataSet.sliceSpace = 10f
+        dataSet.sliceSpace = 5f
         // ? - уменьшается диаграмма при увеличении значения
         dataSet.selectionShift = 10f
         // установка цвета диг диаграммы
-        dataSet.colors = listStateSharesOfAssetsState.map {
-            Color.rgb(
-                it.color[0],
-                it.color[1],
-                it.color[2]
+        var colorList: MutableList<Int> = mutableListOf()
+        listStateSharesOfAssetsState.forEach {
+            colorList.add(
+                Color.rgb(
+                    it.color[0],
+                    it.color[1],
+                    it.color[2]
+                )
             )
-        }.toMutableList()
+        }
+        dataSet.colors = colorList
+        // текст значений на дугах
+        dataSet.setDrawValues(false)
 
         // легенда
-        pieChart.legend.isEnabled = false
+        pieChart.legend.also { it ->
+            // показ
+            it.isEnabled = true
+            // ориентация по вертикали
+            it.verticalAlignment = Legend.LegendVerticalAlignment.CENTER
+            // ориентация по горизонтале
+            it.horizontalAlignment = Legend.LegendHorizontalAlignment.RIGHT
+            // ориентация
+            it.orientation = Legend.LegendOrientation.VERTICAL
+            // форма меток
+//            it.form = Legend.LegendForm.CIRCLE
+            // цвет текста
+            it.textColor = Color.BLACK
+            // размер текста
+            it.textSize = 15f
+            // установка данных
+            it.setCustom(
+                listStateSharesOfAssetsState.map {
+                    LegendEntry(
+                        it.typeAssets,
+                        Legend.LegendForm.CIRCLE,
+                        15f,
+                        5f,
+                        null,
+                        Color.rgb(
+                            it.color[0],
+                            it.color[1],
+                            it.color[2]
+                        )
+                    )
+                }
+            )
+        }
+        // показ процентов на дугах
+        pieChart.setUsePercentValues(true)
+
         // передача значений для построения диаграммы
         pieChart.data = PieData(dataSet)
         // цвет текста на дугах диаграммы
