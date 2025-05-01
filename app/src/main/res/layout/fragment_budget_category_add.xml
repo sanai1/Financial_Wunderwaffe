@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".main.budget.fragments.category.BudgetCategoryAddFragment">
+
+    <include layout="@layout/main_color" />
+
+    <ImageView
+        android:id="@+id/imageViewBackCategoryMain"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="5dp"
+        android:importantForAccessibility="no"
+        android:src="?attr/actionModeCloseDrawable" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingHorizontal="15dp"
+        android:paddingVertical="25dp">
+
+        <TextView
+            style="@style/TextViewInfoBriefcase"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="50dp"
+            android:text="Заполните информацию о новой категории" />
+
+        <EditText
+            android:id="@+id/editTextTextCategoryName"
+            style="@style/TextViewInfoBriefcase"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Введите название категории"
+            android:inputType="text" />
+
+        <RadioGroup
+            android:id="@+id/radioGroupCategoryType"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="50dp">
+
+            <RadioButton
+                android:id="@+id/radioButtonExpense"
+                style="@style/RadioButtonTest"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Расход" />
+
+            <RadioButton
+                android:id="@+id/radioButtonIncome"
+                style="@style/RadioButtonTest"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Доход" />
+        </RadioGroup>
+
+        <Button
+            android:id="@+id/buttonCategoryAdd"
+            style="@style/ButtonWelcome"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="50dp"
+            android:text="Добавить" />
+    </LinearLayout>
+
+</FrameLayout>

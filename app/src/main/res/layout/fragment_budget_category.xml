@@ -3,121 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".main.budget.fragments.BudgetCategoryFragment">
+    tools:context=".main.budget.fragments.category.BudgetCategoryFragment">
 
     <include layout="@layout/main_color"/>
 
-    <TextView
-        android:id="@+id/category_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Введите название категории"
-        android:textSize="20sp"
-        android:textColor="@color/black"
-        android:layout_gravity="bottom|center_horizontal"
-        android:layout_marginBottom="250dp" />
-
-    <EditText
-        android:id="@+id/category_input"
+    <FrameLayout
+        android:id="@+id/container_category"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/category_title"
-        android:layout_marginBottom="210dp"
-        android:layout_gravity="bottom|center_horizontal"
-        android:hint="Название категории"
-        android:textColor="@color/black"
-        android:gravity="center_horizontal"
-        android:inputType="text" />
-
-    <TextView
-        android:id="@+id/select_type_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Выберите тип"
-        android:textColor="@color/black"
-        android:layout_gravity="bottom|center_horizontal"
-        android:textSize="20sp"
-        android:layout_below="@id/category_input"
-        android:layout_marginBottom="160dp" />
-
-    <RadioGroup
-        android:id="@+id/type_radio_group"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|center_horizontal"
-        android:layout_below="@id/select_type_title"
-        android:layout_marginBottom="120dp"
-        android:textColor="@color/black"
-        android:orientation="horizontal">
-
-        <RadioButton
-            android:id="@+id/income_option"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Доход"
-            android:textColor="@android:color/black"
-            android:buttonTint="@color/white"
-            android:checked="true" /> <!-- По умолчанию выбран вариант "доход" -->
-
-        <RadioButton
-            android:id="@+id/expense_option"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Расход"
-            android:textColor="@android:color/black"
-            android:buttonTint="@color/white" />
-    </RadioGroup>
-
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_gravity="top|center_horizontal"
-        android:layout_marginTop="200dp"
-        android:layout_weight="1">
-
-    <TableLayout
-        android:id="@+id/categories_table"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:stretchColumns="1"
-        android:padding="8dp">
-
-    <!-- Заголовок таблицы -->
-    <TableRow
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@android:color/darker_gray">
-        <TextView
-            android:layout_width="50dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Название"
-            android:textColor="@android:color/white"
-            android:padding="8dp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Тип"
-            android:textColor="@android:color/white"
-            android:padding="8dp"
-            android:textStyle="bold" />
-    </TableRow>
-
-    </TableLayout>
-    </ScrollView>
-
-    <Button
-        android:id="@+id/button_add_category"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|center_horizontal"
-        android:backgroundTint="@color/purple_700"
-        android:text="Добавить"
-        android:layout_marginBottom="60dp"
-        android:textColor="@color/white"
-        android:textSize="15sp" />
+        android:layout_height="match_parent" />
 
 </FrameLayout>

@@ -8,7 +8,7 @@ import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
 import com.example.financialwunderwaffe.R
 import com.example.financialwunderwaffe.databinding.FragmentMainBudgetBinding
-import com.example.financialwunderwaffe.main.budget.fragments.BudgetCategoryFragment
+import com.example.financialwunderwaffe.main.budget.fragments.category.BudgetCategoryFragment
 import com.example.financialwunderwaffe.main.budget.fragments.BudgetHistoryFragment
 import com.example.financialwunderwaffe.main.budget.fragments.BudgetReportFragment
 import com.example.financialwunderwaffe.main.budget.fragments.BudgetTransactionFragment
