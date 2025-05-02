@@ -53,6 +53,7 @@ dependencies {
     implementation(libs.material)
 
     implementation(libs.mpAndroidChart)
+    implementation(libs.flexbox)
 
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.navigation.fragment.ktx)

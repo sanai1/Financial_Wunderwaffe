@@ -3,14 +3,85 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".main.budget.fragments.BudgetReportFragment">
+    android:paddingHorizontal="10dp"
+    tools:context=".main.budget.fragments.report.BudgetReportFragment">
 
     <include layout="@layout/main_color"/>
 
-    <TextView
-        android:textColor="@color/black"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/report" />
+        android:layout_height="match_parent">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/imageViewBackYearReportMain"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:importantForAccessibility="no"
+                    android:src="@mipmap/ic_left_arrow_test_foreground" />
+
+                <TextView
+                    android:id="@+id/textViewYearReportMain"
+                    style="@style/TextViewInfoBriefcase"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:gravity="center" />
+
+                <ImageView
+                    android:id="@+id/imageViewForwardYearReportMain"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:importantForAccessibility="no"
+                    android:src="@mipmap/ic_right_arrow_test_foreground" />
+            </LinearLayout>
+
+            <com.github.mikephil.charting.charts.LineChart
+                android:id="@+id/lineChartReportMain"
+                android:layout_width="match_parent"
+                android:layout_height="500dp"
+                android:background="@color/white"
+                android:elevation="4dp" />
+
+            <TextView
+                android:id="@+id/textViewReportMain"
+                style="@style/TextViewInfoBriefcase"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Нет данных за выбранный период"
+                android:visibility="gone" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <CheckBox
+                    android:id="@+id/checkBoxLargeExpense"
+                    style="@style/CheckBox"
+                    android:text="Крупные покупки" />
+
+                <CheckBox
+                    android:id="@+id/checkBoxLargeIncome"
+                    style="@style/CheckBox"
+                    android:text="Крупные доходы" />
+            </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/listCategoryReportMain"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+    </ScrollView>
 </FrameLayout>

@@ -9,10 +9,10 @@ import androidx.fragment.app.Fragment
 import com.example.financialwunderwaffe.R
 import com.example.financialwunderwaffe.databinding.FragmentMainBudgetBinding
 import com.example.financialwunderwaffe.main.MainActivity
-import com.example.financialwunderwaffe.main.budget.fragments.BudgetReportFragment
 import com.example.financialwunderwaffe.main.budget.fragments.BudgetTransactionFragment
 import com.example.financialwunderwaffe.main.budget.fragments.category.BudgetCategoryFragment
 import com.example.financialwunderwaffe.main.budget.fragments.history.BudgetHistoryFragment
+import com.example.financialwunderwaffe.main.budget.fragments.report.BudgetReportFragment
 import com.example.financialwunderwaffe.retrofit.database.category.Category
 import com.example.financialwunderwaffe.retrofit.database.category.CategoryApiClient
 import com.example.financialwunderwaffe.retrofit.database.transaction.Transaction
