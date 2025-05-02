@@ -62,7 +62,7 @@ class TransactionAdapter(
                     it[0] + it.substring(1).reversed().chunked(3).joinToString(" ").reversed()
                 }
                 setTextColor(
-                    if (transactionState.amount[0] == '+') Color.GREEN
+                    if (transactionState.amount[0] == '+') Color.rgb(0,200,0)
                     else Color.RED
                 )
             }

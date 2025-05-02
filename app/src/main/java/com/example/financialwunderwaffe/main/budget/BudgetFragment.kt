@@ -60,6 +60,7 @@ class BudgetFragment : Fragment() {
             binding.drawerBudget.closeDrawer(GravityCompat.START)
             true
         }
+        binding.navigationBudget.itemIconTintList = null
 
         initCategory()
         go_to_fragment(BudgetTransactionFragment())

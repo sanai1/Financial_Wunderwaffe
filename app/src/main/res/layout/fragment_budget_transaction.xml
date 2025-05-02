@@ -69,7 +69,7 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/textViewDateTransaction"
+                    android:id="@+id/textViewDateTransactionAdd"
                     style="@style/TextViewInfoBriefcase"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"

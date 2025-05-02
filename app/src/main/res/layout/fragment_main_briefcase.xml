@@ -63,11 +63,13 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.google.android.material.navigation.NavigationView
-    android:id="@+id/navigation_briefcase"
-    android:layout_width="wrap_content"
-    android:layout_height="match_parent"
-    android:layout_gravity="start"
-    app:headerLayout="@layout/menu_title"
-    app:menu="@menu/navigation_briefcase"/>
+        android:id="@+id/navigation_briefcase"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        app:itemTextColor="@color/black"
+        android:layout_gravity="start"
+        app:headerLayout="@layout/menu_title"
+        app:menu="@menu/navigation_briefcase"/>
 
 </androidx.drawerlayout.widget.DrawerLayout>

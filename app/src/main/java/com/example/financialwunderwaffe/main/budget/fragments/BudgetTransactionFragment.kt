@@ -91,7 +91,7 @@ class BudgetTransactionFragment : Fragment() {
                 (activity as MainActivity).toast("Введите сумму транзакции")
                 return@setOnClickListener
             }
-            val date = view.findViewById<EditText>(R.id.textViewDateTransaction).text.toString()
+            val date = view.findViewById<TextView>(R.id.textViewDateTransactionAdd).text.toString()
             if (date.isEmpty()) {
                 (activity as MainActivity).toast("Введите дату транзакции")
                 return@setOnClickListener
@@ -180,7 +180,7 @@ class BudgetTransactionFragment : Fragment() {
     }
 
     private fun setDate(dataString: String) {
-        view.findViewById<TextView>(R.id.textViewDateTransaction).text = dataString
+        view.findViewById<TextView>(R.id.textViewDateTransactionAdd).text = dataString
     }
 
     private fun saveTransaction(transaction: Transaction) {
