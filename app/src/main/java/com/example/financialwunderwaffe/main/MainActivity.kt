@@ -26,6 +26,9 @@ class MainActivity : AppCompatActivity() {
     lateinit var basicLoginAndPassword: String
     lateinit var uid: UUID
     val date: LocalDate = LocalDate.now()
+    val printToast = fun(message: String) {
+        toast(message)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

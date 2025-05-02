@@ -8,15 +8,25 @@ import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
 import com.example.financialwunderwaffe.R
 import com.example.financialwunderwaffe.databinding.FragmentMainBudgetBinding
-import com.example.financialwunderwaffe.main.budget.fragments.category.BudgetCategoryFragment
-import com.example.financialwunderwaffe.main.budget.fragments.BudgetHistoryFragment
+import com.example.financialwunderwaffe.main.MainActivity
 import com.example.financialwunderwaffe.main.budget.fragments.BudgetReportFragment
 import com.example.financialwunderwaffe.main.budget.fragments.BudgetTransactionFragment
+import com.example.financialwunderwaffe.main.budget.fragments.category.BudgetCategoryFragment
+import com.example.financialwunderwaffe.main.budget.fragments.history.BudgetHistoryFragment
+import com.example.financialwunderwaffe.retrofit.database.category.Category
+import com.example.financialwunderwaffe.retrofit.database.category.CategoryApiClient
+import com.example.financialwunderwaffe.retrofit.database.transaction.Transaction
+import com.example.financialwunderwaffe.retrofit.database.transaction.TransactionApiClient
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class BudgetFragment : Fragment() {
-
     private var _binding: FragmentMainBudgetBinding? = null
     private val binding get() = _binding!!
+    val listCategory = mutableListOf<Category>()
+    val listTransaction = mutableListOf<Transaction>()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentMainBudgetBinding.inflate(inflater, container, false)
@@ -51,6 +61,7 @@ class BudgetFragment : Fragment() {
             true
         }
 
+        initCategory()
         go_to_fragment(BudgetTransactionFragment())
 
         return root
@@ -61,6 +72,42 @@ class BudgetFragment : Fragment() {
         transaction.replace(R.id.container_budget, fragment)
         transaction.addToBackStack(null)
         transaction.commit()
+    }
+
+    fun initCategory() = CoroutineScope(Dispatchers.IO).launch {
+        try {
+            (activity as MainActivity).basicLoginAndPassword
+        } catch (e: Exception) {
+            delay(500)
+        }
+        val response = CategoryApiClient.categoryAPIService.getByUserUID(
+            token = (activity as MainActivity).basicLoginAndPassword,
+            userUID = (activity as MainActivity).uid
+        ).execute()
+        if (response.isSuccessful && response.body() != null) {
+            listCategory.clear()
+            response.body()!!.forEach {
+                listCategory.add(it)
+            }
+            initTransaction()
+        } else {
+            (activity as MainActivity).toast("Ошибка сервера или сети: ${response.code()}-${response.message()}")
+        }
+    }
+
+    fun initTransaction() = CoroutineScope(Dispatchers.IO).launch {
+        val response = TransactionApiClient.transactionAPIService.getBuUserUID(
+            token = (activity as MainActivity).basicLoginAndPassword,
+            userUID = (activity as MainActivity).uid
+        ).execute()
+        if (response.isSuccessful && response.body() != null) {
+            listTransaction.clear()
+            response.body()!!.forEach {
+                listTransaction.add(it)
+            }
+        } else {
+            (activity as MainActivity).toast("Ошибка сервера: ${response.code()}-${response.message()}")
+        }
     }
 
     override fun onDestroyView() {

@@ -25,6 +25,7 @@
                 <RadioButton
                     android:id="@+id/radioButtonExpenseInTransaction"
                     style="@style/RadioButtonTest"
+                    android:textSize="25sp"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -33,6 +34,7 @@
                 <RadioButton
                     android:id="@+id/radioButtonIncomeInTransaction"
                     style="@style/RadioButtonTest"
+                    android:textSize="25sp"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -42,6 +44,7 @@
             <Spinner
                 android:id="@+id/spinnerCategory"
                 style="@style/Spinner"
+                android:layout_marginTop="50dp"
                 android:layout_width="match_parent"
                 android:layout_height="50dp" />
 
@@ -49,26 +52,45 @@
                 android:id="@+id/editTextNumberDecimalAmountTransaction"
                 style="@style/TextViewInfoLK"
                 android:layout_width="match_parent"
+                android:layout_marginTop="50dp"
+                android:background="@drawable/rectangle_rounded_all_light_gray"
                 android:layout_height="wrap_content"
                 android:autofillHints=""
+                android:maxLength="9"
+                android:maxLines="1"
                 android:hint="Введите сумму транзакции"
                 android:inputType="numberDecimal"
                 android:textColorHint="@color/gray" />
 
-            <EditText
-                android:id="@+id/editTextDateTransaction"
-                style="@style/TextViewInfoLK"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:autofillHints=""
-                android:hint="Введите дату транзакции"
-                android:inputType="date"
-                android:textColorHint="@color/gray" />
+                android:layout_marginTop="50dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/textViewDateTransaction"
+                    style="@style/TextViewInfoBriefcase"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:gravity="end"
+                    android:textSize="20sp" />
+
+                <ImageView
+                    android:id="@+id/imageViewDateTransaction"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_weight="1"
+                    android:src="@mipmap/ic_calendar_foreground" />
+            </LinearLayout>
 
             <CheckBox
                 android:id="@+id/checkBoxTransactionType"
                 style="@style/TextViewInfoBriefcase"
                 android:layout_width="wrap_content"
+                android:layout_marginTop="50dp"
                 android:layout_height="wrap_content"
                 android:text="Крупная покупка/доход" />
 
@@ -76,9 +98,12 @@
                 android:id="@+id/editTextTextMultiLineDescriptionTransaction"
                 style="@style/TextViewInfoBriefcase"
                 android:layout_width="match_parent"
+                android:layout_marginTop="50dp"
                 android:layout_height="wrap_content"
                 android:autofillHints=""
+                android:background="@drawable/rectangle_rounded_all_light_gray"
                 android:gravity="start|top"
+                android:padding="10dp"
                 android:hint="Введите описание (опциоанльно)"
                 android:inputType="textMultiLine"
                 android:textColorHint="@color/gray" />

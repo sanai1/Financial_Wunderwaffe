@@ -2,6 +2,7 @@ package com.example.financialwunderwaffe.main.budget.fragments
 
 import android.graphics.Color
 import android.os.Bundle
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,6 +11,7 @@ import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.RadioButton
 import android.widget.RadioGroup
 import android.widget.Spinner
@@ -17,10 +19,12 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.example.financialwunderwaffe.R
 import com.example.financialwunderwaffe.main.MainActivity
+import com.example.financialwunderwaffe.main.budget.BudgetFragment
 import com.example.financialwunderwaffe.retrofit.database.category.Category
 import com.example.financialwunderwaffe.retrofit.database.category.CategoryApiClient
 import com.example.financialwunderwaffe.retrofit.database.transaction.Transaction
 import com.example.financialwunderwaffe.retrofit.database.transaction.TransactionApiClient
+import com.google.android.material.datepicker.MaterialDatePicker
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -28,15 +32,22 @@ import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.util.Calendar
+import java.util.Locale
 
 class BudgetTransactionFragment : Fragment() {
     private lateinit var spinner: Spinner
     private lateinit var view: View
-    private val allCategory = mutableListOf<Category>()
     private val listCategoryExpense = mutableListOf<String>()
     private val listCategoryIncome = mutableListOf<String>()
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         view = inflater.inflate(R.layout.fragment_budget_transaction, container, false)
 
         spinner = view.findViewById(R.id.spinnerCategory)
@@ -51,15 +62,27 @@ class BudgetTransactionFragment : Fragment() {
             setIncomeCategory()
         }
 
+        view.findViewById<ImageView>(R.id.imageViewDateTransaction).setOnClickListener {
+            val datePicker = MaterialDatePicker.Builder.datePicker()
+                .setTitleText("Выберите дату")
+                .setSelection(Calendar.getInstance().timeInMillis)
+                .build()
+            datePicker.show(childFragmentManager, "DATE_PICKER")
+            datePicker.addOnPositiveButtonClickListener { selectedDate ->
+                setDate(SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()).format(selectedDate))
+            }
+        }
+        setDate(LocalDate.now().toString().split("-").reversed().joinToString("."))
+
         view.findViewById<Button>(R.id.buttonTransactionAdd).setOnClickListener {
             val category =
                 when (view.findViewById<RadioGroup>(R.id.radioGroupCategoryInTransaction).checkedRadioButtonId) {
                     view.findViewById<RadioButton>(R.id.radioButtonExpenseInTransaction).id -> {
-                        allCategory.first { it.name == spinner.selectedItem as String && !it.type }
+                        (parentFragment as BudgetFragment).listCategory.first { it.name == spinner.selectedItem as String && !it.type }
                     }
 
                     else -> {
-                        allCategory.first { it.name == spinner.selectedItem as String && it.type }
+                        (parentFragment as BudgetFragment).listCategory.first { it.name == spinner.selectedItem as String && it.type }
                     }
                 }
             val amount =
@@ -68,12 +91,11 @@ class BudgetTransactionFragment : Fragment() {
                 (activity as MainActivity).toast("Введите сумму транзакции")
                 return@setOnClickListener
             }
-            val date = view.findViewById<EditText>(R.id.editTextDateTransaction).text.toString()
+            val date = view.findViewById<EditText>(R.id.textViewDateTransaction).text.toString()
             if (date.isEmpty()) {
                 (activity as MainActivity).toast("Введите дату транзакции")
                 return@setOnClickListener
             }
-            println(date)
             saveTransaction(
                 Transaction(
                     categoryID = category.id,
@@ -101,7 +123,6 @@ class BudgetTransactionFragment : Fragment() {
             ) {
                 if (response.isSuccessful && response.body() != null) {
                     response.body()!!.forEach {
-                        allCategory.add(it)
                         if (it.type) {
                             listCategoryIncome.add(it.name)
                         } else {
@@ -147,11 +168,19 @@ class BudgetTransactionFragment : Fragment() {
                 position: Int,
                 id: Long
             ) {
-                (view as? TextView)?.setTextColor(Color.BLACK)
+                (view as? TextView)?.apply {
+                    gravity = Gravity.CENTER
+                    setTextColor(Color.BLACK)
+                    textSize = 25f
+                }
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
+    }
+
+    private fun setDate(dataString: String) {
+        view.findViewById<TextView>(R.id.textViewDateTransaction).text = dataString
     }
 
     private fun saveTransaction(transaction: Transaction) {
@@ -161,8 +190,9 @@ class BudgetTransactionFragment : Fragment() {
         ).enqueue(object : Callback<Long> {
             override fun onResponse(call: Call<Long>, response: Response<Long>) {
                 if (response.isSuccessful) {
-                    (activity as MainActivity).toast("Транзакция добавлена ")
+                    (activity as MainActivity).toast("Транзакция добавлена")
                     goToDefault()
+                    (parentFragment as BudgetFragment).initTransaction()
                 } else {
                     (activity as MainActivity).toast("Ошибка сервера: ${response.code()}-${response.message()}")
                 }
@@ -176,8 +206,7 @@ class BudgetTransactionFragment : Fragment() {
 
     private fun goToDefault() {
         view.findViewById<EditText>(R.id.editTextNumberDecimalAmountTransaction).setText("")
-        view.findViewById<EditText>(R.id.editTextDateTransaction).setText("")
-        view.findViewById<CheckBox>(R.id.checkBoxTransactionType).clearFocus()
+        view.findViewById<CheckBox>(R.id.checkBoxTransactionType).isChecked = false
         view.findViewById<EditText>(R.id.editTextTextMultiLineDescriptionTransaction).setText("")
     }
 

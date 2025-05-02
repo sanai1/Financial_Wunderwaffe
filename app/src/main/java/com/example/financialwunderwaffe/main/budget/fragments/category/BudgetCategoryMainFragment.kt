@@ -10,11 +10,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.financialwunderwaffe.R
 import com.example.financialwunderwaffe.main.MainActivity
-import com.example.financialwunderwaffe.retrofit.database.category.Category
-import com.example.financialwunderwaffe.retrofit.database.category.CategoryApiClient
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class BudgetCategoryMainFragment : Fragment() {
     private lateinit var categoryStateAdapter: CategoryAdapter
@@ -42,35 +37,19 @@ class BudgetCategoryMainFragment : Fragment() {
     }
 
     private fun initRecyclerViewCategory() {
-        CategoryApiClient.categoryAPIService.getByUserUID(
-            token = (activity as MainActivity).basicLoginAndPassword,
-            userUID = (activity as MainActivity).uid
-        ).enqueue(object : Callback<List<Category>> {
-            override fun onResponse(
-                call: Call<List<Category>>,
-                response: Response<List<Category>>
-            ) {
-                if (response.isSuccessful && response.body() != null) {
-                    categoryStateAdapter = CategoryAdapter(response.body()!!.map {
-                        CategoryState(
-                            id = it.id,
-                            title = it.name,
-                            type = it.type
-                        )
-                    }) { categoryState ->
-                        (activity as MainActivity).toast("Нажали на ${categoryState.title} категорию")
-                    }
-                    recyclerViewCategory.adapter = categoryStateAdapter
-                    recyclerViewCategory.layoutManager = layoutManagerCategory
-                } else {
-                    (activity as MainActivity).toast("Ошибка сервера: ${response.code()}-${response.message()}")
-                }
+        categoryStateAdapter = CategoryAdapter(
+            (parentFragment as BudgetCategoryFragment).budgetFragment.listCategory.map {
+                CategoryState(
+                    id = it.id,
+                    title = it.name,
+                    type = it.type
+                )
             }
-
-            override fun onFailure(call: Call<List<Category>>, t: Throwable) {
-                (activity as MainActivity).toast("Ошибка сервера: ${t.message}")
-            }
-        })
+        ) { categoryState ->
+            (activity as MainActivity).toast("Нажали на ${categoryState.title} категорию")
+        }
+        recyclerViewCategory.adapter = categoryStateAdapter
+        recyclerViewCategory.layoutManager = layoutManagerCategory
     }
 
 }

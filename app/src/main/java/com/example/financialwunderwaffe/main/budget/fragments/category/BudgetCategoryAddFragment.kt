@@ -14,6 +14,9 @@ import com.example.financialwunderwaffe.R
 import com.example.financialwunderwaffe.main.MainActivity
 import com.example.financialwunderwaffe.retrofit.database.category.Category
 import com.example.financialwunderwaffe.retrofit.database.category.CategoryApiClient
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -71,9 +74,13 @@ class BudgetCategoryAddFragment : Fragment() {
         ).enqueue(object : Callback<Long> {
             override fun onResponse(call: Call<Long>, response: Response<Long>) {
                 if (response.isSuccessful) {
-                    (parentFragment as BudgetCategoryFragment).goToFragment(
-                        (parentFragment as BudgetCategoryFragment).budgetCategoryMainFragment
-                    )
+                    CoroutineScope(Dispatchers.IO).launch {
+                        (parentFragment as BudgetCategoryFragment).apply {
+                            budgetFragment.initCategory().join()
+                            budgetCategoryMainFragment = BudgetCategoryMainFragment()
+                            goToFragment(budgetCategoryMainFragment)
+                        }
+                    }
                 } else {
                     (activity as MainActivity).toast("Ошибка сервера: ${response.code()}-${response.message()}")
                     (parentFragment as BudgetCategoryFragment).goToFragment(
