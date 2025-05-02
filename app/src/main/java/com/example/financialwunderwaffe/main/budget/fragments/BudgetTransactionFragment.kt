@@ -20,8 +20,6 @@ import androidx.fragment.app.Fragment
 import com.example.financialwunderwaffe.R
 import com.example.financialwunderwaffe.main.MainActivity
 import com.example.financialwunderwaffe.main.budget.BudgetFragment
-import com.example.financialwunderwaffe.retrofit.database.category.Category
-import com.example.financialwunderwaffe.retrofit.database.category.CategoryApiClient
 import com.example.financialwunderwaffe.retrofit.database.transaction.Transaction
 import com.example.financialwunderwaffe.retrofit.database.transaction.TransactionApiClient
 import com.google.android.material.datepicker.MaterialDatePicker
@@ -29,6 +27,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -113,32 +112,16 @@ class BudgetTransactionFragment : Fragment() {
 
     private fun initListsForSpinner() = CoroutineScope(Dispatchers.IO).launch {
         delay(500)
-        CategoryApiClient.categoryAPIService.getByUserUID(
-            token = (activity as MainActivity).basicLoginAndPassword,
-            userUID = (activity as MainActivity).uid
-        ).enqueue(object : Callback<List<Category>> {
-            override fun onResponse(
-                call: Call<List<Category>>,
-                response: Response<List<Category>>
-            ) {
-                if (response.isSuccessful && response.body() != null) {
-                    response.body()!!.forEach {
-                        if (it.type) {
-                            listCategoryIncome.add(it.name)
-                        } else {
-                            listCategoryExpense.add(it.name)
-                        }
-                    }
-                    setExpenseCategory()
-                } else {
-                    (activity as MainActivity).toast("Ошибка сервера: ${response.code()}-${response.message()}")
-                }
+        (parentFragment as BudgetFragment).listCategory.forEach {
+            if (it.type) {
+                listCategoryIncome.add(it.name)
+            } else {
+                listCategoryExpense.add(it.name)
             }
-
-            override fun onFailure(call: Call<List<Category>>, t: Throwable) {
-                (activity as MainActivity).toast("Ошибка сети: ${t.message}")
-            }
-        })
+        }
+        withContext(Dispatchers.Main) {
+            setExpenseCategory()
+        }
     }
 
     private fun setExpenseCategory() {

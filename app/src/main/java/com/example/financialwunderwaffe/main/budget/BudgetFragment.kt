@@ -79,7 +79,7 @@ class BudgetFragment : Fragment() {
         try {
             (activity as MainActivity).basicLoginAndPassword
         } catch (e: Exception) {
-            delay(500)
+            delay(250)
         }
         val response = CategoryApiClient.categoryAPIService.getByUserUID(
             token = (activity as MainActivity).basicLoginAndPassword,
