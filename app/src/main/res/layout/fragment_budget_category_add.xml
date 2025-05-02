@@ -9,12 +9,12 @@
 
     <ImageView
         android:id="@+id/imageViewBackCategoryMain"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_marginStart="5dp"
         android:layout_marginTop="5dp"
         android:importantForAccessibility="no"
-        android:src="?attr/actionModeCloseDrawable" />
+        android:src="@mipmap/ic_sign_out_foreground" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -36,7 +36,9 @@
             style="@style/TextViewInfoBriefcase"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:autofillHints=""
             android:hint="Введите название категории"
+            android:textColorHint="@color/gray"
             android:inputType="text" />
 
         <RadioGroup

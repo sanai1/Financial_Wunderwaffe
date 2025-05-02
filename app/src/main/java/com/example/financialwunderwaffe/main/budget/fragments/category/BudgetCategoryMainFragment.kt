@@ -50,7 +50,7 @@ class BudgetCategoryMainFragment : Fragment() {
                 call: Call<List<Category>>,
                 response: Response<List<Category>>
             ) {
-                if (response.isSuccessful || response.body() == null) {
+                if (response.isSuccessful && response.body() != null) {
                     categoryStateAdapter = CategoryAdapter(response.body()!!.map {
                         CategoryState(
                             id = it.id,

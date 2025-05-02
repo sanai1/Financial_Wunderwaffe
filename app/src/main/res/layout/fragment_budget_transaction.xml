@@ -1,21 +1,97 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".main.budget.fragments.BudgetTransactionFragment">
 
     <include layout="@layout/main_color"/>
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="10dp">
+
+            <RadioGroup
+                android:id="@+id/radioGroupCategoryInTransaction"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/radioButtonExpenseInTransaction"
+                    style="@style/RadioButtonTest"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Расход" />
+
+                <RadioButton
+                    android:id="@+id/radioButtonIncomeInTransaction"
+                    style="@style/RadioButtonTest"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Доход" />
+            </RadioGroup>
+
+            <Spinner
+                android:id="@+id/spinnerCategory"
+                style="@style/Spinner"
+                android:layout_width="match_parent"
+                android:layout_height="50dp" />
+
+            <EditText
+                android:id="@+id/editTextNumberDecimalAmountTransaction"
+                style="@style/TextViewInfoLK"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autofillHints=""
+                android:hint="Введите сумму транзакции"
+                android:inputType="numberDecimal"
+                android:textColorHint="@color/gray" />
+
+            <EditText
+                android:id="@+id/editTextDateTransaction"
+                style="@style/TextViewInfoLK"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autofillHints=""
+                android:hint="Введите дату транзакции"
+                android:inputType="date"
+                android:textColorHint="@color/gray" />
+
+            <CheckBox
+                android:id="@+id/checkBoxTransactionType"
+                style="@style/TextViewInfoBriefcase"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Крупная покупка/доход" />
+
+            <EditText
+                android:id="@+id/editTextTextMultiLineDescriptionTransaction"
+                style="@style/TextViewInfoBriefcase"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autofillHints=""
+                android:gravity="start|top"
+                android:hint="Введите описание (опциоанльно)"
+                android:inputType="textMultiLine"
+                android:textColorHint="@color/gray" />
+        </LinearLayout>
+    </ScrollView>
+
     <Button
-        android:id="@+id/button_add_transaction"
+        android:id="@+id/buttonTransactionAdd"
+        android:layout_gravity="bottom|center_horizontal"
+        style="@style/ButtonWelcome"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|center_horizontal"
-        android:backgroundTint="@color/purple_700"
-        android:text="Добавить"
-        android:layout_marginBottom="60dp"
-        android:textColor="@color/white"
-        android:textSize="15sp" />
+        android:layout_marginBottom="25dp"
+        android:text="Добавить" />
 
 </FrameLayout>

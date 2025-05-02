@@ -19,13 +19,14 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class BudgetCategoryAddFragment : Fragment() {
+    private lateinit var view: View
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        val view = inflater.inflate(R.layout.fragment_budget_category_add, container, false)
+    ): View {
+        view = inflater.inflate(R.layout.fragment_budget_category_add, container, false)
 
         view.findViewById<ImageView>(R.id.imageViewBackCategoryMain).setOnClickListener {
             (parentFragment as BudgetCategoryFragment).goToFragment(
@@ -88,6 +89,12 @@ class BudgetCategoryAddFragment : Fragment() {
                 )
             }
         })
+    }
+
+    override fun onPause() {
+        super.onPause()
+        view.findViewById<EditText>(R.id.editTextTextCategoryName).setText("")
+        view.findViewById<RadioGroup>(R.id.radioGroupCategoryType).clearCheck()
     }
 
 }
