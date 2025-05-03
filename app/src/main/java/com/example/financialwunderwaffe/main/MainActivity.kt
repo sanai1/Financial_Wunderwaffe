@@ -11,6 +11,7 @@ import androidx.navigation.ui.setupWithNavController
 import com.example.financialwunderwaffe.R
 import com.example.financialwunderwaffe.database.AppDatabase
 import com.example.financialwunderwaffe.databinding.ActivityMainBinding
+import com.example.financialwunderwaffe.main.briefcase.BriefcaseViewModel
 import com.example.financialwunderwaffe.welcome.WelcomeActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.CoroutineScope
@@ -20,7 +21,6 @@ import java.time.LocalDate
 import java.util.UUID
 
 class MainActivity : AppCompatActivity() {
-
     private lateinit var binding: ActivityMainBinding
     val context = this
     lateinit var basicLoginAndPassword: String
@@ -29,6 +29,7 @@ class MainActivity : AppCompatActivity() {
     val printToast = fun(message: String) {
         toast(message)
     }
+    val briefcaseViewModel = BriefcaseViewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

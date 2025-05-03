@@ -19,6 +19,7 @@
         android:layout_gravity="right|bottom"
         android:layout_marginEnd="25dp"
         android:layout_marginBottom="25dp"
+        android:elevation="10dp"
         android:background="@drawable/rectangle_rounded_all_light_gray"
         android:importantForAccessibility="no"
         android:src="@android:drawable/ic_input_add" />

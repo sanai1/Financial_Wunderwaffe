@@ -16,4 +16,10 @@
     <color name="maroon">#800000</color>
     <color name="green">#00FF00</color>
 
+    <color name="green_selected">#00FF00</color>
+    <color name="green_unselected">#B9F6CA</color>
+    <color name="red_selected">#FF1744</color>
+    <color name="red_unselected">#FFCDD2</color>
+    <color name="text_selected">#FFFFFF</color>
+    <color name="text_unselected">#212121</color>
 </resources>

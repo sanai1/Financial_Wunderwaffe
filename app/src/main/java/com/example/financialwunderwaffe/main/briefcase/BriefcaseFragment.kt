@@ -4,59 +4,93 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.financialwunderwaffe.R
 import com.example.financialwunderwaffe.databinding.FragmentMainBriefcaseBinding
-import com.example.financialwunderwaffe.main.briefcase.fragments.assets.BriefcaseAssetsFragment
-import com.example.financialwunderwaffe.main.briefcase.fragments.sharesOfAssets.BriefcaseSharesOfAssetsFragment
-import com.example.financialwunderwaffe.main.briefcase.fragments.strategies.BriefcaseStrategiesFragment
+import com.example.financialwunderwaffe.main.MainActivity
+import com.example.financialwunderwaffe.retrofit.database.asset.Asset
 
 class BriefcaseFragment : Fragment() {
-
     private var _binding: FragmentMainBriefcaseBinding? = null
     private val binding get() = _binding!!
+    private lateinit var viewModel: BriefcaseViewModel
+    private lateinit var briefcaseDialogAssetAdd: BriefcaseDialogAssetAdd
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentMainBriefcaseBinding.inflate(inflater, container, false)
         val root: View = binding.root
+        viewModel = (activity as MainActivity).briefcaseViewModel
 
-        binding.textViewTitleBriefcase.text = getString(R.string.assets)
-
-        binding.imageViewMenuBriefcase.setOnClickListener{
-            binding.drawerBriefcase.openDrawer(GravityCompat.START)
+        briefcaseDialogAssetAdd =
+            BriefcaseDialogAssetAdd((activity as MainActivity).printToast) { title ->
+                viewModel.createAsset(
+                    token = (activity as MainActivity).basicLoginAndPassword,
+                    uid = (activity as MainActivity).uid,
+                    asset = Asset(
+                        userUID = (activity as MainActivity).uid,
+                        title = title
+                    )
+                )
         }
-
-        binding.navigationBriefcase.setNavigationItemSelectedListener { menuitem ->
-            when(menuitem.itemId) {
-                R.id.nav_briefcase_strategies -> {
-                    binding.textViewTitleBriefcase.text = getString(R.string.strategies)
-                    go_to_fragment(BriefcaseStrategiesFragment())
-                }
-                R.id.nav_briefcase_shares_of_assets -> {
-                    binding.textViewTitleBriefcase.text = getString(R.string.shares_of_assets)
-                    go_to_fragment(BriefcaseSharesOfAssetsFragment())
-                }
-                R.id.nav_briefcase_assets -> {
-                    binding.textViewTitleBriefcase.text = getString(R.string.assets)
-                    go_to_fragment(BriefcaseAssetsFragment())
-                }
+        binding.imageViewAssetAdd.setOnClickListener {
+            val listAssetString = mutableListOf(
+                "Фондовый рынок",
+                "Недвижимость",
+                "Криптовалюта",
+                "Бизнес",
+                "Свой вариант"
+            ).filter { s ->
+                if (viewModel.listAssets.value == null || s == "Свой вариант") true
+                else (s in viewModel.listAssets.value!!.map { it.title }).not()
             }
-            binding.drawerBriefcase.closeDrawer(GravityCompat.START)
-            true
+            briefcaseDialogAssetAdd.setAssetList(listAssetString)
+            briefcaseDialogAssetAdd.show(childFragmentManager, "DIALOG_ASSET_ADD")
         }
-
-        go_to_fragment(BriefcaseAssetsFragment())
+        viewModel.listAssets.observe(viewLifecycleOwner) {
+            initAllInfo(it)
+            initListAssets(it)
+        }
+        viewModel.updateListAssets(
+            (activity as MainActivity).basicLoginAndPassword, (activity as MainActivity).uid
+        )
 
         return root
     }
 
-    private fun go_to_fragment(fragment: Fragment) {
-        val transaction = childFragmentManager.beginTransaction()
-        transaction.replace(R.id.container_briefcase, fragment)
-        transaction.addToBackStack(null)
-        transaction.commit()
+    fun closeAssetInfoFragment() {
+        binding.containerBriefcase.visibility = View.GONE
+        binding.imageViewAssetAdd.visibility = View.VISIBLE
+        viewModel.clearListInformation()
     }
+
+    private fun initAllInfo(listAssets: List<Asset>) {
+        binding.textViewCountAsset.text = "Кол-во активов: ${listAssets.size}"
+        binding.textViewAmountAsset.text = listAssets.sumOf { it.amount }.toString()
+    }
+
+    private fun initListAssets(listAssets: List<Asset>) =
+        binding.listAsset.apply {
+            adapter = AssetAdapter(
+                listAssets.map {
+                    AssetState(
+                        id = it.id,
+                        title = it.title,
+                        amount = it.amount
+                    )
+                }
+            ) { assetState ->
+                viewModel.selectAsset(assetState)
+                binding.containerBriefcase.visibility = View.VISIBLE
+                binding.imageViewAssetAdd.visibility = View.GONE
+                childFragmentManager.beginTransaction().apply {
+                    replace(R.id.container_briefcase, BriefcaseAssetInfoFragment())
+                    addToBackStack(null)
+                    commit()
+                }
+            }
+            layoutManager = LinearLayoutManager(requireContext())
+        }
 
     override fun onDestroyView() {
         super.onDestroyView()

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/textViewAssetTitlePriceAdd"
+        style="@style/TextViewInfoWelcome"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="5dp"
+        android:orientation="horizontal"
+        tools:ignore="UseCompoundDrawables">
+
+        <TextView
+            android:id="@+id/textViewDateAssetPrice"
+            style="@style/TextViewInfoBriefcase"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginEnd="50dp"
+            android:text="Дата"
+            android:textSize="20sp" />
+
+        <ImageView
+            android:id="@+id/imageViewDateAssetPrice"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:importantForAccessibility="no"
+            app:srcCompat="@mipmap/ic_calendar_foreground" />
+    </LinearLayout>
+
+    <EditText
+        android:id="@+id/editTextNumberDecimalCurrentAmountAssetPrice"
+        style="@style/TextViewInfoBriefcase"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:autofillHints=""
+        android:gravity="center"
+        android:hint="Введите новую стоимость актива"
+        android:inputType="numberDecimal"
+        android:maxLength="9"
+        android:maxLines="1"
+        android:textColorHint="@color/gray"
+        android:textSize="20sp" />
+
+    <Button
+        android:id="@+id/buttonAssetPriceAdd"
+        style="@style/ButtonWelcome"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="25dp"
+        android:text="Сохранить" />
+</LinearLayout>

@@ -5,7 +5,8 @@
     android:id="@+id/linearLayoutTransaction"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="10dp"
+    android:layout_marginHorizontal="10dp"
+    android:layout_marginVertical="5dp"
     android:background="@drawable/rectangle_rounded_all_light_gray"
     android:baselineAligned="false"
     android:orientation="horizontal">

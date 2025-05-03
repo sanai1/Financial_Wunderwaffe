@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="250dp"
+    android:layout_height="250dp"
+    android:layout_gravity="center"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <TextView
+        style="@style/TextViewInfoLK"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="5dp"
+        android:text="Добавление актива" />
+
+    <Spinner
+        android:id="@+id/spinnerAsset"
+        style="@style/Spinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp" />
+
+    <EditText
+        android:id="@+id/editTextTextAssetTitle"
+        style="@style/TextViewInfoBriefcase"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="5dp"
+        android:autofillHints=""
+        android:background="@drawable/rectangle_rounded_all_light_gray"
+        android:gravity="center"
+        android:hint="Введите свое название актива"
+        android:inputType="text"
+        android:padding="5dp"
+        android:textColorHint="@color/gray"
+        android:visibility="visible" />
+
+    <Button
+        android:id="@+id/buttonAssetAdd"
+        style="@style/ButtonWelcome"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="5dp"
+        android:text="Добавить" />
+</LinearLayout>
