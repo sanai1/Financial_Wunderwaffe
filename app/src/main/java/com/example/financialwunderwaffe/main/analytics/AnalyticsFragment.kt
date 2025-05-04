@@ -9,9 +9,9 @@ import androidx.fragment.app.Fragment
 import com.example.financialwunderwaffe.R
 import com.example.financialwunderwaffe.databinding.FragmentMainAnalyticsBinding
 import com.example.financialwunderwaffe.main.MainActivity
-import com.example.financialwunderwaffe.main.analytics.fragments.AnalyticsAssetFragment
-import com.example.financialwunderwaffe.main.analytics.fragments.budget.AnalyticsBudgetFragment
 import com.example.financialwunderwaffe.main.analytics.fragments.AnalyticsCapitalFragment
+import com.example.financialwunderwaffe.main.analytics.fragments.asset.AnalyticsAssetFragment
+import com.example.financialwunderwaffe.main.analytics.fragments.budget.AnalyticsBudgetFragment
 
 class AnalyticsFragment : Fragment() {
     private var _binding: FragmentMainAnalyticsBinding? = null

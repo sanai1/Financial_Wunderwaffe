@@ -3,12 +3,45 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".main.analytics.fragments.AnalyticsAssetFragment">
+    tools:context=".main.analytics.fragments.asset.AnalyticsAssetFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <include layout="@layout/main_color" />
+
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="match_parent">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    style="@style/TextViewInfoBriefcase"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:text="Текущее распределение долей активов" />
+
+                <com.github.mikephil.charting.charts.PieChart
+                    android:id="@+id/pieChartAssetAnalytics"
+                    android:layout_width="match_parent"
+                    android:layout_height="500dp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
 </FrameLayout>
