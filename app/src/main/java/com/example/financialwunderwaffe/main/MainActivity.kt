@@ -11,7 +11,9 @@ import androidx.navigation.ui.setupWithNavController
 import com.example.financialwunderwaffe.R
 import com.example.financialwunderwaffe.database.AppDatabase
 import com.example.financialwunderwaffe.databinding.ActivityMainBinding
+import com.example.financialwunderwaffe.main.analytics.AnalyticsViewModel
 import com.example.financialwunderwaffe.main.briefcase.BriefcaseViewModel
+import com.example.financialwunderwaffe.main.budget.BudgetViewModel
 import com.example.financialwunderwaffe.welcome.WelcomeActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.CoroutineScope
@@ -30,6 +32,8 @@ class MainActivity : AppCompatActivity() {
         toast(message)
     }
     val briefcaseViewModel = BriefcaseViewModel()
+    val analyticsViewModel = AnalyticsViewModel()
+    val budgetViewModel = BudgetViewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,6 +56,13 @@ class MainActivity : AppCompatActivity() {
             val info = AppDatabase.getDatabase(context).getUserInfoDao().getInfo()[0]
             basicLoginAndPassword = "Basic " + info.loginAndPassword
             uid = info.uid
+            budgetViewModel.apply {
+                updateCategory(basicLoginAndPassword, uid)
+            }
+            analyticsViewModel.apply {
+                updateBudgetByMonth(basicLoginAndPassword, uid)
+                updateCapitalByMonth(basicLoginAndPassword, uid)
+            }
         }
 
 //        setupActionBarWithNavController(navController, appBarConfiguration)

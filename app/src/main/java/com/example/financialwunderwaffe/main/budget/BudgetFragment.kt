@@ -12,7 +12,6 @@ import com.example.financialwunderwaffe.main.MainActivity
 import com.example.financialwunderwaffe.main.budget.fragments.BudgetTransactionFragment
 import com.example.financialwunderwaffe.main.budget.fragments.category.BudgetCategoryFragment
 import com.example.financialwunderwaffe.main.budget.fragments.history.BudgetHistoryFragment
-import com.example.financialwunderwaffe.main.budget.fragments.report.BudgetReportFragment
 import com.example.financialwunderwaffe.retrofit.database.category.Category
 import com.example.financialwunderwaffe.retrofit.database.category.CategoryApiClient
 import com.example.financialwunderwaffe.retrofit.database.transaction.Transaction
@@ -49,8 +48,9 @@ class BudgetFragment : Fragment() {
                     go_to_fragment(BudgetTransactionFragment())
                 }
                 R.id.nav_budget_report -> {
-                    binding.textViewTitleBudget.text = getString(R.string.report)
-                    go_to_fragment(BudgetReportFragment())
+                    (activity as MainActivity).toast("Этот раздел перенесен в 'Аналитику' в главном меню")
+//                    binding.textViewTitleBudget.text = getString(R.string.report)
+//                    go_to_fragment(BudgetReportFragment())
                 }
                 R.id.nav_budget_category -> {
                     binding.textViewTitleBudget.text = getString(R.string.category)

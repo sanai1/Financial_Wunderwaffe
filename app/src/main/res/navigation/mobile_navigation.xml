@@ -13,9 +13,9 @@
 
     <fragment
         android:id="@+id/navigation_goal"
-        android:name="com.example.financialwunderwaffe.main.goal.GoalFragment"
+        android:name="com.example.financialwunderwaffe.main.analytics.AnalyticsFragment"
         android:label="@string/title_goal"
-        tools:layout="@layout/fragment_main_goal" />
+        tools:layout="@layout/fragment_main_analytics" />
 
     <fragment
         android:id="@+id/navigation_briefcase"

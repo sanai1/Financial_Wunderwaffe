@@ -79,4 +79,8 @@
 \n\n
 В целом, инвестирование — это долгосрочный процесс, требующий терпения, знаний и стратегического мышления. Успешные инвесторы понимают, что не существует универсального подхода, и каждый должен разрабатывать свою стратегию, основываясь на своих целях, рисках и предпочтениях.
     </string>
+    <string name="capital">Капитал</string>
+    <string name="analytics">Аналитика</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
