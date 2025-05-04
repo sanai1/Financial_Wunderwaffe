@@ -11,6 +11,8 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.example.financialwunderwaffe.R
+import com.example.financialwunderwaffe.main.analytics.fragments.budget.CategoryReportAdapter
+import com.example.financialwunderwaffe.main.analytics.fragments.budget.MonthlyData
 import com.example.financialwunderwaffe.main.budget.BudgetFragment
 import com.example.financialwunderwaffe.retrofit.database.transaction.Transaction
 import com.github.mikephil.charting.charts.LineChart

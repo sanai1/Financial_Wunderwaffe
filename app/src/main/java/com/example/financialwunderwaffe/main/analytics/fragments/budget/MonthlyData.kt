@@ -1,4 +1,4 @@
-package com.example.financialwunderwaffe.main.budget.fragments.report
+package com.example.financialwunderwaffe.main.analytics.fragments.budget
 
 import java.time.YearMonth
 

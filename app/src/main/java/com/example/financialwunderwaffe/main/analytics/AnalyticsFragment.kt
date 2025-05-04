@@ -10,7 +10,7 @@ import com.example.financialwunderwaffe.R
 import com.example.financialwunderwaffe.databinding.FragmentMainAnalyticsBinding
 import com.example.financialwunderwaffe.main.MainActivity
 import com.example.financialwunderwaffe.main.analytics.fragments.AnalyticsAssetFragment
-import com.example.financialwunderwaffe.main.analytics.fragments.AnalyticsBudgetFragment
+import com.example.financialwunderwaffe.main.analytics.fragments.budget.AnalyticsBudgetFragment
 import com.example.financialwunderwaffe.main.analytics.fragments.AnalyticsCapitalFragment
 
 class AnalyticsFragment : Fragment() {

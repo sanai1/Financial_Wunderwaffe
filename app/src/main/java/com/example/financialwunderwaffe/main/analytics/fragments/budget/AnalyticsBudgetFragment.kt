@@ -1,4 +1,4 @@
-package com.example.financialwunderwaffe.main.analytics.fragments
+package com.example.financialwunderwaffe.main.analytics.fragments.budget
 
 import android.graphics.Color
 import android.os.Bundle
@@ -14,8 +14,6 @@ import com.example.financialwunderwaffe.R
 import com.example.financialwunderwaffe.main.MainActivity
 import com.example.financialwunderwaffe.main.analytics.AnalyticsFragment
 import com.example.financialwunderwaffe.main.analytics.AnalyticsViewModel
-import com.example.financialwunderwaffe.main.budget.fragments.report.CategoryReportAdapter
-import com.example.financialwunderwaffe.main.budget.fragments.report.MonthlyData
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.components.XAxis
