@@ -72,9 +72,23 @@ class AnalyticsViewModel : ViewModel() {
         )
     )
     val dateAsset: LiveData<Year> = _dateAsset
+    private val _assets = MutableLiveData<MutableMap<Long, Boolean>>()
+    val assets: LiveData<MutableMap<Long, Boolean>> = _assets
 
     fun setDateAsset(newDate: Year) {
         _dateAsset.value = newDate
+    }
+
+    fun setAssets(newAssets: MutableMap<Long, Boolean>) {
+        _assets.postValue(newAssets)
+    }
+
+    fun updateAsset(assetId: Long) {
+        val newAssets = _assets.value!!.let {
+            it[assetId] = it[assetId]!!.not()
+            it
+        }
+        _assets.value = newAssets
     }
 
     fun updateCapitalByMonth(token: String, uid: UUID) = CoroutineScope(Dispatchers.IO).launch {

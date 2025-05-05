@@ -16,7 +16,7 @@ class CategoryAnalyticsAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view: View = LayoutInflater.from(parent.context)
-            .inflate(R.layout.list_category_report, parent, false)
+            .inflate(R.layout.list_text_item, parent, false)
 
         return ViewHolder(view)
     }
@@ -30,7 +30,7 @@ class CategoryAnalyticsAdapter(
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         private val textViewCategoryTitleReport: TextView =
-            view.findViewById(R.id.textViewCategoryTitleReport)
+            view.findViewById(R.id.textViewTitleItem)
 
         fun click(position: Int) {
             textViewCategoryTitleReport.setOnClickListener {

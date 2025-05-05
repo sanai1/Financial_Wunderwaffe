@@ -94,6 +94,12 @@
                     android:layout_gravity="center"
                     android:text="Нет данных за выбранный период"
                     android:visibility="gone" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/listAssetAnalytics"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="15dp" />
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

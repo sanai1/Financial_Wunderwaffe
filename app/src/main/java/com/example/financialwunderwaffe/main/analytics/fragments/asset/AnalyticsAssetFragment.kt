@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.RecyclerView
 import com.example.financialwunderwaffe.R
 import com.example.financialwunderwaffe.main.MainActivity
 import com.example.financialwunderwaffe.main.analytics.AnalyticsViewModel
@@ -25,17 +26,28 @@ import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
 import com.github.mikephil.charting.formatter.ValueFormatter
 import com.github.mikephil.charting.utils.ColorTemplate
+import com.google.android.flexbox.AlignItems
+import com.google.android.flexbox.FlexDirection
+import com.google.android.flexbox.FlexWrap
+import com.google.android.flexbox.FlexboxLayoutManager
+import com.google.android.flexbox.JustifyContent
 import java.time.Year
 import java.time.YearMonth
 import java.time.format.DateTimeFormatter
 import java.time.format.TextStyle
 import java.util.Locale
-import kotlin.math.abs
 
 
 class AnalyticsAssetFragment : Fragment() {
     private lateinit var viewModel: AnalyticsViewModel
     private lateinit var view: View
+    private val colorList = mutableListOf<Int>().apply {
+        addAll(ColorTemplate.COLORFUL_COLORS.toList())
+        addAll(ColorTemplate.JOYFUL_COLORS.toList())
+        addAll(ColorTemplate.PASTEL_COLORS.toList())
+        addAll(ColorTemplate.MATERIAL_COLORS.toList())
+    }
+    private val colorToAsset = mutableMapOf<String, Int>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -45,7 +57,27 @@ class AnalyticsAssetFragment : Fragment() {
         view = inflater.inflate(R.layout.fragment_analytics_asset, container, false)
         viewModel = (activity as MainActivity).analyticsViewModel
 
+//        (activity as MainActivity).briefcaseViewModel.listAssets.observe(viewLifecycleOwner) { assets ->
+//            val map = mutableMapOf<Long, Boolean>()
+//            assets.forEachIndexed { index, asset ->
+//                map[asset.id] = true
+//                colorToAsset[asset.title] = colorList[index % colorList.size]
+//            }
+//            viewModel.setAssets(map)
+//        }
+
         viewModel.capitalByMonth.observe(viewLifecycleOwner) { capitalByMonth ->
+            val map = mutableMapOf<Long, Boolean>()
+            var index = 0
+            capitalByMonth.forEach { capitalAnalytics ->
+                capitalAnalytics.listAsset.forEach {
+                    if ((it.id in map.keys).not()) {
+                        map[it.id] = true
+                        colorToAsset[it.title] = colorList[index++ % colorList.size]
+                    }
+                }
+            }
+            viewModel.setAssets(map)
             initPieChart(capitalByMonth.maxBy {
                 YearMonth.parse(
                     it.month,
@@ -59,9 +91,30 @@ class AnalyticsAssetFragment : Fragment() {
             checkDataForLineChart(mapperDataForLineChart(capitalByMonth))
         }
 
+        view.findViewById<RecyclerView>(R.id.listAssetAnalytics).apply {
+            adapter = AssetAnalyticsAdapter(
+                (activity as MainActivity).briefcaseViewModel.listAssets.value!!.map {
+                    Pair(it, true)
+                }.toMutableList(),
+                colorToAsset
+            ) { asset ->
+                viewModel.updateAsset(asset.id)
+            }
+            layoutManager = FlexboxLayoutManager(requireContext()).apply {
+                flexDirection = FlexDirection.ROW
+                flexWrap = FlexWrap.WRAP
+                justifyContent = JustifyContent.FLEX_START
+                alignItems = AlignItems.STRETCH
+            }
+        }
+
         viewModel.dateAsset.observe(viewLifecycleOwner) {
             view.findViewById<TextView>(R.id.textViewYearBarChart).text =
                 viewModel.dateAsset.value!!.value.toString()
+            checkDataForLineChart(mapperDataForLineChart(viewModel.capitalByMonth.value!!))
+        }
+
+        viewModel.assets.observe(viewLifecycleOwner) {
             checkDataForLineChart(mapperDataForLineChart(viewModel.capitalByMonth.value!!))
         }
 
@@ -152,8 +205,13 @@ class AnalyticsAssetFragment : Fragment() {
                 it.month,
                 DateTimeFormatter.ofPattern("MM.yyyy")
             ) == viewModel.dateAsset.value
+        }.map { capitalAnalytics ->
+            capitalAnalytics.copy(listAsset = capitalAnalytics.listAsset.filter {
+                viewModel.assets.value?.getOrDefault(it.id, false) == true
+            })
         }
         if (listCapitalNowYear.isEmpty()) return emptyList()
+        else if (listCapitalNowYear.first().listAsset.isEmpty()) return emptyList()
         val listLines = mutableMapOf<Int, Array<Pair<String, Long>>>()
         val cntLines = listCapitalNowYear.maxOf { it.listAsset.size }
         repeat(12) { n ->
@@ -190,16 +248,17 @@ class AnalyticsAssetFragment : Fragment() {
             setPinchZoom(true)
             setDrawGridBackground(false)
             setDrawBorders(false)
-            legend.apply {
-                form = Legend.LegendForm.LINE
-                textSize = 15f
-                textColor = Color.BLACK
-                verticalAlignment = Legend.LegendVerticalAlignment.BOTTOM
-                horizontalAlignment = Legend.LegendHorizontalAlignment.CENTER
-                orientation = Legend.LegendOrientation.HORIZONTAL
-                setDrawInside(false)
-                isWordWrapEnabled = true
-            }
+            legend.isEnabled = false
+//            legend.apply {
+//                form = Legend.LegendForm.LINE
+//                textSize = 15f
+//                textColor = Color.BLACK
+//                verticalAlignment = Legend.LegendVerticalAlignment.BOTTOM
+//                horizontalAlignment = Legend.LegendHorizontalAlignment.CENTER
+//                orientation = Legend.LegendOrientation.HORIZONTAL
+//                setDrawInside(false)
+//                isWordWrapEnabled = true
+//            }
             xAxis.apply {
                 position = XAxis.XAxisPosition.BOTTOM
                 granularity = 1f
@@ -227,7 +286,6 @@ class AnalyticsAssetFragment : Fragment() {
             }
             axisRight.isEnabled = false
         }
-        val colorList = ColorTemplate.COLORFUL_COLORS.toList()
         // 5. Собираем все уникальные названия активов
         val assetNames = listData.flatMap { (_, assets) ->
             assets.map { it.first }
@@ -244,14 +302,16 @@ class AnalyticsAssetFragment : Fragment() {
             }
 
             LineDataSet(entries, assetName).apply {  // Используем имя актива как label
-                color =
-                    colorList[abs(assetName.hashCode()) % colorList.size]  // Уникальный цвет для каждого актива
-                lineWidth = 2f
+                color = colorToAsset.getOrDefault(
+                    assetName,
+                    Color.DKGRAY
+                )  // Уникальный цвет для каждого актива
+                lineWidth = 2.5f
                 setDrawCircles(true)
                 circleRadius = 4f
                 setDrawValues(false)
                 mode = LineDataSet.Mode.CUBIC_BEZIER
-                cubicIntensity = 0.2f
+                cubicIntensity = 0.1f
             }
         }
 

@@ -59,6 +59,9 @@ class MainActivity : AppCompatActivity() {
             budgetViewModel.apply {
                 updateCategory(basicLoginAndPassword, uid)
             }
+            briefcaseViewModel.apply {
+                updateListAssets(basicLoginAndPassword, uid)
+            }
             analyticsViewModel.apply {
                 updateBudgetByMonth(basicLoginAndPassword, uid)
                 updateCapitalByMonth(basicLoginAndPassword, uid)
