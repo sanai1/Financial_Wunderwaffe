@@ -122,6 +122,11 @@ class BudgetHistoryFragment : Fragment() {
                     type = transaction.type,
                     description = transaction.description
                 )
+            }.sortedByDescending {
+                LocalDate.parse(
+                    it.date,
+                    DateTimeFormatter.ofPattern("dd.MM.yyyy")
+                )
             },
             (activity as MainActivity).printToast
         ) { transactionState ->

@@ -11,7 +11,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.example.financialwunderwaffe.R
-import com.example.financialwunderwaffe.main.analytics.fragments.budget.CategoryReportAdapter
+import com.example.financialwunderwaffe.main.analytics.fragments.budget.CategoryAnalyticsAdapter
 import com.example.financialwunderwaffe.main.analytics.fragments.budget.MonthlyData
 import com.example.financialwunderwaffe.main.budget.BudgetFragment
 import com.example.financialwunderwaffe.retrofit.database.transaction.Transaction
@@ -39,7 +39,7 @@ import java.util.Locale
 class BudgetReportFragment : Fragment() {
     private var date =
         Year.parse(LocalDate.now().year.toString(), DateTimeFormatter.ofPattern("yyyy"))
-    private lateinit var categoryReportAdapter: CategoryReportAdapter
+    private lateinit var categoryReportAdapter: CategoryAnalyticsAdapter
     private lateinit var layoutManagerCategoryReport: RecyclerView.LayoutManager
     private val listNowYearTransaction = mutableListOf<Transaction>()
     private lateinit var view: View
@@ -73,7 +73,7 @@ class BudgetReportFragment : Fragment() {
             alignItems = AlignItems.STRETCH
         }
         categoryReportAdapter =
-            CategoryReportAdapter((parentFragment as BudgetFragment).listCategory.map {
+            CategoryAnalyticsAdapter((parentFragment as BudgetFragment).listCategory.map {
                 Pair(
                     it,
                     true

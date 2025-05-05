@@ -25,6 +25,7 @@
                     style="@style/TextViewInfoBriefcase"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="@drawable/rectangle_rounded_all_light_gray"
                     android:layout_gravity="center"
                     android:gravity="center"
                     android:text="Текущее распределение долей активов" />
@@ -33,14 +34,66 @@
                     android:id="@+id/pieChartAssetAnalytics"
                     android:layout_width="match_parent"
                     android:layout_height="500dp" />
-
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginTop="50dp"
+                android:layout_marginBottom="25dp"
                 android:orientation="vertical">
 
+                <TextView
+                    style="@style/TextViewInfoBriefcase"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:background="@drawable/rectangle_rounded_all_light_gray"
+                    android:gravity="center"
+                    android:text="История стоимости всех активов" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/imageViewBackYearBarChart"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:importantForAccessibility="no"
+                        android:src="@mipmap/ic_left_arrow_test_foreground" />
+
+                    <TextView
+                        android:id="@+id/textViewYearBarChart"
+                        style="@style/TextViewInfoBriefcase"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:gravity="center" />
+
+                    <ImageView
+                        android:id="@+id/imageViewForwardYearBarChart"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:importantForAccessibility="no"
+                        android:src="@mipmap/ic_right_arrow_test_foreground" />
+                </LinearLayout>
+
+                <com.github.mikephil.charting.charts.LineChart
+                    android:id="@+id/lineChartAssetAnalytics"
+                    android:layout_width="match_parent"
+                    android:layout_height="500dp" />
+
+                <TextView
+                    android:id="@+id/textViewLineChartAssetAnalytics"
+                    style="@style/TextViewInfoBriefcase"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="Нет данных за выбранный период"
+                    android:visibility="gone" />
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

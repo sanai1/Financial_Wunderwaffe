@@ -17,13 +17,13 @@ import java.util.UUID
 class AnalyticsViewModel : ViewModel() {
     private val _title = MutableLiveData<String>()
     val title: LiveData<String> = _title
-    private val _date = MutableLiveData(
+    private val _dateBudget = MutableLiveData(
         Year.parse(
             LocalDate.now().year.toString(),
             DateTimeFormatter.ofPattern("yyyy")
         )
     )
-    val date: LiveData<Year> = _date
+    val dateBudget: LiveData<Year> = _dateBudget
     private val _large = MutableLiveData(Pair(false, false))
     val large: LiveData<Pair<Boolean, Boolean>> = _large
     private val _categories = MutableLiveData<MutableMap<Long, Boolean>>(mutableMapOf())
@@ -33,8 +33,8 @@ class AnalyticsViewModel : ViewModel() {
         _title.value = newTitle
     }
 
-    fun setDate(newDate: Year) {
-        _date.value = newDate
+    fun setDateBudget(newDate: Year) {
+        _dateBudget.value = newDate
     }
 
     fun setLarge(newLarge: Pair<Boolean, Boolean>) {
@@ -65,6 +65,17 @@ class AnalyticsViewModel : ViewModel() {
 
     private val _capitalByMonth = MutableLiveData<List<CapitalAnalytics>>(emptyList())
     val capitalByMonth: LiveData<List<CapitalAnalytics>> = _capitalByMonth
+    private val _dateAsset = MutableLiveData(
+        Year.parse(
+            LocalDate.now().year.toString(),
+            DateTimeFormatter.ofPattern("yyyy")
+        )
+    )
+    val dateAsset: LiveData<Year> = _dateAsset
+
+    fun setDateAsset(newDate: Year) {
+        _dateAsset.value = newDate
+    }
 
     fun updateCapitalByMonth(token: String, uid: UUID) = CoroutineScope(Dispatchers.IO).launch {
         val response =

@@ -128,7 +128,7 @@ class BudgetTransactionFragment : Fragment() {
         val adapter = ArrayAdapter(
             requireContext(),
             android.R.layout.simple_spinner_item,
-            listCategoryExpense
+            listCategoryExpense.filter { it != "Покупка актива" }
         )
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinner.adapter = adapter
@@ -137,7 +137,10 @@ class BudgetTransactionFragment : Fragment() {
 
     private fun setIncomeCategory() {
         val adapter =
-            ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, listCategoryIncome)
+            ArrayAdapter(
+                requireContext(),
+                android.R.layout.simple_spinner_item,
+                listCategoryIncome.filter { it != "Продажа актива" })
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinner.adapter = adapter
         setBlackColor()

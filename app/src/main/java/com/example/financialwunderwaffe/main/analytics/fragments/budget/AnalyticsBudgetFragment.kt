@@ -55,12 +55,12 @@ class AnalyticsBudgetFragment : Fragment() {
         }
 
         view.findViewById<ImageView>(R.id.imageViewBackYearReportMain).setOnClickListener {
-            viewModel.setDate(viewModel.date.value!!.minusYears(1))
+            viewModel.setDateBudget(viewModel.dateBudget.value!!.minusYears(1))
         }
         view.findViewById<ImageView>(R.id.imageViewForwardYearReportMain).setOnClickListener {
-            viewModel.setDate(viewModel.date.value!!.plusYears(1))
+            viewModel.setDateBudget(viewModel.dateBudget.value!!.plusYears(1))
         }
-        viewModel.date.observe(viewLifecycleOwner) {
+        viewModel.dateBudget.observe(viewLifecycleOwner) {
             view.findViewById<TextView>(R.id.textViewYearReportMain).text = it.value.toString()
             searchNowYearBudget()
         }
@@ -76,7 +76,7 @@ class AnalyticsBudgetFragment : Fragment() {
         }
 
         view.findViewById<RecyclerView>(R.id.listCategoryReportMain).apply {
-            adapter = CategoryReportAdapter(
+            adapter = CategoryAnalyticsAdapter(
                 (activity as MainActivity).budgetViewModel.categories.value!!.map {
                     Pair(it, true)
                 }.toMutableList(),
@@ -112,7 +112,7 @@ class AnalyticsBudgetFragment : Fragment() {
                         budgetAnalytics.month,
                         DateTimeFormatter.ofPattern("MM.yyyy")
                     )
-                ) == viewModel.date.value
+                ) == viewModel.dateBudget.value
             ) {
                 val month = YearMonth.parse(
                     budgetAnalytics.month,
@@ -148,7 +148,7 @@ class AnalyticsBudgetFragment : Fragment() {
                         if (it < 10) "0$it"
                         else it
                     }
-                }.${viewModel.date.value}", DateTimeFormatter.ofPattern("MM.yyyy")),
+                }.${viewModel.dateBudget.value}", DateTimeFormatter.ofPattern("MM.yyyy")),
                 expense = entry.value[0],
                 income = entry.value[1]
             )
@@ -192,9 +192,11 @@ class AnalyticsBudgetFragment : Fragment() {
                 textColor = Color.DKGRAY
                 valueFormatter = object : ValueFormatter() {
                     override fun getFormattedValue(value: Float): String {
-                        return listMonthlyData.getOrNull(value.toInt())?.let {
-                            it.date.month.getDisplayName(TextStyle.SHORT, Locale.getDefault())
-                        } ?: ""
+                        return listMonthlyData.getOrNull(value.toInt())?.date?.month?.getDisplayName(
+                            TextStyle.SHORT,
+                            Locale.getDefault()
+                        )
+                            ?: ""
                     }
                 }
             }

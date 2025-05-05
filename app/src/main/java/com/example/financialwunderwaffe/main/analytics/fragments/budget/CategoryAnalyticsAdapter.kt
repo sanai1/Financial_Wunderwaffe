@@ -9,10 +9,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.financialwunderwaffe.R
 import com.example.financialwunderwaffe.retrofit.database.category.Category
 
-class CategoryReportAdapter(
+class CategoryAnalyticsAdapter(
     private val listCategory: MutableList<Pair<Category, Boolean>>,
     private val callback: (Category) -> Unit
-) : RecyclerView.Adapter<CategoryReportAdapter.ViewHolder>() {
+) : RecyclerView.Adapter<CategoryAnalyticsAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view: View = LayoutInflater.from(parent.context)

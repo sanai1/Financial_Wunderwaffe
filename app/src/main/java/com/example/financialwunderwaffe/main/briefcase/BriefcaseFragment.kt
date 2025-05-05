@@ -61,6 +61,7 @@ class BriefcaseFragment : Fragment() {
     fun closeAssetInfoFragment() {
         binding.containerBriefcase.visibility = View.GONE
         binding.imageViewAssetAdd.visibility = View.VISIBLE
+        binding.listAsset.visibility = View.VISIBLE
         viewModel.clearListInformation()
     }
 
@@ -83,6 +84,7 @@ class BriefcaseFragment : Fragment() {
                 viewModel.selectAsset(assetState)
                 binding.containerBriefcase.visibility = View.VISIBLE
                 binding.imageViewAssetAdd.visibility = View.GONE
+                binding.listAsset.visibility = View.GONE
                 childFragmentManager.beginTransaction().apply {
                     replace(R.id.container_briefcase, BriefcaseAssetInfoFragment())
                     addToBackStack(null)
