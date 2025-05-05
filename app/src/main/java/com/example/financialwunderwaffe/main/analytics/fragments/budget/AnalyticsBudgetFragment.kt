@@ -228,7 +228,7 @@ class AnalyticsBudgetFragment : Fragment() {
             valueTextSize = 10f
             valueTextColor = Color.RED
             mode = LineDataSet.Mode.CUBIC_BEZIER
-            cubicIntensity = 0.1f
+            cubicIntensity = 0f
         }
         val incomeLine = LineDataSet(incomeEntries, "Доходы").apply {
             color = Color.GREEN

@@ -15,6 +15,11 @@ import java.time.format.DateTimeFormatter
 import java.util.UUID
 
 class AnalyticsViewModel : ViewModel() {
+    private lateinit var update: () -> Unit
+    fun setUpdate(newUpdate: () -> Unit) {
+        update = newUpdate
+    }
+
     private val _title = MutableLiveData<String>()
     val title: LiveData<String> = _title
     private val _dateBudget = MutableLiveData(
@@ -89,6 +94,19 @@ class AnalyticsViewModel : ViewModel() {
             it
         }
         _assets.value = newAssets
+    }
+
+    private val _dateCapital = MutableLiveData(
+        Year.parse(
+            LocalDate.now().year.toString(),
+            DateTimeFormatter.ofPattern("yyyy")
+        )
+    )
+
+    val dateCapital: LiveData<Year> = _dateCapital
+
+    fun setDateCapital(newDate: Year) {
+        _dateCapital.value = newDate
     }
 
     fun updateCapitalByMonth(token: String, uid: UUID) = CoroutineScope(Dispatchers.IO).launch {

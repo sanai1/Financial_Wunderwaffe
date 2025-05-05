@@ -42,6 +42,10 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        budgetViewModel.setUpdate(update)
+        briefcaseViewModel.setUpdate(update)
+        analyticsViewModel.setUpdate(update)
+
         val navView: BottomNavigationView = binding.navView
 
         val navController = findNavController(R.id.container_main)
@@ -56,20 +60,24 @@ class MainActivity : AppCompatActivity() {
             val info = AppDatabase.getDatabase(context).getUserInfoDao().getInfo()[0]
             basicLoginAndPassword = "Basic " + info.loginAndPassword
             uid = info.uid
-            budgetViewModel.apply {
-                updateCategory(basicLoginAndPassword, uid)
-            }
-            briefcaseViewModel.apply {
-                updateListAssets(basicLoginAndPassword, uid)
-            }
-            analyticsViewModel.apply {
-                updateBudgetByMonth(basicLoginAndPassword, uid)
-                updateCapitalByMonth(basicLoginAndPassword, uid)
-            }
+            update()
         }
 
 //        setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+    }
+
+    private val update = fun() {
+        budgetViewModel.apply {
+            updateCategory(basicLoginAndPassword, uid)
+        }
+        briefcaseViewModel.apply {
+            updateListAssets(basicLoginAndPassword, uid)
+        }
+        analyticsViewModel.apply {
+            updateBudgetByMonth(basicLoginAndPassword, uid)
+            updateCapitalByMonth(basicLoginAndPassword, uid)
+        }
     }
 
     fun toast(message: String) =

@@ -81,14 +81,18 @@ class BriefcaseFragment : Fragment() {
                     )
                 }
             ) { assetState ->
-                viewModel.selectAsset(assetState)
-                binding.containerBriefcase.visibility = View.VISIBLE
-                binding.imageViewAssetAdd.visibility = View.GONE
-                binding.listAsset.visibility = View.GONE
-                childFragmentManager.beginTransaction().apply {
-                    replace(R.id.container_briefcase, BriefcaseAssetInfoFragment())
-                    addToBackStack(null)
-                    commit()
+                if (assetState.title == "Фиат") {
+                    (activity as MainActivity).toast("Фиат считается автоматически по вашим транзакциям")
+                } else {
+                    viewModel.selectAsset(assetState)
+                    binding.containerBriefcase.visibility = View.VISIBLE
+                    binding.imageViewAssetAdd.visibility = View.GONE
+                    binding.listAsset.visibility = View.GONE
+                    childFragmentManager.beginTransaction().apply {
+                        replace(R.id.container_briefcase, BriefcaseAssetInfoFragment())
+                        addToBackStack(null)
+                        commit()
+                    }
                 }
             }
             layoutManager = LinearLayoutManager(requireContext())

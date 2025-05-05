@@ -16,6 +16,15 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <TextView
+                style="@style/TextViewInfoBriefcase"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@drawable/rectangle_rounded_all_light_gray"
+                android:gravity="center"
+                android:text="Статистика бюджета по категориям" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

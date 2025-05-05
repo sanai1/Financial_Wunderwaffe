@@ -78,7 +78,7 @@ class AnalyticsAssetFragment : Fragment() {
                 }
             }
             viewModel.setAssets(map)
-            initPieChart(capitalByMonth.maxBy {
+            val lastMonthCapital = capitalByMonth.maxBy {
                 YearMonth.parse(
                     it.month,
                     DateTimeFormatter.ofPattern("MM.yyyy")
@@ -87,7 +87,17 @@ class AnalyticsAssetFragment : Fragment() {
                 it.listAsset.map { assetItem ->
                     assetItem.title to assetItem.amount
                 }
-            })
+            }
+            if (lastMonthCapital.isEmpty() || (lastMonthCapital.size == 1 && lastMonthCapital[0].first == "Фиат" && lastMonthCapital[0].second == 0L)) {
+                view.findViewById<TextView>(R.id.textViewPieChartAssetAnalytics).visibility =
+                    View.VISIBLE
+                view.findViewById<PieChart>(R.id.pieChartAssetAnalytics).visibility = View.GONE
+            } else {
+                view.findViewById<TextView>(R.id.textViewPieChartAssetAnalytics).visibility =
+                    View.GONE
+                view.findViewById<PieChart>(R.id.pieChartAssetAnalytics).visibility = View.VISIBLE
+                initPieChart(lastMonthCapital)
+            }
             checkDataForLineChart(mapperDataForLineChart(capitalByMonth))
         }
 

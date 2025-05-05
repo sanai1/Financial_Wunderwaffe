@@ -104,10 +104,10 @@ class BriefcaseAssetInfoFragment : Fragment() {
                         },
                         percentage = when (it.typeInformation) {
                             "price" -> "(${
-                                if (it.oldPrice!! > it.currentPrice!!) "-" else "+"
+                                if (it.oldPrice!! > it.currentPrice!!) "" else "+"
                             }${
                                 if (it.oldPrice == 0L || it.currentPrice == 0L) "100"
-                                else (10000 * it.currentPrice.toDouble() / it.oldPrice.toDouble()).toLong()
+                                else (10000 * (it.currentPrice - it.oldPrice).toDouble() / it.oldPrice.toDouble()).toLong()
                                     .toDouble() / 100.0
                             }%)"
 

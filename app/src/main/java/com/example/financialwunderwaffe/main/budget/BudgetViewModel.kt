@@ -11,6 +11,11 @@ import kotlinx.coroutines.launch
 import java.util.UUID
 
 class BudgetViewModel : ViewModel() {
+    private lateinit var update: () -> Unit
+    fun setUpdate(newUpdate: () -> Unit) {
+        update = newUpdate
+    }
+
     private val _categories = MutableLiveData<List<Category>>(emptyList())
     val categories: LiveData<List<Category>> = _categories
 

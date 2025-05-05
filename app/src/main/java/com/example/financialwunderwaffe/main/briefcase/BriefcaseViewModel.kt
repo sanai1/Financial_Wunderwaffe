@@ -15,6 +15,11 @@ import kotlinx.coroutines.launch
 import java.util.UUID
 
 class BriefcaseViewModel : ViewModel() {
+    private lateinit var update: () -> Unit
+    fun setUpdate(newUpdate: () -> Unit) {
+        update = newUpdate
+    }
+
     private val _listAssets = MutableLiveData<List<Asset>>()
     val listAssets: LiveData<List<Asset>> = _listAssets
 
@@ -48,7 +53,7 @@ class BriefcaseViewModel : ViewModel() {
             if (response.isSuccessful && (response.body() ?: 0) > 0) {
                 if (_listAssetInformation.value != null) {
                     updateListInformation(token)
-                    updateListAssets(token, uid)
+                    update()
                 }
             }
         }
@@ -62,7 +67,7 @@ class BriefcaseViewModel : ViewModel() {
             if (response.isSuccessful && (response.body() ?: 0) > 0) {
                 if (_listAssetInformation.value != null) {
                     updateListInformation(token)
-                    updateListAssets(token, uid)
+                    update()
                 }
             }
         }
@@ -89,7 +94,7 @@ class BriefcaseViewModel : ViewModel() {
             val response = AssetApiClient.assetAPIService.createAsset(token, asset).execute()
             if (response.isSuccessful && (response.body() ?: 0) > 0) {
                 if (_listAssets.value != null) {
-                    updateListAssets(token, uid)
+                    update()
                 }
             }
         }
