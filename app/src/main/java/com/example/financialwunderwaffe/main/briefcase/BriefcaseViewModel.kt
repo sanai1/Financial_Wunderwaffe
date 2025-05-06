@@ -3,6 +3,7 @@ package com.example.financialwunderwaffe.main.briefcase
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.financialwunderwaffe.main.briefcase.states.AssetState
 import com.example.financialwunderwaffe.retrofit.database.asset.Asset
 import com.example.financialwunderwaffe.retrofit.database.asset.AssetApiClient
 import com.example.financialwunderwaffe.retrofit.database.asset.information.AssetInformationApiClient

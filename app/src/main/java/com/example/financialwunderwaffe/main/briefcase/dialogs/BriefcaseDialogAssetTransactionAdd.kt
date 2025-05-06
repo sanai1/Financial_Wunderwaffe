@@ -1,4 +1,4 @@
-package com.example.financialwunderwaffe.main.briefcase
+package com.example.financialwunderwaffe.main.briefcase.dialogs
 
 import android.os.Bundle
 import android.view.LayoutInflater

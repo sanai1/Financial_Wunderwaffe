@@ -1,4 +1,4 @@
-package com.example.financialwunderwaffe.main.briefcase
+package com.example.financialwunderwaffe.main.briefcase.adapters
 
 import android.graphics.Color
 import android.view.LayoutInflater
@@ -8,6 +8,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.financialwunderwaffe.R
+import com.example.financialwunderwaffe.main.briefcase.states.AssetInformationState
 
 class AssetInformationAdapter(
     private val listAssetInformationState: List<AssetInformationState>,

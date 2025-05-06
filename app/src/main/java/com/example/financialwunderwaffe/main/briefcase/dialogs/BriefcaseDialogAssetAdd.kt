@@ -1,4 +1,4 @@
-package com.example.financialwunderwaffe.main.briefcase
+package com.example.financialwunderwaffe.main.briefcase.dialogs
 
 import android.graphics.Color
 import android.os.Bundle

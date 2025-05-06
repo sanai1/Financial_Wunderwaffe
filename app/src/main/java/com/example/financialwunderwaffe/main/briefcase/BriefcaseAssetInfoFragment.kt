@@ -11,6 +11,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.financialwunderwaffe.R
 import com.example.financialwunderwaffe.main.MainActivity
+import com.example.financialwunderwaffe.main.briefcase.adapters.AssetInformationAdapter
+import com.example.financialwunderwaffe.main.briefcase.dialogs.BriefcaseDialogAssetPriceAdd
+import com.example.financialwunderwaffe.main.briefcase.dialogs.BriefcaseDialogAssetTransactionAdd
+import com.example.financialwunderwaffe.main.briefcase.states.AssetInformationState
 import com.example.financialwunderwaffe.retrofit.database.asset.information.model.AssetInformation
 import com.example.financialwunderwaffe.retrofit.database.asset.information.model.AssetPrice
 import com.example.financialwunderwaffe.retrofit.database.asset.information.model.AssetTransaction

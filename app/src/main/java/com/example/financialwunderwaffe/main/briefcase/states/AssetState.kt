@@ -1,4 +1,4 @@
-package com.example.financialwunderwaffe.main.briefcase
+package com.example.financialwunderwaffe.main.briefcase.states
 
 data class AssetState(
     val id: Long,

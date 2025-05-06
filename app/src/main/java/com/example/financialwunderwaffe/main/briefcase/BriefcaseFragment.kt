@@ -9,6 +9,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.financialwunderwaffe.R
 import com.example.financialwunderwaffe.databinding.FragmentMainBriefcaseBinding
 import com.example.financialwunderwaffe.main.MainActivity
+import com.example.financialwunderwaffe.main.briefcase.adapters.AssetAdapter
+import com.example.financialwunderwaffe.main.briefcase.dialogs.BriefcaseDialogAssetAdd
+import com.example.financialwunderwaffe.main.briefcase.states.AssetState
 import com.example.financialwunderwaffe.retrofit.database.asset.Asset
 
 class BriefcaseFragment : Fragment() {
