@@ -39,7 +39,8 @@ class AssetAdapter(
 
         fun update(assetState: AssetState) {
             textViewAssetTitle.text = assetState.title
-            textViewAssetAmount.text = assetState.amount.toString()
+            textViewAssetAmount.text =
+                assetState.amount.toString().reversed().chunked(3).joinToString(" ").reversed()
         }
     }
 }

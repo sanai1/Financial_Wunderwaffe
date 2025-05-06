@@ -21,6 +21,7 @@ class BriefcaseDialogAssetPriceAdd(
     private val callback: (String, Long) -> Unit
 ) : DialogFragment() {
     private lateinit var title: String
+    private lateinit var view: View
 
     fun setTitle(newTitle: String) {
         title = newTitle
@@ -30,11 +31,10 @@ class BriefcaseDialogAssetPriceAdd(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        val view = inflater.inflate(R.layout.dialog_fragment_briefcase_asset_price_add, null)
+    ): View {
+        view = inflater.inflate(R.layout.dialog_fragment_briefcase_asset_price_add, null)
 
         view.findViewById<TextView>(R.id.textViewAssetTitlePriceAdd).text = title
-
         val textViewDate = view.findViewById<TextView>(R.id.textViewDateAssetPrice)
         textViewDate.text = LocalDate.now().toString().split("-").reversed().joinToString(".")
 
@@ -62,5 +62,10 @@ class BriefcaseDialogAssetPriceAdd(
         }
 
         return view
+    }
+
+    override fun onStart() {
+        super.onStart()
+        view.findViewById<EditText>(R.id.editTextNumberDecimalCurrentAmountAssetPrice).setText("")
     }
 }

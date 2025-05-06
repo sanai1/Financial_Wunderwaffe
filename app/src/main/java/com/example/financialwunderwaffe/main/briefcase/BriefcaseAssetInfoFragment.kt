@@ -77,7 +77,8 @@ class BriefcaseAssetInfoFragment : Fragment() {
 
         viewModel.selectAsset.observe(viewLifecycleOwner) {
             view.findViewById<TextView>(R.id.textViewAssetTitleInfo).text = it.title
-            view.findViewById<TextView>(R.id.textViewAssetAmountInfo).text = it.amount.toString()
+            view.findViewById<TextView>(R.id.textViewAssetAmountInfo).text =
+                it.amount.toString().reversed().chunked(3).joinToString(" ").reversed() + "₽"
         }
         viewModel.listAssetInformation.observe(viewLifecycleOwner) {
             initListInformation(it)
@@ -95,12 +96,20 @@ class BriefcaseAssetInfoFragment : Fragment() {
                         assetId = it.assetId,
                         title = when (it.typeInformation) {
                             "price" -> "Переоценка"
-                            else -> "Транзакция"
+                            else -> if (it.isSale == true) "Продажа актива" else "Покупка актива"
                         },
                         date = it.date,
                         amount = when (it.typeInformation) {
-                            "price" -> "${it.oldPrice} -> ${it.currentPrice}"
-                            else -> if (it.isSale!!) "-${it.amount!!}" else "+${it.amount}"
+                            "price" -> "${
+                                it.oldPrice.toString().reversed().chunked(3).joinToString(" ")
+                                    .reversed()
+                            } -> ${
+                                it.currentPrice.toString().reversed().chunked(3).joinToString(" ")
+                                    .reversed()
+                            }"
+
+                            else -> (if (it.isSale!!) "-" else "+") + it.amount.toString()
+                                .reversed().chunked(3).joinToString(" ").reversed()
                         },
                         percentage = when (it.typeInformation) {
                             "price" -> "(${

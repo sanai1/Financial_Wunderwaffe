@@ -23,6 +23,7 @@ class BriefcaseDialogAssetTransactionAdd(
     private val callback: (String, Long, Boolean) -> Unit
 ) : DialogFragment() {
     private lateinit var title: String
+    private lateinit var view: View
 
     fun setTitle(newTitle: String) {
         title = newTitle
@@ -32,8 +33,8 @@ class BriefcaseDialogAssetTransactionAdd(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        val view = inflater.inflate(R.layout.dialog_fragment_briefcase_asset_transaction_add, null)
+    ): View {
+        view = inflater.inflate(R.layout.dialog_fragment_briefcase_asset_transaction_add, null)
 
         view.findViewById<TextView>(R.id.textViewAssetTitleTransactionAdd).text = "Актив: $title"
         val textViewDate = view.findViewById<TextView>(R.id.textViewDateAssetTransaction)
@@ -69,6 +70,11 @@ class BriefcaseDialogAssetTransactionAdd(
         }
 
         return view
+    }
+
+    override fun onStart() {
+        super.onStart()
+        view.findViewById<EditText>(R.id.editTextNumberDecimalAmountAssetTransaction).setText("")
     }
 
 }

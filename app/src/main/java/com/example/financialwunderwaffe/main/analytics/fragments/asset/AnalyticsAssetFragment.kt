@@ -165,7 +165,8 @@ class AnalyticsAssetFragment : Fragment() {
             transparentCircleRadius = 50f
             centerText = when (listAssets.isEmpty()) {
                 true -> ""
-                false -> listAssets.sumOf { it.second }.toString()
+                false -> listAssets.sumOf { it.second }.toString().reversed().chunked(3)
+                    .joinToString(" ").reversed()
             }
             setCenterTextColor(Color.BLACK)
             setCenterTextSize(20f)
@@ -259,16 +260,6 @@ class AnalyticsAssetFragment : Fragment() {
             setDrawGridBackground(false)
             setDrawBorders(false)
             legend.isEnabled = false
-//            legend.apply {
-//                form = Legend.LegendForm.LINE
-//                textSize = 15f
-//                textColor = Color.BLACK
-//                verticalAlignment = Legend.LegendVerticalAlignment.BOTTOM
-//                horizontalAlignment = Legend.LegendHorizontalAlignment.CENTER
-//                orientation = Legend.LegendOrientation.HORIZONTAL
-//                setDrawInside(false)
-//                isWordWrapEnabled = true
-//            }
             xAxis.apply {
                 position = XAxis.XAxisPosition.BOTTOM
                 granularity = 1f

@@ -20,6 +20,7 @@ class BriefcaseDialogAssetAdd(
     private val callback: (String) -> Unit
 ) : DialogFragment() {
     private var listAsset = listOf<String>()
+    private lateinit var view: View
 
     fun setAssetList(listAssetNew: List<String>) {
         listAsset = listAssetNew
@@ -30,7 +31,7 @@ class BriefcaseDialogAssetAdd(
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val view = inflater.inflate(R.layout.dialog_fragment_briefcase_asset_add, null)
+        view = inflater.inflate(R.layout.dialog_fragment_briefcase_asset_add, null)
 
         val spinner = view.findViewById<Spinner>(R.id.spinnerAsset)
         val editText = view.findViewById<EditText>(R.id.editTextTextAssetTitle)
@@ -77,6 +78,13 @@ class BriefcaseDialogAssetAdd(
         }
 
         return view
+    }
+
+    override fun onStart() {
+        super.onStart()
+        view.apply {
+            findViewById<EditText>(R.id.editTextTextAssetTitle).setText("")
+        }
     }
 
 }

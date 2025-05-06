@@ -67,7 +67,9 @@ class BriefcaseFragment : Fragment() {
 
     private fun initAllInfo(listAssets: List<Asset>) {
         binding.textViewCountAsset.text = "Кол-во активов: ${listAssets.size}"
-        binding.textViewAmountAsset.text = listAssets.sumOf { it.amount }.toString()
+        binding.textViewAmountAsset.text =
+            listAssets.sumOf { it.amount }.toString().reversed().chunked(3).joinToString(" ")
+                .reversed() + "₽"
     }
 
     private fun initListAssets(listAssets: List<Asset>) =
