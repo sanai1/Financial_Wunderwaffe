@@ -12,17 +12,12 @@ import android.widget.RadioGroup
 import androidx.fragment.app.Fragment
 import com.example.financialwunderwaffe.R
 import com.example.financialwunderwaffe.main.MainActivity
+import com.example.financialwunderwaffe.main.budget.BudgetViewModel
 import com.example.financialwunderwaffe.retrofit.database.category.Category
-import com.example.financialwunderwaffe.retrofit.database.category.CategoryApiClient
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class BudgetCategoryAddFragment : Fragment() {
     private lateinit var view: View
+    private lateinit var viewModel: BudgetViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -30,11 +25,12 @@ class BudgetCategoryAddFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         view = inflater.inflate(R.layout.fragment_budget_category_add, container, false)
+        viewModel = (activity as MainActivity).budgetViewModel
 
         view.findViewById<ImageView>(R.id.imageViewBackCategoryMain).setOnClickListener {
-            (parentFragment as BudgetCategoryFragment).goToFragment(
-                (parentFragment as BudgetCategoryFragment).budgetCategoryMainFragment
-            )
+            (parentFragment as BudgetCategoryFragment).apply {
+                goToFragment(budgetCategoryMainFragment)
+            }
         }
 
         view.findViewById<Button>(R.id.buttonCategoryAdd).setOnClickListener {
@@ -52,50 +48,19 @@ class BudgetCategoryAddFragment : Fragment() {
                         return@setOnClickListener
                     }
                 }
-            addCategory(
-                Category(
+            viewModel.createCategory(
+                (activity as MainActivity).basicLoginAndPassword, Category(
                     name = name,
                     type = type,
                     userUID = (activity as MainActivity).uid.toString()
                 )
             )
+            (parentFragment as BudgetCategoryFragment).apply {
+                goToFragment(budgetCategoryMainFragment)
+            }
         }
 
         return view
-    }
-
-    private fun addCategory(category: Category) {
-        (parentFragment as BudgetCategoryFragment).goToFragment(
-            (parentFragment as BudgetCategoryFragment).loadingFragment
-        )
-        CategoryApiClient.categoryAPIService.createCategory(
-            token = (activity as MainActivity).basicLoginAndPassword,
-            category = category
-        ).enqueue(object : Callback<Long> {
-            override fun onResponse(call: Call<Long>, response: Response<Long>) {
-                if (response.isSuccessful) {
-                    CoroutineScope(Dispatchers.IO).launch {
-                        (parentFragment as BudgetCategoryFragment).apply {
-                            budgetFragment.initCategory().join()
-                            budgetCategoryMainFragment = BudgetCategoryMainFragment()
-                            goToFragment(budgetCategoryMainFragment)
-                        }
-                    }
-                } else {
-                    (activity as MainActivity).toast("Ошибка сервера: ${response.code()}-${response.message()}")
-                    (parentFragment as BudgetCategoryFragment).goToFragment(
-                        (parentFragment as BudgetCategoryFragment).budgetCategoryAddFragment
-                    )
-                }
-            }
-
-            override fun onFailure(call: Call<Long>, t: Throwable) {
-                (activity as MainActivity).toast("Ошибка сети: ${t.message}")
-                (parentFragment as BudgetCategoryFragment).goToFragment(
-                    (parentFragment as BudgetCategoryFragment).budgetCategoryAddFragment
-                )
-            }
-        })
     }
 
     override fun onPause() {

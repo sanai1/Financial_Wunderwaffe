@@ -15,11 +15,6 @@ import java.time.format.DateTimeFormatter
 import java.util.UUID
 
 class AnalyticsViewModel : ViewModel() {
-    private lateinit var update: () -> Unit
-    fun setUpdate(newUpdate: () -> Unit) {
-        update = newUpdate
-    }
-
     private val _title = MutableLiveData<String>()
     val title: LiveData<String> = _title
     private val _dateBudget = MutableLiveData(

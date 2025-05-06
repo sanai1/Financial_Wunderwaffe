@@ -53,9 +53,9 @@ class BudgetReportFragment : Fragment() {
     ): View {
         view = inflater.inflate(R.layout.fragment_budget_report, container, false)
 
-        (parentFragment as BudgetFragment).listCategory.forEach {
-            categoriesIdNow[it.id] = it.type
-        }
+//        (parentFragment as BudgetFragment).listCategory.forEach {
+//            categoriesIdNow[it.id] = it.type
+//        }
 
         view.findViewById<ImageView>(R.id.imageViewBackYearReportMain).setOnClickListener {
             date = date.minusYears(1)
@@ -72,20 +72,20 @@ class BudgetReportFragment : Fragment() {
             justifyContent = JustifyContent.FLEX_START
             alignItems = AlignItems.STRETCH
         }
-        categoryReportAdapter =
-            CategoryAnalyticsAdapter((parentFragment as BudgetFragment).listCategory.map {
-                Pair(
-                    it,
-                    true
-                )
-            }.toMutableList()) { category ->
-                if (category.id in categoriesIdNow.keys) {
-                    categoriesIdNow -= category.id
-                } else {
-                    categoriesIdNow[category.id] = category.type
-                }
-                searchNowYearTransaction()
-            }
+//        categoryReportAdapter =
+//            CategoryAnalyticsAdapter((parentFragment as BudgetFragment).listCategory.map {
+//                Pair(
+//                    it,
+//                    true
+//                )
+//            }.toMutableList()) { category ->
+//                if (category.id in categoriesIdNow.keys) {
+//                    categoriesIdNow -= category.id
+//                } else {
+//                    categoriesIdNow[category.id] = category.type
+//                }
+//                searchNowYearTransaction()
+//            }
         view.findViewById<RecyclerView>(R.id.listCategoryReportMain).apply {
             adapter = categoryReportAdapter
             layoutManager = layoutManagerCategoryReport
@@ -108,24 +108,24 @@ class BudgetReportFragment : Fragment() {
     private fun searchNowYearTransaction() {
         view.findViewById<TextView>(R.id.textViewYearReportMain).text = date.value.toString()
         listNowYearTransaction.clear()
-        (parentFragment as BudgetFragment).listTransaction.forEach { transaction ->
-            if (Year.from(
-                    LocalDate.parse(
-                        transaction.date,
-                        DateTimeFormatter.ofPattern("dd.MM.yyyy")
-                    )
-                ) == date
-            ) {
-                if (transaction.type.not()) {
-                    listNowYearTransaction.add(transaction)
-                } else {
-                    when ((parentFragment as BudgetFragment).listCategory.first { it.id == transaction.categoryID }.type) {
-                        true -> if (large.second) listNowYearTransaction.add(transaction)
-                        false -> if (large.first) listNowYearTransaction.add(transaction)
-                    }
-                }
-            }
-        }
+//        (parentFragment as BudgetFragment).listTransaction.forEach { transaction ->
+//            if (Year.from(
+//                    LocalDate.parse(
+//                        transaction.date,
+//                        DateTimeFormatter.ofPattern("dd.MM.yyyy")
+//                    )
+//                ) == date
+//            ) {
+//                if (transaction.type.not()) {
+//                    listNowYearTransaction.add(transaction)
+//                } else {
+//                    when ((parentFragment as BudgetFragment).listCategory.first { it.id == transaction.categoryID }.type) {
+//                        true -> if (large.second) listNowYearTransaction.add(transaction)
+//                        false -> if (large.first) listNowYearTransaction.add(transaction)
+//                    }
+//                }
+//            }
+//        }
         mapperTransactions(listNowYearTransaction).also { monthlyDataList ->
             if (monthlyDataList.sumOf { it.expense + it.income } == 0L) {
                 view.findViewById<TextView>(R.id.textViewReportMain).visibility = View.VISIBLE

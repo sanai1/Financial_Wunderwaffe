@@ -48,7 +48,7 @@
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 
         <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
+            android:id="@+id/toolbarBudgetHistory"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/white">
@@ -76,6 +76,7 @@
                 android:id="@+id/listTransaction"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginBottom="15dp"
                 app:layout_anchor="@+id/nestedScrollView"
                 app:layout_anchorGravity="center" />
         </FrameLayout>

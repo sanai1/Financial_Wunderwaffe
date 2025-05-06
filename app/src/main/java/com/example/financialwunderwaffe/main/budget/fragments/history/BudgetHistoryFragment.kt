@@ -12,10 +12,9 @@ import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.RecyclerView.LayoutManager
 import com.example.financialwunderwaffe.R
 import com.example.financialwunderwaffe.main.MainActivity
-import com.example.financialwunderwaffe.main.budget.BudgetFragment
+import com.example.financialwunderwaffe.main.budget.BudgetViewModel
 import com.example.financialwunderwaffe.retrofit.database.transaction.Transaction
 import com.github.mikephil.charting.charts.PieChart
 import com.github.mikephil.charting.components.Legend
@@ -31,48 +30,46 @@ import java.time.format.DateTimeFormatter
 
 class BudgetHistoryFragment : Fragment() {
     private lateinit var view: View
-    private var date = YearMonth.parse(LocalDate.now().let { localDate ->
-        "${
-            localDate.monthValue.let { if (it < 10) "0$it" else it }
-        }.${localDate.year}"
-    }, DateTimeFormatter.ofPattern("MM.yyyy"))
-    private val listTransactionNowMonth = mutableListOf<Transaction>()
-    private lateinit var transactionAdapter: TransactionAdapter
-    private lateinit var transactionLayoutManager: LayoutManager
+    private lateinit var viewModel: BudgetViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         view = inflater.inflate(R.layout.fragment_budget_history, container, false)
+        viewModel = (activity as MainActivity).budgetViewModel
 
-        transactionLayoutManager = LinearLayoutManager(activity)
-        searchNowMonthTransaction()
+        viewModel.transaction.observe(viewLifecycleOwner) {
+            searchNowMonthTransaction(it)
+        }
+        viewModel.dateHistory.observe(viewLifecycleOwner) {
+            searchNowMonthTransaction(viewModel.transaction.value!!)
+        }
+        viewModel.typeTransaction.observe(viewLifecycleOwner) {
+            searchNowMonthTransaction(viewModel.transaction.value!!)
+        }
 
         view.findViewById<LinearLayout>(R.id.transaction_type).apply {
             findViewById<LinearLayout>(R.id.linearLayoutExpenseInfo).setOnClickListener {
-                getExpense()
+                viewModel.setTypeTransaction(false)
             }
             findViewById<LinearLayout>(R.id.linearLayoutIncomeInfo).setOnClickListener {
-                getIncome()
+                viewModel.setTypeTransaction(true)
             }
             findViewById<ImageView>(R.id.imageViewBackMonth).setOnClickListener {
-                date = date.minusMonths(1)
-                searchNowMonthTransaction()
+                viewModel.setDateHistory(viewModel.dateHistory.value!!.minusMonths(1))
             }
             findViewById<ImageView>(R.id.imageViewForwardMonth).setOnClickListener {
-                date = date.plusMonths(1)
-                searchNowMonthTransaction()
+                viewModel.setDateHistory(viewModel.dateHistory.value!!.plusMonths(1))
             }
         }
-
         view.findViewById<ImageView>(R.id.imageViewBackTransactionHistory).setOnClickListener {
-            searchNowMonthTransaction()
+            viewModel.setTypeTransaction(null)
         }
 
         return view
     }
 
-    private fun searchNowMonthTransaction() {
+    private fun searchNowMonthTransaction(listTransaction: List<Transaction>) {
         val months = mapOf(
             1 to "январь",
             2 to "февраль",
@@ -89,62 +86,92 @@ class BudgetHistoryFragment : Fragment() {
         )
         view.findViewById<LinearLayout>(R.id.transaction_type)
             .findViewById<TextView>(R.id.textViewMonthTransaction).text =
-            "${months[date.monthValue]} ${date.year}"
-        listTransactionNowMonth.clear()
-        (parentFragment as BudgetFragment).listTransaction.forEach {
-            if (YearMonth.from(
+            "${months[viewModel.dateHistory.value!!.monthValue]} ${viewModel.dateHistory.value!!.year}"
+        listTransaction.filter {
+            YearMonth.parse(
+                it.date,
+                DateTimeFormatter.ofPattern("dd.MM.yyyy")
+            ) == viewModel.dateHistory.value
+        }.also { transactionByNowYearMonth ->
+            transactionByNowYearMonth.filter { transaction ->
+                if (viewModel.typeTransaction.value == null) true
+                else {
+                    val category =
+                        viewModel.categories.value?.find { it.id == transaction.categoryID }
+                    if (category == null) false
+                    else category.type == viewModel.typeTransaction.value
+                }
+            }.also {
+                initListTransaction(it)
+                when (viewModel.typeTransaction.value) {
+                    null -> {
+                        view.findViewById<Toolbar>(R.id.toolbarBudgetHistory).visibility =
+                            View.VISIBLE
+                        view.findViewById<CollapsingToolbarLayout>(R.id.pieChartInfo).visibility =
+                            View.GONE
+                    }
+
+                    true, false -> {
+                        view.findViewById<Toolbar>(R.id.toolbarBudgetHistory).visibility = View.GONE
+                        view.findViewById<CollapsingToolbarLayout>(R.id.pieChartInfo).visibility =
+                            View.VISIBLE
+                        initPieChart(it, when (viewModel.typeTransaction.value!!) {
+                            true -> mutableListOf<Int>().apply {
+                                addAll(ColorTemplate.COLORFUL_COLORS.toList())
+                                addAll(ColorTemplate.MATERIAL_COLORS.toList())
+                            }
+
+                            false -> mutableListOf<Int>().apply {
+                                addAll(ColorTemplate.PASTEL_COLORS.toList())
+                                addAll(ColorTemplate.JOYFUL_COLORS.toList())
+                            }
+                        })
+                    }
+                }
+            }
+            initTransactionInfo(transactionByNowYearMonth)
+        }
+    }
+
+    private fun initListTransaction(listTransaction: List<Transaction>) {
+        view.findViewById<RecyclerView>(R.id.listTransaction).apply {
+            adapter = TransactionAdapter(
+                listTransaction.map { transaction ->
+                    val category =
+                        viewModel.categories.value?.find { it.id == transaction.categoryID }
+                    TransactionState(
+                        id = transaction.id,
+                        categoryTitle = category?.name ?: "Not title",
+                        amount = transaction.amount.let {
+                            if (category == null) it.toString()
+                            else {
+                                if (category.type) "+$it"
+                                else "-$it"
+                            }
+                        },
+                        date = transaction.date,
+                        type = transaction.type,
+                        description = transaction.description
+                    )
+                }.sortedByDescending {
                     LocalDate.parse(
                         it.date,
                         DateTimeFormatter.ofPattern("dd.MM.yyyy")
                     )
-                ) == date
-            ) {
-                listTransactionNowMonth.add(it)
+                },
+                (activity as MainActivity).printToast
+            ) { transactionState ->
+                if (transactionState.description.isNotEmpty()) {
+                    (activity as MainActivity).toast(transactionState.description)
+                }
             }
-        }
-        initListTransaction(listTransactionNowMonth)
-        initTransactionInfo()
-    }
-
-    private fun initListTransaction(listTransaction: List<Transaction>) {
-        transactionAdapter = TransactionAdapter(
-            listTransaction.map { transaction ->
-                val category =
-                    (parentFragment as BudgetFragment).listCategory.first { it.id == transaction.categoryID }
-                TransactionState(
-                    id = transaction.id,
-                    categoryTitle = category.name,
-                    amount = transaction.amount.let {
-                        if (category.type) "+$it"
-                        else "-$it"
-                    },
-                    date = transaction.date,
-                    type = transaction.type,
-                    description = transaction.description
-                )
-            }.sortedByDescending {
-                LocalDate.parse(
-                    it.date,
-                    DateTimeFormatter.ofPattern("dd.MM.yyyy")
-                )
-            },
-            (activity as MainActivity).printToast
-        ) { transactionState ->
-            if (transactionState.description.isNotEmpty()) {
-                (activity as MainActivity).toast(transactionState.description)
-            }
-        }
-        view.findViewById<RecyclerView>(R.id.listTransaction).apply {
-            adapter = transactionAdapter
-            layoutManager = transactionLayoutManager
+            layoutManager = LinearLayoutManager(activity)
         }
     }
 
-    private fun initTransactionInfo() = view.apply {
-        findViewById<Toolbar>(R.id.toolbar).visibility = View.VISIBLE
-        findViewById<CollapsingToolbarLayout>(R.id.pieChartInfo).visibility = View.GONE
+    private fun initTransactionInfo(listTransaction: List<Transaction>) = view.apply {
         findViewById<LinearLayout>(R.id.transaction_type).apply {
-            getSumAmount().also {
+            getSumAmount(listTransaction).also {
                 findViewById<TextView>(R.id.textViewExpenseAmount).text =
                     it.first.reversed().chunked(3).joinToString(" ").reversed()
                 findViewById<TextView>(R.id.textViewIncomeAmount).text =
@@ -153,36 +180,15 @@ class BudgetHistoryFragment : Fragment() {
         }
     }
 
-    private fun getSumAmount(): Pair<String, String> {
-        val first = listTransactionNowMonth.filter { transaction ->
-            (parentFragment as BudgetFragment).listCategory.first { it.id == transaction.categoryID }.type.not()
+    private fun getSumAmount(listTransaction: List<Transaction>): Pair<String, String> {
+        val first = listTransaction.filter { transaction ->
+            viewModel.categories.value?.find { it.id == transaction.categoryID }?.type?.not()
+                ?: false
         }.sumOf { it.amount }.toString()
-        val second = listTransactionNowMonth.filter { transaction ->
-            (parentFragment as BudgetFragment).listCategory.first { it.id == transaction.categoryID }.type
+        val second = listTransaction.filter { transaction ->
+            viewModel.categories.value?.find { it.id == transaction.categoryID }?.type ?: false
         }.sumOf { it.amount }.toString()
         return Pair(first, second)
-    }
-
-    private fun getExpense() {
-        view.findViewById<Toolbar>(R.id.toolbar).visibility = View.GONE
-        view.findViewById<CollapsingToolbarLayout>(R.id.pieChartInfo).visibility = View.VISIBLE
-        listTransactionNowMonth.filter { transaction ->
-            (parentFragment as BudgetFragment).listCategory.first { it.id == transaction.categoryID }.type.not()
-        }.also {
-            initPieChart(it, ColorTemplate.PASTEL_COLORS.toList())
-            initListTransaction(it)
-        }
-    }
-
-    private fun getIncome() {
-        view.findViewById<Toolbar>(R.id.toolbar).visibility = View.GONE
-        view.findViewById<CollapsingToolbarLayout>(R.id.pieChartInfo).visibility = View.VISIBLE
-        listTransactionNowMonth.filter { transaction ->
-            (parentFragment as BudgetFragment).listCategory.first { it.id == transaction.categoryID }.type
-        }.also {
-            initPieChart(it, ColorTemplate.JOYFUL_COLORS.toList())
-            initListTransaction(it)
-        }
     }
 
     private fun initPieChart(listTransactions: List<Transaction>, colorList: List<Int>) =
@@ -202,10 +208,12 @@ class BudgetHistoryFragment : Fragment() {
             val category = mutableListOf<String>()
             listTransactions.groupBy { it.categoryID }.forEach { (categoryId, listTransaction) ->
                 pieData.add(PieEntry(listTransaction.sumOf { it.amount }.toFloat()))
-                category.add((parentFragment as BudgetFragment).listCategory.first { it.id == categoryId }.name)
+                category.add(
+                    viewModel.categories.value?.find { it.id == categoryId }?.name ?: "Not Title"
+                )
             }
             val dataSet = PieDataSet(pieData, "").apply {
-                sliceSpace = 5f
+                sliceSpace = 1f
                 selectionShift = 10f
                 colors = colorList
                 setDrawValues(false)

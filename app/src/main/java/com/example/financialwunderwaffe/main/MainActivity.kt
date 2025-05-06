@@ -44,7 +44,6 @@ class MainActivity : AppCompatActivity() {
 
         budgetViewModel.setUpdate(update)
         briefcaseViewModel.setUpdate(update)
-        analyticsViewModel.setUpdate(update)
 
         val navView: BottomNavigationView = binding.navView
 
@@ -70,6 +69,7 @@ class MainActivity : AppCompatActivity() {
     private val update = fun() {
         budgetViewModel.apply {
             updateCategory(basicLoginAndPassword, uid)
+            updateTransaction(basicLoginAndPassword, uid)
         }
         briefcaseViewModel.apply {
             updateListAssets(basicLoginAndPassword, uid)
