@@ -78,6 +78,7 @@
                         style="@style/TextViewInfoBriefcase"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:textSize="20sp"
                         android:layout_gravity="center"
                         android:layout_weight="1"
                         android:gravity="center" />
@@ -112,4 +113,10 @@
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
+
+    <FrameLayout
+        android:id="@+id/container_analytics_asset"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone" />
 </FrameLayout>

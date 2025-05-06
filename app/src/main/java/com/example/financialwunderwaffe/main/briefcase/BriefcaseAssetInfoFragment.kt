@@ -4,11 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.financialwunderwaffe.LoadingFragment
 import com.example.financialwunderwaffe.R
 import com.example.financialwunderwaffe.main.MainActivity
 import com.example.financialwunderwaffe.main.briefcase.adapters.AssetInformationAdapter
@@ -18,6 +21,11 @@ import com.example.financialwunderwaffe.main.briefcase.states.AssetInformationSt
 import com.example.financialwunderwaffe.retrofit.database.asset.information.model.AssetInformation
 import com.example.financialwunderwaffe.retrofit.database.asset.information.model.AssetPrice
 import com.example.financialwunderwaffe.retrofit.database.asset.information.model.AssetTransaction
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 
 class BriefcaseAssetInfoFragment : Fragment() {
@@ -71,12 +79,27 @@ class BriefcaseAssetInfoFragment : Fragment() {
             briefcaseDialogAssetPriceAdd.show(childFragmentManager, "DIALOG_ASSET_PRICE_ADD")
         }
 
-        view.findViewById<ImageView>(R.id.imageViewAssetTransactionAdd).setOnClickListener {
-            briefcaseDialogAssetTransactionAdd.setTitle(viewModel.selectAsset.value?.title ?: "")
-            briefcaseDialogAssetTransactionAdd.show(
-                childFragmentManager,
-                "DIALOG_ASSET_TRANSACTION_ADD"
-            )
+        view.apply {
+            findViewById<Button>(R.id.buttonAssetSell).setOnClickListener {
+                briefcaseDialogAssetTransactionAdd.apply {
+                    setTitle(viewModel.selectAsset.value?.title ?: "")
+                    setType(true)
+                }
+                briefcaseDialogAssetTransactionAdd.show(
+                    childFragmentManager,
+                    "DIALOG_ASSET_TRANSACTION_ADD"
+                )
+            }
+            findViewById<Button>(R.id.buttonAssetBuy).setOnClickListener {
+                briefcaseDialogAssetTransactionAdd.apply {
+                    setTitle(viewModel.selectAsset.value?.title ?: "")
+                    setType(false)
+                }
+                briefcaseDialogAssetTransactionAdd.show(
+                    childFragmentManager,
+                    "DIALOG_ASSET_TRANSACTION_ADD"
+                )
+            }
         }
 
         viewModel.selectAsset.observe(viewLifecycleOwner) {
@@ -87,9 +110,29 @@ class BriefcaseAssetInfoFragment : Fragment() {
         viewModel.listAssetInformation.observe(viewLifecycleOwner) {
             initListInformation(it)
         }
-        viewModel.updateListInformation((activity as MainActivity).basicLoginAndPassword)
+
+        view.findViewById<FrameLayout>(R.id.container_briefcase_info).visibility = View.VISIBLE
+        childFragmentManager.beginTransaction().apply {
+            replace(R.id.container_briefcase_info, LoadingFragment())
+            addToBackStack(null)
+            commit()
+        }
+        check()
 
         return view
+    }
+
+    private fun check() = CoroutineScope(Dispatchers.IO).launch {
+        viewModel.apply {
+            clearListInformation()
+            updateListInformation((activity as MainActivity).basicLoginAndPassword)
+            while (listAssetInformation.value?.isEmpty() != false) {
+                delay(50)
+            }
+        }
+        withContext(Dispatchers.Main) {
+            view.findViewById<FrameLayout>(R.id.container_briefcase_info).visibility = View.GONE
+        }
     }
 
     private fun initListInformation(listInformation: List<AssetInformation>) =

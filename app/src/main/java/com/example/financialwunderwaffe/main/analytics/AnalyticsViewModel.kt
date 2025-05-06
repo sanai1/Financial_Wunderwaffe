@@ -53,7 +53,7 @@ class AnalyticsViewModel : ViewModel() {
         _categories.value = newCategories
     }
 
-    private val _budgetByMonth = MutableLiveData<List<BudgetAnalytics>>(emptyList())
+    private val _budgetByMonth = MutableLiveData<List<BudgetAnalytics>>()
     val budgetByMonth: LiveData<List<BudgetAnalytics>> = _budgetByMonth
 
     fun updateBudgetByMonth(token: String, uid: UUID) = CoroutineScope(Dispatchers.IO).launch {
@@ -63,7 +63,7 @@ class AnalyticsViewModel : ViewModel() {
         }
     }
 
-    private val _capitalByMonth = MutableLiveData<List<CapitalAnalytics>>(emptyList())
+    private val _capitalByMonth = MutableLiveData<List<CapitalAnalytics>>()
     val capitalByMonth: LiveData<List<CapitalAnalytics>> = _capitalByMonth
     private val _dateAsset = MutableLiveData(
         Year.parse(

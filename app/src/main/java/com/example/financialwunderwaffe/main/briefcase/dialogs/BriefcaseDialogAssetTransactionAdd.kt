@@ -8,10 +8,10 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import com.example.financialwunderwaffe.R
 import com.google.android.material.button.MaterialButton
-import com.google.android.material.button.MaterialButtonToggleGroup
 import com.google.android.material.datepicker.MaterialDatePicker
 import java.text.SimpleDateFormat
 import java.time.LocalDate
@@ -23,10 +23,15 @@ class BriefcaseDialogAssetTransactionAdd(
     private val callback: (String, Long, Boolean) -> Unit
 ) : DialogFragment() {
     private lateinit var title: String
+    private var type = false
     private lateinit var view: View
 
     fun setTitle(newTitle: String) {
         title = newTitle
+    }
+
+    fun setType(newType: Boolean) {
+        type = newType
     }
 
     override fun onCreateView(
@@ -36,7 +41,21 @@ class BriefcaseDialogAssetTransactionAdd(
     ): View {
         view = inflater.inflate(R.layout.dialog_fragment_briefcase_asset_transaction_add, null)
 
-        view.findViewById<TextView>(R.id.textViewAssetTitleTransactionAdd).text = "Актив: $title"
+        view.apply {
+            findViewById<TextView>(R.id.textViewAssetTitleTransactionAdd).text = "Актив: $title"
+            findViewById<MaterialButton>(R.id.btnType).apply {
+                text = when (type) {
+                    true -> "Продажа"
+                    false -> "Покупка"
+                }
+                setBackgroundColor(
+                    when (type) {
+                        true -> ContextCompat.getColor(requireContext(), R.color.red_selected)
+                        false -> ContextCompat.getColor(requireContext(), R.color.green_selected)
+                    }
+                )
+            }
+        }
         val textViewDate = view.findViewById<TextView>(R.id.textViewDateAssetTransaction)
         textViewDate.text = LocalDate.now().toString().split("-").reversed().joinToString(".")
 
@@ -52,21 +71,22 @@ class BriefcaseDialogAssetTransactionAdd(
             }
         }
 
-        view.findViewById<Button>(R.id.buttonAssetTransactionAdd).setOnClickListener {
-            val date = textViewDate.text.toString()
-            val amount =
-                view.findViewById<EditText>(R.id.editTextNumberDecimalAmountAssetTransaction).text.toString()
-            if (amount.isEmpty()) {
-                toast("Заполните сумму операции")
-                return@setOnClickListener
+        view.findViewById<Button>(R.id.buttonAssetTransactionAdd).apply {
+            text = when (type) {
+                true -> "Купить"
+                false -> "Продать"
             }
-            val type =
-                when (view.findViewById<MaterialButtonToggleGroup>(R.id.toggleGroupAssetTransaction).checkedButtonId) {
-                    view.findViewById<MaterialButton>(R.id.btn_buy).id -> false
-                    else -> true
+            setOnClickListener {
+                val date = textViewDate.text.toString()
+                val amount =
+                    view.findViewById<EditText>(R.id.editTextNumberDecimalAmountAssetTransaction).text.toString()
+                if (amount.isEmpty()) {
+                    toast("Заполните сумму операции")
+                    return@setOnClickListener
                 }
-            dismiss()
-            callback(date, amount.toLong(), type)
+                dismiss()
+                callback(date, amount.toLong(), type)
+            }
         }
 
         return view

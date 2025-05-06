@@ -5,9 +5,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import com.example.financialwunderwaffe.LoadingFragment
 import com.example.financialwunderwaffe.R
 import com.example.financialwunderwaffe.main.MainActivity
 import com.example.financialwunderwaffe.main.analytics.AnalyticsViewModel
@@ -24,6 +26,11 @@ import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.formatter.ValueFormatter
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.time.Year
 import java.time.YearMonth
 import java.time.format.DateTimeFormatter
@@ -56,10 +63,31 @@ class AnalyticsCapitalFragment : Fragment() {
         viewModel.dateCapital.observe(viewLifecycleOwner) {
             view.findViewById<TextView>(R.id.textViewYearCapitalAnalytics).text =
                 it.value.toString()
-            checkData(mapperDataForCombinedChart(viewModel.capitalByMonth.value!!))
+            if (viewModel.capitalByMonth.value != null) checkData(
+                mapperDataForCombinedChart(
+                    viewModel.capitalByMonth.value!!
+                )
+            )
         }
 
+        view.findViewById<FrameLayout>(R.id.container_analytics_capital).visibility = View.VISIBLE
+        childFragmentManager.beginTransaction().apply {
+            replace(R.id.container_analytics_capital, LoadingFragment())
+            addToBackStack(null)
+            commit()
+        }
+        check()
+
         return view
+    }
+
+    private fun check() = CoroutineScope(Dispatchers.IO).launch {
+        while (viewModel.capitalByMonth.value == null) {
+            delay(50)
+        }
+        withContext(Dispatchers.Main) {
+            view.findViewById<FrameLayout>(R.id.container_analytics_capital).visibility = View.GONE
+        }
     }
 
     private fun checkData(listData: List<Triple<YearMonth, Long, Double>>) {

@@ -5,6 +5,7 @@ import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
@@ -18,6 +19,7 @@ import com.example.financialwunderwaffe.welcome.WelcomeActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.util.UUID
@@ -73,6 +75,12 @@ class MainActivity : AppCompatActivity() {
         }
         briefcaseViewModel.apply {
             updateListAssets(basicLoginAndPassword, uid)
+            viewModelScope.launch {
+                while (selectAsset.value == null) {
+                    delay(50)
+                }
+                updateListInformation(basicLoginAndPassword)
+            }
         }
         analyticsViewModel.apply {
             updateBudgetByMonth(basicLoginAndPassword, uid)

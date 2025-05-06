@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -12,6 +13,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.financialwunderwaffe.LoadingFragment
 import com.example.financialwunderwaffe.R
 import com.example.financialwunderwaffe.main.MainActivity
 import com.example.financialwunderwaffe.main.budget.BudgetViewModel
@@ -24,6 +26,11 @@ import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
 import com.github.mikephil.charting.utils.ColorTemplate
 import com.google.android.material.appbar.CollapsingToolbarLayout
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.time.LocalDate
 import java.time.YearMonth
 import java.time.format.DateTimeFormatter
@@ -42,7 +49,7 @@ class BudgetHistoryFragment : Fragment() {
             searchNowMonthTransaction(it)
         }
         viewModel.dateHistory.observe(viewLifecycleOwner) {
-            searchNowMonthTransaction(viewModel.transaction.value!!)
+            if (viewModel.transaction.value != null) searchNowMonthTransaction(viewModel.transaction.value!!)
         }
         viewModel.typeTransaction.observe(viewLifecycleOwner) {
             searchNowMonthTransaction(viewModel.transaction.value!!)
@@ -66,7 +73,27 @@ class BudgetHistoryFragment : Fragment() {
             viewModel.setTypeTransaction(null)
         }
 
+        view.findViewById<FrameLayout>(R.id.container_budget_history).visibility = View.VISIBLE
+        childFragmentManager.beginTransaction().apply {
+            replace(R.id.container_budget_history, LoadingFragment())
+            addToBackStack(null)
+            commit()
+        }
+        view.findViewById<Toolbar>(R.id.toolbarBudgetHistory).visibility = View.GONE
+        view.findViewById<CollapsingToolbarLayout>(R.id.pieChartInfo).visibility = View.GONE
+        check()
+
         return view
+    }
+
+    private fun check() = CoroutineScope(Dispatchers.IO).launch {
+        while (viewModel.categories.value == null || viewModel.transaction.value == null) {
+            delay(50)
+        }
+        withContext(Dispatchers.Main) {
+            view.findViewById<FrameLayout>(R.id.container_budget_history).visibility = View.GONE
+            view.findViewById<Toolbar>(R.id.toolbarBudgetHistory).visibility = View.VISIBLE
+        }
     }
 
     private fun searchNowMonthTransaction(listTransaction: List<Transaction>) {
@@ -200,7 +227,8 @@ class BudgetHistoryFragment : Fragment() {
             transparentCircleRadius = 50f
             centerText = when (listTransactions.isEmpty()) {
                 true -> ""
-                false -> listTransactions.sumOf { it.amount }.toString()
+                false -> listTransactions.sumOf { it.amount }.toString().reversed().chunked(3)
+                    .joinToString(" ").reversed() + "₽"
             }
             setCenterTextColor(Color.BLACK)
             setCenterTextSize(15f)

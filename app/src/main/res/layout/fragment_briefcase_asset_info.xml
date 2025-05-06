@@ -20,16 +20,21 @@
             android:id="@+id/textViewAssetTitleInfo"
             style="@style/TextViewLabelWelcome"
             android:layout_width="0dp"
+            android:layout_marginEnd="5dp"
+            android:ellipsize="end"
+            android:gravity="start"
+            android:maxLines="1"
             android:layout_height="wrap_content"
             android:layout_weight="1" />
 
         <TextView
             android:id="@+id/textViewAssetAmountInfo"
             style="@style/TextViewLabelWelcome"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
+            android:maxLength="9"
+            android:maxLines="1"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:layout_weight="1"
             android:gravity="end|center_vertical" />
     </LinearLayout>
 
@@ -39,22 +44,10 @@
         android:layout_height="match_parent"
         android:layout_marginHorizontal="10dp"
         android:layout_marginTop="50dp"
-        android:layout_marginBottom="15dp"
+        android:layout_marginBottom="65dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout4" />
-
-    <ImageView
-        android:id="@+id/imageViewAssetTransactionAdd"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="25dp"
-        android:background="@drawable/rectangle_rounded_all_light_gray"
-        android:elevation="10dp"
-        android:importantForAccessibility="no"
-        android:src="@android:drawable/ic_input_add"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
 
     <ImageView
         android:id="@+id/imageViewBackBriefcaseMain"
@@ -73,4 +66,43 @@
         android:src="@android:drawable/ic_menu_edit"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginBottom="15dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <Button
+            android:id="@+id/buttonAssetSell"
+            style="@style/ButtonWelcome"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="2.5dp"
+            android:layout_weight="1"
+            android:backgroundTint="@color/red_selected"
+            android:elevation="10dp"
+            android:text="Продать" />
+
+        <Button
+            android:id="@+id/buttonAssetBuy"
+            style="@style/ButtonWelcome"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="2.5dp"
+            android:layout_weight="1"
+            android:backgroundTint="@color/green_selected"
+            android:elevation="10dp"
+            android:text="Купить" />
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/container_briefcase_info"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.financialwunderwaffe.LoadingFragment
 import com.example.financialwunderwaffe.R
 import com.example.financialwunderwaffe.databinding.FragmentMainBriefcaseBinding
 import com.example.financialwunderwaffe.main.MainActivity
@@ -13,6 +14,11 @@ import com.example.financialwunderwaffe.main.briefcase.adapters.AssetAdapter
 import com.example.financialwunderwaffe.main.briefcase.dialogs.BriefcaseDialogAssetAdd
 import com.example.financialwunderwaffe.main.briefcase.states.AssetState
 import com.example.financialwunderwaffe.retrofit.database.asset.Asset
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class BriefcaseFragment : Fragment() {
     private var _binding: FragmentMainBriefcaseBinding? = null
@@ -50,15 +56,37 @@ class BriefcaseFragment : Fragment() {
             briefcaseDialogAssetAdd.setAssetList(listAssetString)
             briefcaseDialogAssetAdd.show(childFragmentManager, "DIALOG_ASSET_ADD")
         }
-        viewModel.listAssets.observe(viewLifecycleOwner) {
-            initAllInfo(it)
-            initListAssets(it)
+        viewModel.listAssets.observe(viewLifecycleOwner) { assetList ->
+            initAllInfo(assetList)
+            initListAssets(assetList.sortedBy { it.title.lowercase() })
         }
-        viewModel.updateListAssets(
-            (activity as MainActivity).basicLoginAndPassword, (activity as MainActivity).uid
-        )
+
+        binding.apply {
+            containerBriefcase.visibility = View.VISIBLE
+            imageViewAssetAdd.visibility = View.GONE
+            listAsset.visibility = View.GONE
+        }
+        childFragmentManager.beginTransaction().apply {
+            replace(R.id.container_briefcase, LoadingFragment())
+            addToBackStack(null)
+            commit()
+        }
+        check()
 
         return root
+    }
+
+    private fun check() = CoroutineScope(Dispatchers.IO).launch {
+        while (viewModel.listAssets.value == null) {
+            delay(50)
+        }
+        withContext(Dispatchers.Main) {
+            binding.apply {
+                containerBriefcase.visibility = View.GONE
+                imageViewAssetAdd.visibility = View.VISIBLE
+                listAsset.visibility = View.VISIBLE
+            }
+        }
     }
 
     fun closeAssetInfoFragment() {

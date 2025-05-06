@@ -5,10 +5,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
+import com.example.financialwunderwaffe.LoadingFragment
 import com.example.financialwunderwaffe.R
 import com.example.financialwunderwaffe.main.MainActivity
 import com.example.financialwunderwaffe.main.analytics.AnalyticsViewModel
@@ -31,6 +33,11 @@ import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayoutManager
 import com.google.android.flexbox.JustifyContent
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.time.Year
 import java.time.YearMonth
 import java.time.format.DateTimeFormatter
@@ -57,15 +64,6 @@ class AnalyticsAssetFragment : Fragment() {
         view = inflater.inflate(R.layout.fragment_analytics_asset, container, false)
         viewModel = (activity as MainActivity).analyticsViewModel
 
-//        (activity as MainActivity).briefcaseViewModel.listAssets.observe(viewLifecycleOwner) { assets ->
-//            val map = mutableMapOf<Long, Boolean>()
-//            assets.forEachIndexed { index, asset ->
-//                map[asset.id] = true
-//                colorToAsset[asset.title] = colorList[index % colorList.size]
-//            }
-//            viewModel.setAssets(map)
-//        }
-
         viewModel.capitalByMonth.observe(viewLifecycleOwner) { capitalByMonth ->
             val map = mutableMapOf<Long, Boolean>()
             var index = 0
@@ -88,6 +86,22 @@ class AnalyticsAssetFragment : Fragment() {
                     assetItem.title to assetItem.amount
                 }
             }
+            view.findViewById<RecyclerView>(R.id.listAssetAnalytics).apply {
+                adapter = AssetAnalyticsAdapter(
+                    (activity as MainActivity).briefcaseViewModel.listAssets.value!!.map {
+                        Pair(it, true)
+                    }.toMutableList(),
+                    colorToAsset
+                ) { asset ->
+                    viewModel.updateAsset(asset.id)
+                }
+                layoutManager = FlexboxLayoutManager(requireContext()).apply {
+                    flexDirection = FlexDirection.ROW
+                    flexWrap = FlexWrap.WRAP
+                    justifyContent = JustifyContent.FLEX_START
+                    alignItems = AlignItems.STRETCH
+                }
+            }
             if (lastMonthCapital.isEmpty() || (lastMonthCapital.size == 1 && lastMonthCapital[0].first == "Фиат" && lastMonthCapital[0].second == 0L)) {
                 view.findViewById<TextView>(R.id.textViewPieChartAssetAnalytics).visibility =
                     View.VISIBLE
@@ -101,27 +115,14 @@ class AnalyticsAssetFragment : Fragment() {
             checkDataForLineChart(mapperDataForLineChart(capitalByMonth))
         }
 
-        view.findViewById<RecyclerView>(R.id.listAssetAnalytics).apply {
-            adapter = AssetAnalyticsAdapter(
-                (activity as MainActivity).briefcaseViewModel.listAssets.value!!.map {
-                    Pair(it, true)
-                }.toMutableList(),
-                colorToAsset
-            ) { asset ->
-                viewModel.updateAsset(asset.id)
-            }
-            layoutManager = FlexboxLayoutManager(requireContext()).apply {
-                flexDirection = FlexDirection.ROW
-                flexWrap = FlexWrap.WRAP
-                justifyContent = JustifyContent.FLEX_START
-                alignItems = AlignItems.STRETCH
-            }
-        }
-
         viewModel.dateAsset.observe(viewLifecycleOwner) {
             view.findViewById<TextView>(R.id.textViewYearBarChart).text =
                 viewModel.dateAsset.value!!.value.toString()
-            checkDataForLineChart(mapperDataForLineChart(viewModel.capitalByMonth.value!!))
+            if (viewModel.capitalByMonth.value != null) checkDataForLineChart(
+                mapperDataForLineChart(
+                    viewModel.capitalByMonth.value!!
+                )
+            )
         }
 
         viewModel.assets.observe(viewLifecycleOwner) {
@@ -135,11 +136,28 @@ class AnalyticsAssetFragment : Fragment() {
             viewModel.setDateAsset(viewModel.dateAsset.value!!.plusYears(1))
         }
 
+        view.findViewById<FrameLayout>(R.id.container_analytics_asset).visibility = View.VISIBLE
+        childFragmentManager.beginTransaction().apply {
+            replace(R.id.container_analytics_asset, LoadingFragment())
+            addToBackStack(null)
+            commit()
+        }
+        check()
+
         return view
     }
 
+    private fun check() = CoroutineScope(Dispatchers.IO).launch {
+        while (viewModel.capitalByMonth.value == null || (activity as MainActivity).budgetViewModel.categories.value == null) {
+            delay(50)
+        }
+        withContext(Dispatchers.Main) {
+            view.findViewById<FrameLayout>(R.id.container_analytics_asset).visibility = View.GONE
+        }
+    }
+
     private fun checkDataForLineChart(listData: List<Pair<YearMonth, Array<Pair<String, Long>>>>) {
-        if (listData.isEmpty()) {
+        if (listData.isEmpty() || listData.sumOf { pair -> pair.second.sumOf { it.second } } == 0L) {
             view.findViewById<TextView>(R.id.textViewLineChartAssetAnalytics).visibility =
                 View.VISIBLE
             view.findViewById<LineChart>(R.id.lineChartAssetAnalytics).visibility = View.GONE
@@ -167,7 +185,7 @@ class AnalyticsAssetFragment : Fragment() {
                 true -> ""
                 false -> listAssets.sumOf { it.second }.toString().reversed().chunked(3)
                     .joinToString(" ").reversed()
-            }
+            } + "₽"
             setCenterTextColor(Color.BLACK)
             setCenterTextSize(20f)
             val pieData = mutableListOf<PieEntry>()

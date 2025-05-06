@@ -8,37 +8,15 @@
     android:background="@color/white"
     android:orientation="vertical">
 
-    <com.google.android.material.button.MaterialButtonToggleGroup
-        android:id="@+id/toggleGroupAssetTransaction"
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnType"
+        style="@style/Widget.Material3.Button.OutlinedButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        app:checkedButton="@+id/btn_buy"
-        app:selectionRequired="true"
-        app:singleSelection="true">
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_buy"
-            style="@style/Widget.Material3.Button.OutlinedButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Покупка"
-            android:textColor="@color/button_text_selector"
-            android:textSize="25sp"
-            app:backgroundTint="@color/buy_button_selector"
-            app:rippleColor="@color/white" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_sell"
-            style="@style/Widget.Material3.Button.OutlinedButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@color/sell_button_selector"
-            android:text="Продажа"
-            android:textColor="@color/button_text_selector"
-            android:textSize="25sp"
-            app:rippleColor="@color/white" />
-    </com.google.android.material.button.MaterialButtonToggleGroup>
+        android:layout_gravity="center"
+        android:text="Покупка"
+        android:textColor="@color/button_text_selector"
+        android:textSize="25sp" />
 
     <TextView
         android:id="@+id/textViewAssetTitleTransactionAdd"

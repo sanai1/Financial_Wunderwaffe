@@ -6,10 +6,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
+import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
+import com.example.financialwunderwaffe.LoadingFragment
 import com.example.financialwunderwaffe.R
 import com.example.financialwunderwaffe.main.MainActivity
 import com.example.financialwunderwaffe.main.analytics.AnalyticsFragment
@@ -28,6 +30,11 @@ import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayoutManager
 import com.google.android.flexbox.JustifyContent
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.time.Year
 import java.time.YearMonth
 import java.time.format.DateTimeFormatter
@@ -98,10 +105,28 @@ class AnalyticsBudgetFragment : Fragment() {
             searchNowYearBudget()
         }
 
+        view.findViewById<FrameLayout>(R.id.container_analytics_budget).visibility = View.VISIBLE
+        childFragmentManager.beginTransaction().apply {
+            replace(R.id.container_analytics_budget, LoadingFragment())
+            addToBackStack(null)
+            commit()
+        }
+        check()
+
         return view
     }
 
+    private fun check() = CoroutineScope(Dispatchers.IO).launch {
+        while (viewModel.budgetByMonth.value == null) {
+            delay(50)
+        }
+        withContext(Dispatchers.Main) {
+            view.findViewById<FrameLayout>(R.id.container_analytics_budget).visibility = View.GONE
+        }
+    }
+
     private fun searchNowYearBudget() {
+        if (viewModel.budgetByMonth.value == null) return
         val listMonthlyData: MutableMap<Int, Array<Long>> = mutableMapOf()
         repeat(12) { n ->
             listMonthlyData[n + 1] = arrayOf(0L, 0L)

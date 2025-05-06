@@ -46,7 +46,7 @@ class BudgetTransactionFragment : Fragment() {
             initSpinner(categories.sortedBy { it.name })
         }
         viewModel.typeCategory.observe(viewLifecycleOwner) {
-            initSpinner(viewModel.categories.value!!.sortedBy { it.name })
+            if (viewModel.categories.value != null) initSpinner(viewModel.categories.value!!.sortedBy { it.name })
         }
 
         view.findViewById<RadioGroup>(R.id.radioGroupCategoryInTransaction).check(

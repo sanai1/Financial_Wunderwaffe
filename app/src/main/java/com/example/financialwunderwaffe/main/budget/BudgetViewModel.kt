@@ -19,7 +19,7 @@ class BudgetViewModel : ViewModel() {
         update = newUpdate
     }
 
-    private val _categories = MutableLiveData<List<Category>>(emptyList())
+    private val _categories = MutableLiveData<List<Category>>()
     val categories: LiveData<List<Category>> = _categories
     private val _typeCategory = MutableLiveData<Boolean>(false)
     val typeCategory: LiveData<Boolean> = _typeCategory
@@ -44,7 +44,7 @@ class BudgetViewModel : ViewModel() {
             }
         }
 
-    private val _transactions = MutableLiveData<List<Transaction>>(emptyList())
+    private val _transactions = MutableLiveData<List<Transaction>>()
     val transaction: LiveData<List<Transaction>> = _transactions
     private val _dateHistory = MutableLiveData(YearMonth.now())
     val dateHistory: LiveData<YearMonth> = _dateHistory

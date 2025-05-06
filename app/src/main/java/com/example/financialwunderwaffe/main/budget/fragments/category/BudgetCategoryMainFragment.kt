@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.ProgressBar
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -25,8 +24,6 @@ class BudgetCategoryMainFragment : Fragment() {
     ): View {
         view = inflater.inflate(R.layout.fragment_budget_category_main, container, false)
         viewModel = (activity as MainActivity).budgetViewModel
-        view.findViewById<RecyclerView>(R.id.list_category).visibility = View.GONE
-        view.findViewById<ProgressBar>(R.id.progressBarCategoryMain).visibility = View.VISIBLE
 
         view.findViewById<ImageView>(R.id.imageViewCategoryAdd).setOnClickListener {
             (parentFragment as BudgetCategoryFragment).apply {
@@ -35,16 +32,14 @@ class BudgetCategoryMainFragment : Fragment() {
         }
 
         viewModel.categories.observe(viewLifecycleOwner) { categoryList ->
-            initRecyclerViewCategory(categoryList.sortedBy { it.name })
+            initRecyclerViewCategory(categoryList.sortedBy { it.name.lowercase() })
         }
 
         return view
     }
 
     private fun initRecyclerViewCategory(listCategory: List<Category>) {
-        view.findViewById<ProgressBar>(R.id.progressBarCategoryMain).visibility = View.GONE
         view.findViewById<RecyclerView>(R.id.list_category).apply {
-            visibility = View.VISIBLE
             adapter = CategoryAdapter(
                 listCategory.map {
                     CategoryState(

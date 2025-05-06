@@ -41,7 +41,14 @@ class BriefcaseViewModel : ViewModel() {
     }
 
     fun clearListInformation() {
-        _listAssetInformation.value = emptyList()
+        var flag = false
+        while (flag.not()) {
+            try {
+                _listAssetInformation.postValue(emptyList())
+                flag = true
+            } catch (_: Exception) {
+            }
+        }
     }
 
     fun createAssetTransaction(token: String, uid: UUID, assetTransaction: AssetTransaction) =
