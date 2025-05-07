@@ -7,7 +7,7 @@
     android:id="@+id/drawer_briefcase"
     tools:context=".main.briefcase.BriefcaseFragment">
 
-    <include layout="@layout/main_color"/>
+    <include layout="@layout/main_color" />
 
     <TextView
         android:id="@+id/textViewTitleBriefcase"
@@ -70,13 +70,13 @@
         android:id="@+id/imageViewAssetAdd"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="25dp"
+        android:layout_marginEnd="25dp"
         android:background="@drawable/rectangle_rounded_all_light_gray"
         android:elevation="10dp"
         android:importantForAccessibility="no"
         android:src="@android:drawable/ic_input_add"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/textViewTitleBriefcase" />
 
     <FrameLayout
         android:id="@+id/container_briefcase"

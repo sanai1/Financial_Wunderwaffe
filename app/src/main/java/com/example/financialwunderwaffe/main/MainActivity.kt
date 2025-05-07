@@ -44,8 +44,15 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        budgetViewModel.setUpdate(update)
-        briefcaseViewModel.setUpdate(update)
+        budgetViewModel.apply {
+            setUpdate(update)
+            setToast(printToast)
+        }
+        briefcaseViewModel.apply {
+            setUpdate(update)
+            setToast(printToast)
+        }
+        analyticsViewModel.setToast(printToast)
 
         val navView: BottomNavigationView = binding.navView
 

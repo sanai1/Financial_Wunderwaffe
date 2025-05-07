@@ -10,13 +10,18 @@ import com.example.financialwunderwaffe.retrofit.database.transaction.Transactio
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.time.YearMonth
 import java.util.UUID
 
 class BudgetViewModel : ViewModel() {
     private lateinit var update: () -> Unit
+    private lateinit var toast: (String) -> Unit
     fun setUpdate(newUpdate: () -> Unit) {
         update = newUpdate
+    }
+    fun setToast(newToast: (String) -> Unit) {
+        toast = newToast
     }
 
     private val _categories = MutableLiveData<List<Category>>()
@@ -29,18 +34,35 @@ class BudgetViewModel : ViewModel() {
     }
 
     fun updateCategory(token: String, uid: UUID) = CoroutineScope(Dispatchers.IO).launch {
-        val response = CategoryApiClient.categoryAPIService.getByUserUID(token, uid).execute()
-        if (response.isSuccessful && response.body() != null) {
-            _categories.postValue(response.body())
+        try {
+            val response = CategoryApiClient.categoryAPIService.getByUserUID(token, uid).execute()
+            if (response.isSuccessful && response.body() != null) {
+                _categories.postValue(response.body())
+            } else withContext(Dispatchers.Main) {
+                toast("Ошибка сервера: ${response.code()}")
+            }
+        } catch (e: Exception) {
+            withContext(Dispatchers.Main) {
+                toast("Ошибка сети: ${e.message}")
+            }
         }
     }
 
     fun createCategory(token: String, categoryView: Category) =
         CoroutineScope(Dispatchers.IO).launch {
-            val response =
-                CategoryApiClient.categoryAPIService.createCategory(token, categoryView).execute()
-            if (response.isSuccessful && (response.body() ?: 0L) > 0L) {
-                update()
+            try {
+                val response =
+                    CategoryApiClient.categoryAPIService.createCategory(token, categoryView)
+                        .execute()
+                if (response.isSuccessful && (response.body() ?: 0L) > 0L) {
+                    update()
+                } else withContext(Dispatchers.Main) {
+                    toast("Ошибка сервера: ${response.message()}")
+                }
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    toast("Ошибка сети: ${e.message}")
+                }
             }
         }
 
@@ -60,21 +82,43 @@ class BudgetViewModel : ViewModel() {
     }
 
     fun updateTransaction(token: String, uid: UUID) = CoroutineScope(Dispatchers.IO).launch {
-        val response = TransactionApiClient.transactionAPIService.getBuUserUID(token, uid).execute()
-        if (response.isSuccessful && response.body() != null) {
-            _transactions.postValue(response.body())
+        try {
+            val response =
+                TransactionApiClient.transactionAPIService.getBuUserUID(token, uid).execute()
+            if (response.isSuccessful && response.body() != null) {
+                _transactions.postValue(response.body())
+            } else withContext(Dispatchers.Main) {
+                toast("Ошибка сервера: ${response.message()}")
+            }
+        } catch (e: Exception) {
+            withContext(Dispatchers.Main) {
+                toast("Ошибка сети: ${e.message}")
+            }
         }
     }
 
     fun createTransaction(token: String, transactionView: Transaction) =
         CoroutineScope(Dispatchers.IO).launch {
-            val response =
-                TransactionApiClient.transactionAPIService.createTransaction(token, transactionView)
-                    .execute()
-            if (response.isSuccessful && (response.body() ?: 0L) > 0L) {
-                update()
+            try {
+                val response =
+                    TransactionApiClient.transactionAPIService.createTransaction(
+                        token,
+                        transactionView
+                    )
+                        .execute()
+                if (response.isSuccessful && (response.body() ?: 0L) > 0L) {
+                    update()
+                    withContext(Dispatchers.Main) {
+                        toast("Транзакция добавлена")
+                    }
+                } else withContext(Dispatchers.Main) {
+                    toast("Ошибка сервера: ${response.message()}")
+                }
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    toast("Ошибка сети: ${e.message}")
+                }
             }
         }
-
 
 }

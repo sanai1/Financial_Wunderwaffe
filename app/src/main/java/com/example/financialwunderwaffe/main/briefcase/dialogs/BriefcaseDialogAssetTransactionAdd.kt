@@ -15,6 +15,7 @@ import com.google.android.material.button.MaterialButton
 import com.google.android.material.datepicker.MaterialDatePicker
 import java.text.SimpleDateFormat
 import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import java.util.Calendar
 import java.util.Locale
 
@@ -66,15 +67,22 @@ class BriefcaseDialogAssetTransactionAdd(
                 .build()
             datePicker.show(childFragmentManager, "DATE_PICKER_ASSET_TRANSACTION")
             datePicker.addOnPositiveButtonClickListener { selectedDate ->
-                textViewDate.text =
+                val selDate =
                     SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()).format(selectedDate)
+                if (LocalDate.parse(selDate, DateTimeFormatter.ofPattern("dd.MM.yyyy"))
+                        .isAfter(LocalDate.now())
+                ) {
+                    toast("Нельзя выбрать будущую дату")
+                } else {
+                    textViewDate.text = selDate
+                }
             }
         }
 
         view.findViewById<Button>(R.id.buttonAssetTransactionAdd).apply {
             text = when (type) {
-                true -> "Купить"
-                false -> "Продать"
+                true -> "Продать"
+                false -> "Купить"
             }
             setOnClickListener {
                 val date = textViewDate.text.toString()

@@ -62,7 +62,7 @@ class AssetInformationAdapter(
             } else {
                 textViewPercentage.apply {
                     text = assetInformationState.percentage
-                    visibility = View.VISIBLE
+//                    visibility = View.VISIBLE
                     setTextColor(
                         when (assetInformationState.percentage[1]) {
                             '-' -> Color.RED

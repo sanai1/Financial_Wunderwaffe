@@ -9,12 +9,18 @@ import com.example.financialwunderwaffe.retrofit.database.analytics.model.Capita
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.time.LocalDate
 import java.time.Year
 import java.time.format.DateTimeFormatter
 import java.util.UUID
 
 class AnalyticsViewModel : ViewModel() {
+    private lateinit var toast: (String) -> Unit
+    fun setToast(newToast: (String) -> Unit) {
+        toast = newToast
+    }
+
     private val _title = MutableLiveData<String>()
     val title: LiveData<String> = _title
     private val _dateBudget = MutableLiveData(
@@ -57,9 +63,18 @@ class AnalyticsViewModel : ViewModel() {
     val budgetByMonth: LiveData<List<BudgetAnalytics>> = _budgetByMonth
 
     fun updateBudgetByMonth(token: String, uid: UUID) = CoroutineScope(Dispatchers.IO).launch {
-        val response = AnalyticsApiClient.analyticsAPIService.getBudgetByMonth(token, uid).execute()
-        if (response.isSuccessful && response.body() != null) {
-            _budgetByMonth.postValue(response.body())
+        try {
+            val response =
+                AnalyticsApiClient.analyticsAPIService.getBudgetByMonth(token, uid).execute()
+            if (response.isSuccessful && response.body() != null) {
+                _budgetByMonth.postValue(response.body())
+            } else withContext(Dispatchers.Main) {
+                toast("Ошибка сервера: ${response.code()}")
+            }
+        } catch (e: Exception) {
+            withContext(Dispatchers.Main) {
+                toast("Ошибка сети: ${e.message}")
+            }
         }
     }
 
@@ -105,10 +120,18 @@ class AnalyticsViewModel : ViewModel() {
     }
 
     fun updateCapitalByMonth(token: String, uid: UUID) = CoroutineScope(Dispatchers.IO).launch {
-        val response =
-            AnalyticsApiClient.analyticsAPIService.getCapitalByMonth(token, uid).execute()
-        if (response.isSuccessful && response.body() != null) {
-            _capitalByMonth.postValue(response.body())
+        try {
+            val response =
+                AnalyticsApiClient.analyticsAPIService.getCapitalByMonth(token, uid).execute()
+            if (response.isSuccessful && response.body() != null) {
+                _capitalByMonth.postValue(response.body())
+            } else withContext(Dispatchers.Main) {
+                toast("Ошибка сервера: ${response.code()}")
+            }
+        } catch (e: Exception) {
+            withContext(Dispatchers.Main) {
+                toast("Ошибка сети: ${e.message}")
+            }
         }
     }
 }

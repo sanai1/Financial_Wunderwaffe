@@ -56,7 +56,7 @@
                 android:background="@drawable/rectangle_rounded_all_light_gray"
                 android:layout_height="wrap_content"
                 android:autofillHints=""
-                android:maxLength="9"
+                android:maxLength="7"
                 android:maxLines="1"
                 android:hint="Введите сумму транзакции"
                 android:inputType="numberDecimal"
@@ -104,6 +104,7 @@
                 android:background="@drawable/rectangle_rounded_all_light_gray"
                 android:gravity="start|top"
                 android:padding="10dp"
+                android:maxLength="50"
                 android:hint="Введите описание (опциоанльно)"
                 android:inputType="textMultiLine"
                 android:textColorHint="@color/gray" />

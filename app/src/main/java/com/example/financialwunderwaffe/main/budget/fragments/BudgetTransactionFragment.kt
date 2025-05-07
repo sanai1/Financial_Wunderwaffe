@@ -25,6 +25,7 @@ import com.example.financialwunderwaffe.retrofit.database.transaction.Transactio
 import com.google.android.material.datepicker.MaterialDatePicker
 import java.text.SimpleDateFormat
 import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import java.util.Calendar
 import java.util.Locale
 
@@ -67,7 +68,15 @@ class BudgetTransactionFragment : Fragment() {
                 .build()
             datePicker.show(childFragmentManager, "DATE_PICKER")
             datePicker.addOnPositiveButtonClickListener { selectedDate ->
-                setDate(SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()).format(selectedDate))
+                val selDate =
+                    SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()).format(selectedDate)
+                if (LocalDate.parse(selDate, DateTimeFormatter.ofPattern("dd.MM.yyyy"))
+                        .isAfter(LocalDate.now())
+                ) {
+                    (activity as MainActivity).toast("Нельзя выбрать будущую дату")
+                } else {
+                    setDate(selDate)
+                }
             }
         }
         setDate(LocalDate.now().toString().split("-").reversed().joinToString("."))

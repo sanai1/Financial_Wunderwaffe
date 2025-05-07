@@ -107,8 +107,11 @@ class BriefcaseAssetInfoFragment : Fragment() {
             view.findViewById<TextView>(R.id.textViewAssetAmountInfo).text =
                 it.amount.toString().reversed().chunked(3).joinToString(" ").reversed() + "₽"
         }
-        viewModel.listAssetInformation.observe(viewLifecycleOwner) {
-            initListInformation(it)
+        viewModel.listAssetInformation.observe(viewLifecycleOwner) { assetInformationList ->
+            if (assetInformationList != null) {
+                val listInformation = assetInformationList.filter { it.date != "01.01.2000" }
+                initListInformation(listInformation)
+            }
         }
 
         view.findViewById<FrameLayout>(R.id.container_briefcase_info).visibility = View.VISIBLE
@@ -126,7 +129,7 @@ class BriefcaseAssetInfoFragment : Fragment() {
         viewModel.apply {
             clearListInformation()
             updateListInformation((activity as MainActivity).basicLoginAndPassword)
-            while (listAssetInformation.value?.isEmpty() != false) {
+            while (listAssetInformation.value == null) {
                 delay(50)
             }
         }
@@ -147,13 +150,15 @@ class BriefcaseAssetInfoFragment : Fragment() {
                         },
                         date = it.date,
                         amount = when (it.typeInformation) {
-                            "price" -> "${
-                                it.oldPrice.toString().reversed().chunked(3).joinToString(" ")
-                                    .reversed()
-                            } -> ${
-                                it.currentPrice.toString().reversed().chunked(3).joinToString(" ")
-                                    .reversed()
-                            }"
+//                            "price" -> "${
+//                                it.oldPrice.toString().reversed().chunked(3).joinToString(" ")
+//                                    .reversed()
+//                            } -> ${
+//                                it.currentPrice.toString().reversed().chunked(3).joinToString(" ")
+//                                    .reversed()
+//                            }"
+                            "price" -> it.currentPrice.toString().reversed().chunked(3)
+                                .joinToString(" ").reversed()
 
                             else -> (if (it.isSale!!) "-" else "+") + it.amount.toString()
                                 .reversed().chunked(3).joinToString(" ").reversed()
