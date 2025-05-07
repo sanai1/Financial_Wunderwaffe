@@ -91,6 +91,12 @@ class BriefcaseDialogAssetTransactionAdd(
                 if (amount.isEmpty()) {
                     toast("Заполните сумму операции")
                     return@setOnClickListener
+                } else if ("." in amount) {
+                    toast("Введите целое число")
+                    return@setOnClickListener
+                } else if (amount.toLong() <= 0L) {
+                    toast("Введите положительное значение")
+                    return@setOnClickListener
                 }
                 dismiss()
                 callback(date, amount.toLong(), type)

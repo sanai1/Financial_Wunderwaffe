@@ -64,6 +64,12 @@ class BriefcaseDialogAssetPriceAdd(
             if (currentAmount.isEmpty()) {
                 toast("Введите новую стоимость актива")
                 return@setOnClickListener
+            } else if ("." in currentAmount) {
+                toast("Введите целое число")
+                return@setOnClickListener
+            } else if (currentAmount.toLong() <= 0L) {
+                toast("Введите положительное значение")
+                return@setOnClickListener
             }
             dismiss()
             callback(textViewDate.text.toString(), currentAmount.toLong())

@@ -12,8 +12,6 @@ import android.widget.Button
 import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.ImageView
-import android.widget.RadioButton
-import android.widget.RadioGroup
 import android.widget.Spinner
 import android.widget.TextView
 import androidx.fragment.app.Fragment
@@ -22,6 +20,7 @@ import com.example.financialwunderwaffe.main.MainActivity
 import com.example.financialwunderwaffe.main.budget.BudgetViewModel
 import com.example.financialwunderwaffe.retrofit.database.category.Category
 import com.example.financialwunderwaffe.retrofit.database.transaction.Transaction
+import com.google.android.material.button.MaterialButtonToggleGroup
 import com.google.android.material.datepicker.MaterialDatePicker
 import java.text.SimpleDateFormat
 import java.time.LocalDate
@@ -50,15 +49,15 @@ class BudgetTransactionFragment : Fragment() {
             if (viewModel.categories.value != null) initSpinner(viewModel.categories.value!!.sortedBy { it.name })
         }
 
-        view.findViewById<RadioGroup>(R.id.radioGroupCategoryInTransaction).check(
-            view.findViewById<RadioButton>(R.id.radioButtonExpenseInTransaction).id
-        )
         viewModel.setTypeCategory(false)
-        view.findViewById<RadioButton>(R.id.radioButtonExpenseInTransaction).setOnClickListener {
-            viewModel.setTypeCategory(false)
-        }
-        view.findViewById<RadioButton>(R.id.radioButtonIncomeInTransaction).setOnClickListener {
-            viewModel.setTypeCategory(true)
+        view.findViewById<MaterialButtonToggleGroup>(R.id.toggleGroupTransactionBudget)
+            .addOnButtonCheckedListener { _, checkedId, isChecked ->
+                if (isChecked) {
+                    when (checkedId) {
+                        R.id.btn_expense -> viewModel.setTypeCategory(false)
+                        R.id.btn_income -> viewModel.setTypeCategory(true)
+                    }
+                }
         }
 
         view.findViewById<ImageView>(R.id.imageViewDateTransaction).setOnClickListener {
@@ -83,13 +82,13 @@ class BudgetTransactionFragment : Fragment() {
 
         view.findViewById<Button>(R.id.buttonTransactionAdd).setOnClickListener {
             val category =
-                when (view.findViewById<RadioGroup>(R.id.radioGroupCategoryInTransaction).checkedRadioButtonId) {
-                    view.findViewById<RadioButton>(R.id.radioButtonExpenseInTransaction).id -> {
-                        viewModel.categories.value?.first { it.name == spinner.selectedItem as String && !it.type }
+                when (viewModel.typeCategory.value) {
+                    true -> {
+                        viewModel.categories.value?.first { it.name == spinner.selectedItem as String && it.type }
                     }
 
                     else -> {
-                        viewModel.categories.value?.first { it.name == spinner.selectedItem as String && it.type }
+                        viewModel.categories.value?.first { it.name == spinner.selectedItem as String && !it.type }
                     }
                 }
             if (category == null) {
@@ -100,6 +99,12 @@ class BudgetTransactionFragment : Fragment() {
                 view.findViewById<EditText>(R.id.editTextNumberDecimalAmountTransaction).text.toString()
             if (amount.isEmpty()) {
                 (activity as MainActivity).toast("Введите сумму транзакции")
+                return@setOnClickListener
+            } else if ("." in amount) {
+                (activity as MainActivity).toast("Введите целое число")
+                return@setOnClickListener
+            } else if (amount.toLong() <= 0L) {
+                (activity as MainActivity).toast("Введите положительное значение")
                 return@setOnClickListener
             }
             val date = view.findViewById<TextView>(R.id.textViewDateTransactionAdd).text.toString()

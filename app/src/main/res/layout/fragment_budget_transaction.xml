@@ -2,6 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".main.budget.fragments.BudgetTransactionFragment">
 
     <include layout="@layout/main_color"/>
@@ -16,30 +17,37 @@
             android:orientation="vertical"
             android:padding="10dp">
 
-            <RadioGroup
-                android:id="@+id/radioGroupCategoryInTransaction"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal">
+            <com.google.android.material.button.MaterialButtonToggleGroup
+                android:id="@+id/toggleGroupTransactionBudget"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                app:checkedButton="@+id/btn_expense"
+                app:selectionRequired="true"
+                app:singleSelection="true">
 
-                <RadioButton
-                    android:id="@+id/radioButtonExpenseInTransaction"
-                    style="@style/RadioButtonTest"
-                    android:textSize="25sp"
-                    android:layout_width="0dp"
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_expense"
+                    style="@style/Widget.Material3.Button.OutlinedButton"
+                    android:layout_width="150dp"
+                    android:backgroundTint="@color/sell_button_selector"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Расход" />
+                    android:text="Расход"
+                    android:textColor="@color/button_text_selector"
+                    android:textSize="25sp"
+                    app:rippleColor="@color/white" />
 
-                <RadioButton
-                    android:id="@+id/radioButtonIncomeInTransaction"
-                    style="@style/RadioButtonTest"
-                    android:textSize="25sp"
-                    android:layout_width="0dp"
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_income"
+                    style="@style/Widget.Material3.Button.OutlinedButton"
+                    android:layout_width="150dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Доход" />
-            </RadioGroup>
+                    android:text="Доход"
+                    android:textColor="@color/button_text_selector"
+                    android:textSize="25sp"
+                    app:backgroundTint="@color/buy_button_selector"
+                    app:rippleColor="@color/white" />
+            </com.google.android.material.button.MaterialButtonToggleGroup>
 
             <Spinner
                 android:id="@+id/spinnerCategory"
@@ -65,7 +73,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="50dp"
+                android:layout_marginTop="25dp"
                 android:orientation="horizontal">
 
                 <TextView
@@ -90,7 +98,7 @@
                 android:id="@+id/checkBoxTransactionType"
                 style="@style/TextViewInfoBriefcase"
                 android:layout_width="wrap_content"
-                android:layout_marginTop="50dp"
+                android:layout_marginTop="25dp"
                 android:layout_height="wrap_content"
                 android:text="Крупная покупка/доход" />
 
@@ -98,7 +106,8 @@
                 android:id="@+id/editTextTextMultiLineDescriptionTransaction"
                 style="@style/TextViewInfoBriefcase"
                 android:layout_width="match_parent"
-                android:layout_marginTop="50dp"
+                android:layout_marginTop="25dp"
+                android:layout_marginBottom="75dp"
                 android:layout_height="wrap_content"
                 android:autofillHints=""
                 android:background="@drawable/rectangle_rounded_all_light_gray"
